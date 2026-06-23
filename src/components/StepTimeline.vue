@@ -111,7 +111,7 @@ defineEmits(['nudge'])
   content: '';
   position: absolute;
   top: 0;
-  height: 12px;
+  height: 19px; /* reach dot centre: padding-top(2) + margin-top(10) + radius(7) */
   width: 2px;
   background: var(--color-rail);
 }

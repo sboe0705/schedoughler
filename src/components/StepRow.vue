@@ -8,7 +8,7 @@
 
     <!-- Rail -->
     <div class="rail">
-      <div class="rail-line" />
+      <div class="rail-line" :class="{ 'rail-line-first': stepIndex === 0 }" />
       <div
         class="rail-dot"
         :style="{
@@ -100,14 +100,20 @@ const kindColor = computed(() => KINDS[props.step.kind]?.color ?? '#999')
   align-items: center;
   position: relative;
   padding-top: 4px;
+  align-self: stretch;
 }
 
 .rail-line {
   position: absolute;
   top: 0;
-  bottom: -24px;
+  bottom: 0;
   width: 2px;
   background: var(--color-rail);
+}
+
+/* First row: start line at dot centre (padding-top 4px + radius 8px) */
+.rail-line-first {
+  top: 12px;
 }
 
 .rail-dot {
