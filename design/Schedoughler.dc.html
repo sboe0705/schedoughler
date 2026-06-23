@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<template id="__bundler_thumbnail" data-bg-color="#241a12">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#241a12"/>
+    <rect x="430" y="250" width="340" height="300" rx="60" fill="#6B4426"/>
+    <text x="600" y="470" font-family="Georgia,serif" font-size="220" font-weight="800" fill="#F4EBDD" text-anchor="middle">S</text>
+  </svg>
+</template>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;font-family:'Hanken Grotesk',system-ui,sans-serif}
+.sd-scroll::-webkit-scrollbar{display:none}
+.sd-scroll{scrollbar-width:none}
+.sd-x::-webkit-scrollbar{display:none}
+.sd-x{scrollbar-width:none}
+input[type=date],input[type=time]{font-family:'Bitter',serif}
+</style>
+</helmet>
+<div style="min-height:100vh;width:100%;background:radial-gradient(120% 90% at 50% 0%, #3a2b1d 0%, #241a12 60%, #1c140d 100%);display:flex;align-items:center;justify-content:center;padding:32px 16px;font-family:'Hanken Grotesk',sans-serif">
+  <div style="width:392px;height:830px;background:#F4EBDD;border-radius:46px;position:relative;overflow:hidden;box-shadow:0 40px 90px -20px rgba(0,0,0,.6),0 0 0 11px #15100a,0 0 0 13px #2b2018;display:flex;flex-direction:column">
+
+    <div style="height:46px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 30px 0 32px;font-family:'Bitter',serif;font-weight:600;font-size:14px;color:#3D2817">
+      <span>9:41</span>
+      <div style="display:flex;gap:6px;align-items:center">
+        <div style="width:18px;height:9px;border:1.5px solid #3D2817;border-radius:3px;opacity:.8"></div>
+        <div style="width:15px;height:9px;background:#3D2817;border-radius:2px"></div>
+      </div>
+    </div>
+
+    <div class="sd-scroll" style="flex:1;overflow-y:auto;padding:6px 20px 40px">
+
+      <header style="padding:8px 2px 18px">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:34px;height:34px;border-radius:11px;background:#6B4426;display:flex;align-items:center;justify-content:center;font-family:'Bitter',serif;font-weight:800;color:#F4EBDD;font-size:19px;box-shadow:inset 0 -3px 0 rgba(0,0,0,.18)">S</div>
+          <div>
+            <div style="font-family:'Bitter',serif;font-weight:800;font-size:24px;color:#2E2218;letter-spacing:-.01em;line-height:1">Schedoughler</div>
+            <div style="font-size:12px;color:#9A8156;font-weight:600;margin-top:3px;letter-spacing:.04em;text-transform:uppercase">Brot nach Plan</div>
+          </div>
+        </div>
+      </header>
+
+      <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#A8946C;margin:0 2px 9px">Rezept wählen</div>
+      <div class="sd-x" style="display:flex;gap:10px;overflow-x:auto;margin:0 -20px 22px;padding:2px 20px 6px">
+        <sc-for list="{{ recipes }}" as="r" hint-placeholder-count="4">
+          <button onClick="{{ r.onSelect }}" style="{{ r.chipStyle }}">
+            <span style="{{ r.nameStyle }}">{{ r.name }}</span>
+            <span style="{{ r.metaStyle }}">{{ r.totalShort }}</span>
+          </button>
+        </sc-for>
+      </div>
+
+      <div style="background:#FBF5EA;border:1px solid #EADCC4;border-radius:20px;padding:18px;box-shadow:0 1px 0 #fff inset;margin-bottom:18px">
+        <div style="font-family:'Bitter',serif;font-weight:700;font-size:17px;color:#2E2218">{{ currentName }}</div>
+        <div style="font-size:12.5px;color:#9A8156;font-weight:500;margin-top:2px;margin-bottom:16px">{{ currentSubtitle }}</div>
+
+        <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#A8946C;margin-bottom:8px">Brot fertig am</div>
+        <div style="display:flex;gap:10px">
+          <input type="date" value="{{ dateValue }}" onChange="{{ onDateChange }}" style="flex:1;min-width:0;background:#F4EBDD;border:1px solid #E5D5BB;border-radius:12px;padding:11px 12px;font-size:15px;color:#3D2817;font-weight:600;font-family:'Bitter',serif">
+          <input type="time" value="{{ timeValue }}" onChange="{{ onTimeChange }}" style="width:108px;flex:none;background:#F4EBDD;border:1px solid #E5D5BB;border-radius:12px;padding:11px 12px;font-size:15px;color:#3D2817;font-weight:600;font-family:'Bitter',serif">
+        </div>
+
+        <div style="display:flex;align-items:center;gap:12px;margin-top:16px;padding:14px;background:linear-gradient(180deg,#6B4426,#5a3820);border-radius:14px">
+          <div style="flex:1">
+            <div style="font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#E7C9A0">Jetzt loslegen</div>
+            <div style="font-family:'Bitter',serif;font-weight:800;font-size:21px;color:#FBF5EA;margin-top:2px;letter-spacing:-.01em">{{ startLabel }}</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:11px;color:#E7C9A0;font-weight:600">Gesamt</div>
+            <div style="font-family:'Bitter',serif;font-weight:700;font-size:15px;color:#FBF5EA;margin-top:2px">{{ totalLabel }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#A8946C;margin:0 2px 14px">Ablauf</div>
+      <sc-for list="{{ steps }}" as="s" hint-placeholder-count="8">
+        <div style="display:flex;gap:12px;align-items:stretch">
+          <div style="width:60px;flex:none;text-align:right;padding-top:1px">
+            <div style="{{ s.timeStyle }}">{{ s.timeBig }}</div>
+            <div style="font-size:10.5px;color:#A8946C;font-weight:600;margin-top:2px">{{ s.dayLabel }}</div>
+          </div>
+          <div style="width:28px;flex:none;position:relative">
+            <div style="{{ s.lineStyle }}"></div>
+            <div style="{{ s.dotStyle }}"></div>
+          </div>
+          <div style="flex:1;min-width:0;padding-bottom:14px">
+            <div style="{{ s.cardStyle }}">
+              <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px">
+                <div style="font-family:'Bitter',serif;font-weight:700;font-size:15.5px;color:#2E2218;line-height:1.2">{{ s.title }}</div>
+                <sc-if value="{{ s.sleep }}" hint-placeholder-val="{{ true }}">
+                  <span style="flex:none;display:inline-flex;align-items:center;gap:5px;background:#3D3450;color:#EDE9F4;font-size:10px;font-weight:700;padding:5px 8px;border-radius:999px;letter-spacing:.02em"><span style="width:9px;height:9px;border-radius:50%;box-shadow:inset -3px -1px 0 0 #EDE9F4"></span>über Nacht</span>
+                </sc-if>
+              </div>
+              <div style="font-size:12.5px;color:#6E6253;line-height:1.45;margin-top:6px">{{ s.desc }}</div>
+              <div style="display:flex;align-items:center;gap:8px;margin-top:11px">
+                <span style="{{ s.pillStyle }}">{{ s.kindLabel }}</span>
+                <span style="font-size:11.5px;color:#9A8156;font-weight:600">{{ s.durLabel }}</span>
+              </div>
+              <sc-if value="{{ s.flex }}" hint-placeholder-val="{{ false }}">
+                <div style="margin-top:11px;padding-top:11px;border-top:1px dashed #E7D6BB">
+                  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+                    <span style="font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#B6A485">Gärzeit anpassen</span>
+                    <span style="font-size:11px;font-weight:600;color:#B6A485">{{ s.rangeLabel }}</span>
+                  </div>
+                  <div style="display:flex;gap:8px">
+                    <button onClick="{{ s.onEarlier }}" style="{{ s.earlierStyle }}">‹ früher beginnen</button>
+                    <button onClick="{{ s.onLater }}" style="{{ s.laterStyle }}">später ›</button>
+                  </div>
+                </div>
+              </sc-if>
+              <sc-if value="{{ s.isLast }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;align-items:center;gap:8px;margin-top:12px;padding-top:11px;border-top:1px dashed #E0CBA8">
+                  <span style="font-size:12px;color:#9A8156;font-weight:600">Brot fertig</span>
+                  <span style="font-family:'Bitter',serif;font-weight:800;font-size:17px;color:#B5532A;margin-left:auto">{{ s.fertigLabel }}</span>
+                </div>
+              </sc-if>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+
+      <div style="text-align:center;font-size:11px;color:#C2B393;font-weight:600;margin-top:8px">Zeiten rückwärts berechnet · Raumtemperatur ~22&nbsp;°C</div>
+
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:392,&quot;height&quot;:830}}">
+class Component extends DCLogic {
+  RECIPES = [
+    {
+      id: 'sauerteig', name: 'Sauerteigbrot', totalShort: '~28 Std',
+      subtitle: 'Knusprige Kruste, aromatische Krume · Marcel Paa',
+      steps: [
+        { title: 'Vorteig ansetzen', dur: 15, kind: 'prep', desc: 'Sauerteig, handwarmes Wasser und Weissmehl verkneten, zur Kugel formen und im Gefäss markieren.' },
+        { title: 'Vorteig gären lassen', dur: 720, min: 480, max: 840, step: 30, kind: 'rise', sleep: true, desc: 'Bei Raumtemperatur gehen lassen, bis sich das Volumen verdreifacht hat.' },
+        { title: 'Hauptteig kneten', dur: 15, kind: 'prep', desc: 'Alle Zutaten 10–12 Min. kneten, bis der Teig die Fensterprobe besteht.' },
+        { title: 'Stockgare', dur: 120, min: 90, max: 180, step: 15, kind: 'rise', desc: 'Rund vorformen und zugedeckt bei Raumtemperatur aufgehen lassen.' },
+        { title: 'Rund formen', dur: 15, kind: 'prep', desc: 'Teig schleifen, Spannung aufbauen und mit Verschluss nach oben in den bemehlten Gärkorb setzen.' },
+        { title: 'Stückgare im Kühlschrank', dur: 720, min: 600, max: 960, step: 30, kind: 'cold', sleep: true, desc: 'Zugedeckt im Kühlschrank reifen lassen – entwickelt Aroma und Triebkraft.' },
+        { title: 'Ofen vorheizen', dur: 45, kind: 'prep', desc: 'Mit Gusseisentopf auf 230 °C Ober-/Unterhitze vorheizen.' },
+        { title: 'Einschneiden & backen', dur: 50, kind: 'bake', desc: 'Stürzen, übers Kreuz einschneiden, 40 Min. im Topf, dann 10 Min. offen ausbacken.' },
+      ],
+    },
+    {
+      id: 'weizen', name: 'Helles Weizenbrot', totalShort: '~3,5 Std',
+      subtitle: 'Locker und schnell – ein Hefebrot für denselben Tag',
+      steps: [
+        { title: 'Teig kneten', dur: 15, kind: 'prep', desc: 'Mehl, Wasser, Hefe und Salz glatt und geschmeidig auskneten.' },
+        { title: 'Stockgare', dur: 90, min: 60, max: 150, step: 15, kind: 'rise', desc: 'Zugedeckt gehen lassen, bis sich das Volumen verdoppelt hat.' },
+        { title: 'Formen', dur: 10, kind: 'prep', desc: 'Entgasen, straff zu einem Laib formen und in den Gärkorb legen.' },
+        { title: 'Stückgare', dur: 45, min: 30, max: 75, step: 15, kind: 'rise', desc: 'Bei Raumtemperatur bis zur vollen Gare aufgehen lassen.' },
+        { title: 'Ofen vorheizen', dur: 30, kind: 'prep', desc: 'Mit Backstein oder Blech auf 240 °C vorheizen, Schwaden vorbereiten.' },
+        { title: 'Backen', dur: 40, kind: 'bake', desc: 'Einschneiden, mit Dampf anbacken, dann goldbraun ausbacken.' },
+      ],
+    },
+    {
+      id: 'roggen', name: 'Roggenmischbrot', totalShort: '~16 Std',
+      subtitle: 'Kräftig & saftig – Sauerteig mit Roggen und Weizen',
+      steps: [
+        { title: 'Sauerteig auffrischen', dur: 10, kind: 'prep', desc: 'Anstellgut mit Roggenmehl und Wasser verrühren.' },
+        { title: 'Sauerteig reifen', dur: 720, min: 600, max: 900, step: 30, kind: 'rise', sleep: true, desc: 'Über Nacht bei Raumtemperatur reifen lassen, bis er schön sauer duftet.' },
+        { title: 'Hauptteig mischen', dur: 15, kind: 'prep', desc: 'Sauerteig mit Roggen-, Weizenmehl, Wasser und Salz zu einem klebrigen Teig mischen.' },
+        { title: 'Teigruhe', dur: 60, min: 30, max: 90, step: 15, kind: 'rise', desc: 'Abgedeckt entspannen lassen.' },
+        { title: 'Formen', dur: 15, kind: 'prep', desc: 'Mit nassen Händen rund wirken und in den Gärkorb setzen.' },
+        { title: 'Stückgare', dur: 90, min: 60, max: 120, step: 15, kind: 'rise', desc: 'Gehen lassen, bis sich feine Risse an der Oberfläche zeigen.' },
+        { title: 'Ofen vorheizen', dur: 45, kind: 'prep', desc: 'Auf 250 °C vorheizen, fallend backen.' },
+        { title: 'Backen', dur: 60, kind: 'bake', desc: 'Kräftig mit Schwaden anbacken und dunkel ausbacken.' },
+      ],
+    },
+    {
+      id: 'broetchen', name: 'Übernacht-Brötchen', totalShort: '~12 Std',
+      subtitle: 'Knusprige Frühstücksbrötchen ohne Kneten',
+      steps: [
+        { title: 'Teig anrühren', dur: 10, kind: 'prep', desc: 'Alle Zutaten mit wenig Hefe nur kurz vermengen – nicht kneten.' },
+        { title: 'Übernachtgare im Kühlschrank', dur: 600, min: 480, max: 840, step: 30, kind: 'cold', sleep: true, desc: 'Zugedeckt über Nacht im Kühlschrank reifen lassen.' },
+        { title: 'Abstechen & formen', dur: 20, kind: 'prep', desc: 'Teig auf die bemehlte Fläche geben und Brötchen abstechen.' },
+        { title: 'Stückgare', dur: 30, min: 20, max: 60, step: 10, kind: 'rise', desc: 'Kurz akklimatisieren und antreiben lassen.' },
+        { title: 'Ofen vorheizen', dur: 30, kind: 'prep', desc: 'Auf 240 °C vorheizen, Schwaden vorbereiten.' },
+        { title: 'Backen', dur: 20, kind: 'bake', desc: 'Mit Dampf knusprig goldbraun backen.' },
+      ],
+    },
+  ];
+
+  KIND = {
+    prep: { c: '#C28A3D', label: 'Handarbeit' },
+    rise: { c: '#A8894E', label: 'Gärzeit' },
+    cold: { c: '#6E8597', label: 'Kühlschrank' },
+    bake: { c: '#B5532A', label: 'Backen' },
+  };
+
+  WD = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
+  MON = ['Jan.', 'Feb.', 'März', 'Apr.', 'Mai', 'Juni', 'Juli', 'Aug.', 'Sep.', 'Okt.', 'Nov.', 'Dez.'];
+
+  state = { recipeId: 'sauerteig', target: this._defaultTarget('sauerteig'), overrides: {} };
+
+  setDur(i, dir) {
+    const r = this.RECIPES.find(x => x.id === this.state.recipeId);
+    const s = r.steps[i]; if (s.min == null) return;
+    const key = r.id + ':' + i;
+    const ov = { ...(this.state.overrides || {}) };
+    const cur = ov[key] != null ? ov[key] : s.dur;
+    ov[key] = Math.min(s.max, Math.max(s.min, cur + dir * s.step));
+    this.setState({ overrides: ov });
+  }
+
+  _defaultTarget(id) {
+    const r = this.RECIPES.find(x => x.id === id);
+    const total = r.steps.reduce((a, s) => a + s.dur, 0);
+    const t = new Date(Date.now() + total * 60000 + 75 * 60000);
+    t.setMinutes(0, 0, 0);
+    t.setHours(t.getHours() + 1);
+    return t;
+  }
+
+  pad(n) { return String(n).padStart(2, '0'); }
+  fmtDur(m) {
+    if (m < 60) return m + ' Min';
+    const h = Math.floor(m / 60), mm = m % 60;
+    return mm ? h + ' Std ' + mm + ' Min' : h + ' Std';
+  }
+  fmtTimeOnly(d) { const x = new Date(d); return this.pad(x.getHours()) + ':' + this.pad(x.getMinutes()); }
+  fmtDay(d) { const x = new Date(d); return this.WD[x.getDay()] + ', ' + x.getDate() + '. ' + this.MON[x.getMonth()]; }
+  fmtDayTime(d) { const x = new Date(d); return this.WD[x.getDay()] + ' · ' + this.fmtTimeOnly(x); }
+
+  onDateChange = (e) => {
+    const v = e.target.value; if (!v) return;
+    const [y, mo, da] = v.split('-').map(Number);
+    const t = new Date(this.state.target); t.setFullYear(y, mo - 1, da);
+    this.setState({ target: t });
+  };
+  onTimeChange = (e) => {
+    const v = e.target.value; if (!v) return;
+    const [h, mi] = v.split(':').map(Number);
+    const t = new Date(this.state.target); t.setHours(h, mi, 0, 0);
+    this.setState({ target: t });
+  };
+
+  renderVals() {
+    const r = this.RECIPES.find(x => x.id === this.state.recipeId) || this.RECIPES[0];
+    const target = this.state.target;
+    const K = this.KIND;
+
+    const ov = this.state.overrides || {};
+    const steps = r.steps.map((s, i) => {
+      const dur = s.min != null
+        ? Math.min(s.max, Math.max(s.min, ov[r.id + ':' + i] != null ? ov[r.id + ':' + i] : s.dur))
+        : s.dur;
+      return { ...s, dur };
+    });
+    let cursor = target.getTime();
+    for (let i = steps.length - 1; i >= 0; i--) {
+      steps[i].end = cursor;
+      steps[i].start = cursor - steps[i].dur * 60000;
+      cursor = steps[i].start;
+    }
+    const firstStart = steps[0].start;
+    const span = target.getTime() - firstStart || 1;
+    const totalMin = steps.reduce((a, s) => a + s.dur, 0);
+    const hrs = (m) => { const h = m / 60; return (Number.isInteger(h) ? h : h.toFixed(1).replace('.', ',')) + ' Std'; };
+    const rng = (mn, mx) => mn >= 60 ? hrs(mn) + '–' + hrs(mx) : mn + '–' + mx + ' Min';
+    const btn = (on) => `display:inline-flex;align-items:center;justify-content:center;font-family:'Hanken Grotesk';font-weight:700;font-size:12.5px;padding:9px 13px;border-radius:11px;border:1px solid #E0CBA8;background:#F4EBDD;color:#6B4426;cursor:pointer;${on ? '' : 'opacity:.3;pointer-events:none'}`;
+
+    const stepViews = steps.map((s, i) => {
+      const k = K[s.kind]; const isLast = i === steps.length - 1; const st = s.start;
+      return {
+        title: s.title, desc: s.desc, durLabel: this.fmtDur(s.dur), kindLabel: k.label,
+        timeBig: this.fmtTimeOnly(st), dayLabel: this.fmtDay(st), sleep: !!s.sleep, isLast,
+        fertigLabel: this.fmtTimeOnly(target),
+        flex: s.min != null,
+        rangeLabel: s.min != null ? rng(s.min, s.max) : '',
+        onEarlier: () => this.setDur(i, 1),
+        onLater: () => this.setDur(i, -1),
+        earlierStyle: btn(s.min != null && s.dur < s.max),
+        laterStyle: btn(s.min != null && s.dur > s.min),
+        timeStyle: `font-family:'Bitter',serif;font-weight:700;font-size:18px;color:${k.c};line-height:1`,
+        dotStyle: `position:absolute;left:6px;top:3px;width:16px;height:16px;border-radius:50%;background:${k.c};box-shadow:0 0 0 4px #F4EBDD,0 0 0 5px ${k.c}55;z-index:2`,
+        lineStyle: `position:absolute;left:13px;top:${i === 0 ? '11px' : '0'};${isLast ? 'height:11px' : 'bottom:0'};width:2px;background:#E2D5BF`,
+        cardStyle: s.sleep
+          ? 'background:#EBEEF3;border:1px solid #D6DEE6;border-radius:16px;padding:13px 15px'
+          : 'background:#FBF5EA;border:1px solid #EADCC4;border-radius:16px;padding:13px 15px',
+        pillStyle: `display:inline-flex;align-items:center;background:${k.c}22;color:${k.c};font-weight:700;font-size:11px;padding:5px 9px;border-radius:999px;letter-spacing:.02em`,
+      };
+    });
+
+    const bands = [];
+    for (let kk = -1; kk <= 4; kk++) {
+      const ns = new Date(firstStart); ns.setHours(22, 0, 0, 0); ns.setDate(ns.getDate() + kk);
+      const a = Math.max(ns.getTime(), firstStart);
+      const b = Math.min(ns.getTime() + 8 * 3600000, target.getTime());
+      if (b > a) bands.push({ style: `position:absolute;top:0;bottom:0;left:${(a - firstStart) / span * 100}%;width:${(b - a) / span * 100}%;background:#2E22181A;border-radius:7px` });
+    }
+
+    const ticks = [];
+    const m = new Date(firstStart); m.setHours(0, 0, 0, 0); m.setDate(m.getDate() + 1);
+    let guard = 0;
+    while (m.getTime() < target.getTime() && guard < 8) {
+      const left = (m.getTime() - firstStart) / span * 100;
+      ticks.push({
+        label: this.WD[m.getDay()],
+        style: `position:absolute;top:0;bottom:0;left:${left}%;width:1px;background:#0000001A`,
+        labelStyle: `position:absolute;top:100%;left:${left}%;transform:translateX(-50%);margin-top:7px;font-size:10px;font-weight:700;color:#A8946C;white-space:nowrap`,
+      });
+      m.setDate(m.getDate() + 1); guard++;
+    }
+
+    const markers = steps.map(s => ({
+      style: `position:absolute;top:50%;left:${(s.start - firstStart) / span * 100}%;transform:translate(-50%,-50%);width:11px;height:11px;border-radius:50%;background:${K[s.kind].c};border:2px solid #FBF5EA;box-shadow:0 1px 2px rgba(0,0,0,.15);z-index:2`,
+    }));
+    markers.push({ style: `position:absolute;top:50%;left:100%;transform:translate(-50%,-50%);width:15px;height:15px;border-radius:50%;background:#B5532A;border:3px solid #FBF5EA;box-shadow:0 0 0 2px #B5532A55;z-index:3` });
+
+    const recipes = this.RECIPES.map(rr => {
+      const sel = rr.id === r.id;
+      return {
+        name: rr.name, totalShort: rr.totalShort,
+        onSelect: () => this.setState({ recipeId: rr.id, target: this._defaultTarget(rr.id), overrides: {} }),
+        chipStyle: `flex:none;display:flex;flex-direction:column;align-items:flex-start;gap:3px;min-width:120px;text-align:left;cursor:pointer;padding:13px 15px;border-radius:16px;border:1.5px solid ${sel ? '#6B4426' : '#E5D5BB'};background:${sel ? '#6B4426' : '#FBF5EA'};transition:all .15s`,
+        nameStyle: `font-family:'Bitter',serif;font-weight:700;font-size:14.5px;color:${sel ? '#FBF5EA' : '#2E2218'}`,
+        metaStyle: `font-size:11px;font-weight:600;color:${sel ? '#E7C9A0' : '#A8946C'}`,
+      };
+    });
+
+    return {
+      recipes,
+      currentName: r.name, currentSubtitle: r.subtitle,
+      dateValue: `${target.getFullYear()}-${this.pad(target.getMonth() + 1)}-${this.pad(target.getDate())}`,
+      timeValue: this.fmtTimeOnly(target),
+      onDateChange: this.onDateChange, onTimeChange: this.onTimeChange,
+      startLabel: this.fmtDayTime(firstStart),
+      totalLabel: this.fmtDur(totalMin),
+      steps: stepViews,
+      overview: {
+        spanLabel: '≈ ' + Math.round(span / 3600000) + ' Std',
+        startLabel: this.fmtDayTime(firstStart),
+        endLabel: this.fmtTimeOnly(target),
+        nightBands: bands, ticks, markers,
+      },
+    };
+  }
+}
+</script>
+</body>
+</html>
