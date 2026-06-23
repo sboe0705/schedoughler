@@ -111,6 +111,83 @@ export const RECIPES = [
       },
     ],
   },
+  {
+    id: 'pane-di-altamura',
+    name: 'Pane di Altamura',
+    totalShort: '~14 Std',
+    subtitle: 'Hartweizenmehl-Sauerteigbrot mit langer Kaltgare – von Oliver',
+    steps: [
+      {
+        title: 'Autolyse',
+        dur: 60,
+        kind: 'rise',
+        desc: 'Mehl und Wasser grob mischen und 1 Stunde zur Autolyse stehen lassen.',
+        ingredients: [
+          { amount: 440, unit: 'g', name: 'Hartweizenmehl', note: 'Semola rimacinata' },
+          { amount: 300, unit: 'g', name: 'Wasser' },
+        ],
+      },
+      {
+        title: 'LM & Salz einarbeiten',
+        dur: 5,
+        kind: 'prep',
+        desc: 'Lievito Madre und Salz zum Autolyseteig geben und kurz einmischen.',
+        ingredients: [
+          { amount: 150, unit: 'g', name: 'Lievito Madre', note: 'TA 150' },
+          { amount: 12, unit: 'g', name: 'Salz' },
+        ],
+      },
+      {
+        title: 'Kneten',
+        dur: 10,
+        kind: 'prep',
+        desc: 'Teig auf mittlerer Stufe kneten, bis er sich vom Schüsselrand löst und den Fenstertest besteht (Thermomix: Rückwärtslauf Stufe 5, 2 min).',
+      },
+      {
+        title: 'Anspringen lassen',
+        dur: 30,
+        kind: 'rise',
+        desc: 'Teig abgedeckt bei Raumtemperatur 30 Minuten ruhen lassen.',
+      },
+      {
+        title: 'Kaltgare',
+        dur: 600,
+        min: 480,
+        max: 720,
+        step: 30,
+        kind: 'cold',
+        sleep: true,
+        desc: 'Teig für ca. 10 Stunden im 0-Grad-Fach oder im kältesten Teil des Kühlschranks kalt führen.',
+      },
+      {
+        title: 'Akklimatisieren',
+        dur: 30,
+        kind: 'rise',
+        desc: 'Teig am Backtag 30 Minuten bei Raumtemperatur akklimatisieren lassen.',
+      },
+      {
+        title: 'Ofen vorheizen',
+        dur: 45,
+        kind: 'prep',
+        desc: 'Ofen mit Backstahl oder Topf auf 250 °C Ober-/Unterhitze vorheizen.',
+      },
+      {
+        title: 'Wirken & Stückgare',
+        dur: 60,
+        min: 30,
+        max: 120,
+        step: 15,
+        kind: 'rise',
+        desc: 'Teig rund wirken, in ein bemehltes Gärkörbchen legen und bis zur knappen Gare bei Raumtemperatur stehen lassen.',
+      },
+      {
+        title: 'Einschießen & Backen',
+        dur: 40,
+        kind: 'bake',
+        desc: 'Teig ggf. einschneiden und bei 250 °C mit kräftigen Schwaden einschießen; nach 10 Minuten Dampf ablassen und fallend auf 200 °C ca. 30 weitere Minuten fertig backen (Topf-Variante: 20 min mit Deckel bei 250 °C, dann 20–25 min ohne Deckel bei 230 °C).',
+      },
+    ],
+  },
 ];
 
 // ---------------------------------------------------------------------------
