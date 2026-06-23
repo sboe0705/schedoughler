@@ -111,50 +111,6 @@ export const RECIPES = [
       },
     ],
   },
-  {
-    id: 'weizen',
-    name: 'Helles Weizenbrot',
-    totalShort: '~3,5 Std',
-    subtitle: 'Locker und schnell – ein Hefebrot für denselben Tag',
-    steps: [
-      { title: 'Teig kneten', dur: 15, kind: 'prep', desc: 'Mehl, Wasser, Hefe und Salz glatt und geschmeidig auskneten.' },
-      { title: 'Stockgare', dur: 90, min: 60, max: 150, step: 15, kind: 'rise', desc: 'Zugedeckt gehen lassen, bis sich das Volumen verdoppelt hat.' },
-      { title: 'Formen', dur: 10, kind: 'prep', desc: 'Entgasen, straff zu einem Laib formen und in den Gärkorb legen.' },
-      { title: 'Stückgare', dur: 45, min: 30, max: 75, step: 15, kind: 'rise', desc: 'Bei Raumtemperatur bis zur vollen Gare aufgehen lassen.' },
-      { title: 'Ofen vorheizen', dur: 30, kind: 'prep', desc: 'Mit Backstein oder Blech auf 240 °C vorheizen, Schwaden vorbereiten.' },
-      { title: 'Backen', dur: 40, kind: 'bake', desc: 'Einschneiden, mit Dampf anbacken, dann goldbraun ausbacken.' },
-    ],
-  },
-  {
-    id: 'roggen',
-    name: 'Roggenmischbrot',
-    totalShort: '~16 Std',
-    subtitle: 'Kräftig & saftig – Sauerteig mit Roggen und Weizen',
-    steps: [
-      { title: 'Sauerteig auffrischen', dur: 10, kind: 'prep', desc: 'Anstellgut mit Roggenmehl und Wasser verrühren.' },
-      { title: 'Sauerteig reifen', dur: 720, min: 600, max: 900, step: 30, kind: 'rise', sleep: true, desc: 'Über Nacht bei Raumtemperatur reifen lassen, bis er schön sauer duftet.' },
-      { title: 'Hauptteig mischen', dur: 15, kind: 'prep', desc: 'Sauerteig mit Roggen-, Weizenmehl, Wasser und Salz zu einem klebrigen Teig mischen.' },
-      { title: 'Teigruhe', dur: 60, min: 30, max: 90, step: 15, kind: 'rise', desc: 'Abgedeckt entspannen lassen.' },
-      { title: 'Formen', dur: 15, kind: 'prep', desc: 'Mit nassen Händen rund wirken und in den Gärkorb setzen.' },
-      { title: 'Stückgare', dur: 90, min: 60, max: 120, step: 15, kind: 'rise', desc: 'Gehen lassen, bis sich feine Risse an der Oberfläche zeigen.' },
-      { title: 'Ofen vorheizen', dur: 45, kind: 'prep', desc: 'Auf 250 °C vorheizen, fallend backen.' },
-      { title: 'Backen', dur: 60, kind: 'bake', desc: 'Kräftig mit Schwaden anbacken und dunkel ausbacken.' },
-    ],
-  },
-  {
-    id: 'broetchen',
-    name: 'Übernacht-Brötchen',
-    totalShort: '~12 Std',
-    subtitle: 'Knusprige Frühstücksbrötchen ohne Kneten',
-    steps: [
-      { title: 'Teig anrühren', dur: 10, kind: 'prep', desc: 'Alle Zutaten mit wenig Hefe nur kurz vermengen – nicht kneten.' },
-      { title: 'Übernachtgare im Kühlschrank', dur: 600, min: 480, max: 840, step: 30, kind: 'cold', sleep: true, desc: 'Zugedeckt über Nacht im Kühlschrank reifen lassen.' },
-      { title: 'Abstechen & formen', dur: 20, kind: 'prep', desc: 'Teig auf die bemehlte Fläche geben und Brötchen abstechen.' },
-      { title: 'Stückgare', dur: 30, min: 20, max: 60, step: 10, kind: 'rise', desc: 'Kurz akklimatisieren und antreiben lassen.' },
-      { title: 'Ofen vorheizen', dur: 30, kind: 'prep', desc: 'Auf 240 °C vorheizen, Schwaden vorbereiten.' },
-      { title: 'Backen', dur: 20, kind: 'bake', desc: 'Mit Dampf knusprig goldbraun backen.' },
-    ],
-  },
 ];
 
 // ---------------------------------------------------------------------------
