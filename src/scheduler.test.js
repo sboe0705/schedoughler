@@ -13,8 +13,8 @@ import {
 const FINISH = new Date('2025-01-15T10:00:00')
 
 describe('RECIPES', () => {
-  it('exports 4 recipes', () => {
-    expect(RECIPES).toHaveLength(4)
+  it('exports 2 recipes', () => {
+    expect(RECIPES).toHaveLength(2)
   })
 
   it('every recipe has required fields', () => {
@@ -213,7 +213,7 @@ describe('rangeLabel', () => {
   })
 
   it('formats minute ranges', () => {
-    const step = RECIPES[1].steps[3] // Stückgare: 30–75 min
-    expect(rangeLabel(step)).toBe('30–75 Min')
+    const step = RECIPES[1].steps[4] // Backen: 10–15 min
+    expect(rangeLabel(step)).toBe('10–15 Min')
   })
 })
