@@ -28,6 +28,7 @@ export const KINDS = {
 //   step.min/max/step   present => step is "flexible" (range adjustable in UI)
 //   step.kind           key into KINDS
 //   step.sleep          true => overnight step (blue highlight + "über Nacht")
+//   step.ingredients    optional array of { amount?, unit?, name, note? }
 // ---------------------------------------------------------------------------
 export const RECIPES = [
   {
@@ -36,9 +37,19 @@ export const RECIPES = [
     totalShort: '~28 Std',
     subtitle: 'Knusprige Kruste, aromatische Krume · Marcel Paa',
     steps: [
-      { title: 'Vorteig ansetzen', dur: 15, kind: 'prep', desc: 'Sauerteig, handwarmes Wasser und Weissmehl verkneten, zur Kugel formen und im Gefäss markieren.' },
+      { title: 'Vorteig ansetzen', dur: 15, kind: 'prep', desc: 'Sauerteig, handwarmes Wasser und Weissmehl verkneten, zur Kugel formen und im Gefäss markieren.', ingredients: [
+        { amount: 30,  unit: 'g', name: 'Sauerteig' },
+        { amount: 110, unit: 'g', name: 'Wasser',    note: 'handwarm' },
+        { amount: 145, unit: 'g', name: 'Weissmehl', note: 'Weizenmehl Type 405/550' },
+      ] },
       { title: 'Vorteig gären lassen', dur: 720, min: 480, max: 840, step: 30, kind: 'rise', sleep: true, desc: 'Bei Raumtemperatur gehen lassen, bis sich das Volumen verdreifacht hat.' },
-      { title: 'Hauptteig kneten', dur: 15, kind: 'prep', desc: 'Alle Zutaten 10–12 Min. kneten, bis der Teig die Fensterprobe besteht.' },
+      { title: 'Hauptteig kneten', dur: 15, kind: 'prep', desc: 'Alle Zutaten 10–12 Min. kneten, bis der Teig die Fensterprobe besteht.', ingredients: [
+        {                         name: 'Vorteig' },
+        { amount: 300, unit: 'g', name: 'Wasser',          note: 'handwarm' },
+        { amount: 140, unit: 'g', name: 'Roggenmehl hell', note: 'Roggenmehl Type 610 oder 815' },
+        { amount: 285, unit: 'g', name: 'Weissmehl',       note: 'Weizenmehl Type 405/550' },
+        { amount: 9,   unit: 'g', name: 'Salz' },
+      ] },
       { title: 'Stockgare', dur: 120, min: 90, max: 180, step: 15, kind: 'rise', desc: 'Rund vorformen und zugedeckt bei Raumtemperatur aufgehen lassen.' },
       { title: 'Rund formen', dur: 15, kind: 'prep', desc: 'Teig schleifen, Spannung aufbauen und mit Verschluss nach oben in den bemehlten Gärkorb setzen.' },
       { title: 'Stückgare im Kühlschrank', dur: 720, min: 600, max: 960, step: 30, kind: 'cold', sleep: true, desc: 'Zugedeckt im Kühlschrank reifen lassen – entwickelt Aroma und Triebkraft.' },
