@@ -41,6 +41,8 @@ index.html            # HTML entry point; loads Google Fonts; lang="de"
 vite.config.js        # Vite config — Vue plugin + dynamic base path for GitHub Pages
 .github/workflows/ci.yml  # CI: test → build → deploy to GitHub Pages
 design/               # Reference materials and design prototypes (not deployed)
+README.md             # Data model reference + recipe conversion prompt + CLAUDE.md update instructions
+CLAUDE.md             # This file — Claude Code context for this repository
 ```
 
 ## Coding Conventions
