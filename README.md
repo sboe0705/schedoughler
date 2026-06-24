@@ -69,6 +69,21 @@ Ingredients live on the step where they are **first introduced**. A step that on
 
 ---
 
+## Saved bakes
+
+Long-pressing a recipe chip (~550 ms) saves the current bake — the active recipe's finish time and any duration overrides — as a bookmark. A small rust-coloured badge appears on saved chips.
+
+- **Tap** a chip that has a saved bake → restores its saved finish time and overrides
+- **Tap** a chip without a saved bake → resets to a fresh default finish time
+- **Long-press** a chip that already has a saved bake → removes the bookmark
+- **Auto-expiry** — saved bakes are dropped automatically 2 hours after their finish time, both on app launch and every 60 seconds while the page is open
+
+Saved bakes are persisted to `localStorage` under the key `schedoughler.saved.v1`.
+
+The persistence helpers (`loadSavedBakes`, `persistSavedBakes`, `toggleSavedBake`, `pruneSavedBakes`) and the constants `SAVED_KEY` / `SAVED_EXPIRY_MS` live in `src/scheduler.js`.
+
+---
+
 ## Adding a recipe
 
 ### 1. Manual authoring

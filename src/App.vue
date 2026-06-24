@@ -10,7 +10,7 @@
 
     <section class="section">
       <div class="section-label">REZEPT WÄHLEN</div>
-      <RecipePicker :recipes="RECIPES" v-model="recipeId" />
+      <RecipePicker :recipes="RECIPES" v-model="recipeId" :saved-bakes="savedBakes" @long-press="onLongPress" />
     </section>
 
     <SetupCard
@@ -30,8 +30,11 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue'
-import { RECIPES, computeSchedule, defaultFinishTime, nudgeDuration } from './scheduler.js'
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
+import {
+  RECIPES, computeSchedule, defaultFinishTime, nudgeDuration,
+  loadSavedBakes, persistSavedBakes, toggleSavedBake, pruneSavedBakes,
+} from './scheduler.js'
 import RecipePicker from './components/RecipePicker.vue'
 import SetupCard from './components/SetupCard.vue'
 import StepTimeline from './components/StepTimeline.vue'
@@ -52,11 +55,25 @@ const recipe = computed(() => RECIPES.find(r => r.id === recipeId.value) ?? RECI
 const finishAt = ref(loadFinishAt(recipeId.value))
 const overrides = ref(JSON.parse(localStorage.getItem('overrides') ?? '{}'))
 
+function pruneAndPersist(saved) {
+  const { saved: pruned, changed } = pruneSavedBakes(saved)
+  if (changed) persistSavedBakes(localStorage, pruned)
+  return pruned
+}
+
+const savedBakes = ref(pruneAndPersist(loadSavedBakes(localStorage)))
+
 const schedule = computed(() => computeSchedule(recipe.value, finishAt.value, overrides.value))
 
-watch(recipeId, (newId) => {
-  overrides.value = {}
-  finishAt.value = defaultFinishTime(recipe.value)
+watch(recipeId, () => {
+  const entry = savedBakes.value[recipeId.value]
+  if (entry) {
+    finishAt.value = new Date(entry.target)
+    overrides.value = { ...entry.overrides }
+  } else {
+    overrides.value = {}
+    finishAt.value = defaultFinishTime(recipe.value)
+  }
 })
 
 watch([recipeId, finishAt, overrides], ([id, fa]) => {
@@ -68,6 +85,25 @@ watch([recipeId, finishAt, overrides], ([id, fa]) => {
 function onNudge(stepIndex, dir) {
   overrides.value = nudgeDuration(recipe.value, overrides.value, stepIndex, dir)
 }
+
+function onLongPress(r) {
+  navigator.vibrate?.(50)
+  const next = toggleSavedBake(savedBakes.value, r, {
+    isActive: r.id === recipeId.value,
+    finishAt: finishAt.value,
+    overrides: overrides.value,
+  })
+  savedBakes.value = next
+  persistSavedBakes(localStorage, next)
+}
+
+let pruneInterval
+onMounted(() => {
+  pruneInterval = setInterval(() => {
+    savedBakes.value = pruneAndPersist(savedBakes.value)
+  }, 60_000)
+})
+onUnmounted(() => clearInterval(pruneInterval))
 </script>
 
 <style>

@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-Schedoughler is a single-page bread-baking scheduler. The user picks a recipe and sets a target finish time; the app calculates every step's start and end by working backwards from that time. Step durations can be nudged where the recipe allows a flexible range.
+Schedoughler is a single-page bread-baking scheduler. The user picks a recipe and sets a target finish time; the app calculates every step's start and end by working backwards from that time. Step durations can be nudged where the recipe allows a flexible range. Long-pressing a recipe chip saves its current bake plan (finish time + overrides) as a bookmark that is restored on the next tap.
 
 **Tech stack:** Vue 3 (Composition API) · Vite 8 · Vitest 4 · plain JavaScript (no TypeScript) · scoped CSS in SFCs · no routing library · no component library · no external state manager.
 
@@ -49,7 +49,7 @@ CLAUDE.md             # This file — Claude Code context for this repository
 
 **Vue components** use `<script setup>` with the Composition API. Props are declared with `defineProps`, events with `defineEmits`. Two-way binding follows the `modelValue` / `update:modelValue` convention.
 
-**State** lives in `App.vue` as Vue `ref`s (`recipeId`, `finishAt`, `overrides`). A `watch` persists them to `localStorage`. The schedule itself is a `computed` ref derived from `computeSchedule(recipe, finishAt, overrides)` — a pure, framework-agnostic function in `scheduler.js`. Data flows down via props; events flow up via `$emit`.
+**State** lives in `App.vue` as Vue `ref`s (`recipeId`, `finishAt`, `overrides`, `savedBakes`). A `watch` persists `recipeId`/`finishAt`/`overrides` to `localStorage`; `savedBakes` is persisted separately under `schedoughler.saved.v1` via helpers in `scheduler.js`. The schedule itself is a `computed` ref derived from `computeSchedule(recipe, finishAt, overrides)` — a pure, framework-agnostic function in `scheduler.js`. Data flows down via props; events flow up via `$emit`.
 
 **Styling** uses scoped CSS inside each SFC — no preprocessor, no utility framework. Fonts are Bitter (headings) and Hanken Grotesk (body), loaded from Google Fonts in `index.html`.
 
@@ -60,6 +60,10 @@ CLAUDE.md             # This file — Claude Code context for this repository
 ## Recipe Data Model
 
 Recipes live in the `RECIPES` array exported from `src/scheduler.js`. The full schema (Recipe, Step, Ingredient fields, step kinds and their colors) is documented in `README.md`. Recipes may carry an optional `source: { url, title }` field; when present, `SetupCard.vue` renders a link icon next to the recipe name.
+
+## Saved Bakes
+
+Long-pressing a recipe chip (~550 ms) saves the active bake plan (finish time + overrides) for that recipe. `RecipePicker.vue` handles the long-press detection (pointer events + 550 ms timer, scroll-cancelled by movement threshold) and emits a `long-press` event. `App.vue` calls `toggleSavedBake` from `scheduler.js` and persists via `persistSavedBakes`. Saved bakes auto-expire 2 hours after their finish time and are pruned on mount and every 60 s. A small rust-coloured badge (`saved-badge`) overlays the top-right corner of saved chips.
 
 ## Important Constraints
 

@@ -365,3 +365,59 @@ export function durationLabel(minutes) {
   const h = Math.floor(minutes / 60), m = minutes % 60;
   return m ? `${h} Std ${m} Min` : `${h} Std`;
 }
+
+// ---------------------------------------------------------------------------
+// Saved bakes
+// ---------------------------------------------------------------------------
+// A "saved bake" bookmarks a planned bake so the user can return to it.
+// Long-pressing a recipe chip in the UI creates or removes the bookmark.
+// A badge on the chip indicates a saved bake; tapping the chip restores it.
+// Saved bakes auto-expire 2 hours after their finish time.
+//
+// Persisted shape (JSON under SAVED_KEY):
+//   { [recipeId]: { target: <ms epoch>, overrides: { [stepIndex]: minutes } } }
+
+export const SAVED_KEY = 'schedoughler.saved.v1';
+export const SAVED_EXPIRY_MS = 2 * 60 * 60 * 1000;
+
+/** Parse the saved-bakes map from localStorage. Safe on missing/corrupt data. */
+export function loadSavedBakes(store) {
+  try { const raw = store.getItem(SAVED_KEY); return raw ? JSON.parse(raw) : {}; }
+  catch (e) { return {}; }
+}
+
+/** Persist the saved-bakes map to localStorage. */
+export function persistSavedBakes(store, saved) {
+  try { store.setItem(SAVED_KEY, JSON.stringify(saved)); } catch (e) {}
+}
+
+/**
+ * Toggle a recipe's saved bake. If already saved, removes it.
+ * If not saved and this is the active recipe, stores its live finish time +
+ * overrides. Otherwise stores the recipe's default finish time.
+ * Returns a NEW map (does not mutate the input).
+ */
+export function toggleSavedBake(saved, recipe, { isActive, finishAt, overrides } = {}) {
+  const next = { ...saved };
+  if (next[recipe.id]) {
+    delete next[recipe.id];
+  } else if (isActive && finishAt) {
+    next[recipe.id] = { target: finishAt.getTime(), overrides: { ...(overrides || {}) } };
+  } else {
+    next[recipe.id] = { target: defaultFinishTime(recipe).getTime(), overrides: {} };
+  }
+  return next;
+}
+
+/**
+ * Drop saved bakes whose finish time is more than SAVED_EXPIRY_MS in the past.
+ * Returns { saved, changed } so the caller knows whether to re-persist.
+ */
+export function pruneSavedBakes(saved, now = Date.now()) {
+  const cutoff = now - SAVED_EXPIRY_MS;
+  const next = { ...saved }; let changed = false;
+  Object.keys(next).forEach(k => {
+    if (next[k].target < cutoff) { delete next[k]; changed = true; }
+  });
+  return { saved: next, changed };
+}
