@@ -62,7 +62,14 @@ input[type=date],input[type=time]{font-family:'Bitter',serif}
       </div>
 
       <div style="background:#FBF5EA;border:1px solid #EADCC4;border-radius:20px;padding:18px;box-shadow:0 1px 0 #fff inset;margin-bottom:18px">
-        <div style="font-family:'Bitter',serif;font-weight:700;font-size:17px;color:#2E2218">{{ currentName }}</div>
+        <div style="display:flex;align-items:center;gap:9px">
+          <div style="font-family:'Bitter',serif;font-weight:700;font-size:17px;color:#2E2218">{{ currentName }}</div>
+          <sc-if value="{{ hasSource }}" hint-placeholder-val="{{ true }}">
+            <a href="{{ sourceUrl }}" target="_blank" rel="noopener" title="{{ sourceTitle }}" style="flex:none;width:26px;height:26px;display:inline-flex;align-items:center;justify-content:center;border-radius:8px;background:#F4EBDD;border:1px solid #E7D6BB;color:#6B4426;text-decoration:none" style-hover="background:#6B4426;border-color:#6B4426;color:#FBF5EA">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+            </a>
+          </sc-if>
+        </div>
         <div style="font-size:12.5px;color:#9A8156;font-weight:500;margin-top:2px;margin-bottom:16px">{{ currentSubtitle }}</div>
 
         <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#A8946C;margin-bottom:8px">Brot fertig am</div>
@@ -153,6 +160,7 @@ class Component extends DCLogic {
     {
       id: 'sauerteig', name: 'Sauerteigbrot', totalShort: '~28 Std',
       subtitle: 'Knusprige Kruste, aromatische Krume · Marcel Paa',
+      source: { url: 'https://www.marcelpaa.com/rezepte/sauerteig-brot/', title: 'Originalrezept auf marcelpaa.com' },
       steps: [
         { title: 'Vorteig ansetzen', dur: 15, kind: 'prep', ingredients: [{ amount: 30, unit: 'g', name: 'Sauerteig' }, { amount: 110, unit: 'g', name: 'Wasser', note: 'handwarm' }, { amount: 145, unit: 'g', name: 'Weissmehl', note: 'Weizenmehl Type 405/550' }], desc: 'Sauerteig, handwarmes Wasser und Weissmehl verkneten, zur Kugel formen und im Gefäss markieren.' },
         { title: 'Vorteig gären lassen', dur: 720, min: 480, max: 840, step: 30, kind: 'rise', sleep: true, desc: 'Bei Raumtemperatur gehen lassen, bis sich das Volumen verdreifacht hat.' },
@@ -352,6 +360,9 @@ class Component extends DCLogic {
     return {
       recipes,
       currentName: r.name, currentSubtitle: r.subtitle,
+      hasSource: !!(r.source && r.source.url),
+      sourceUrl: r.source ? r.source.url : '#',
+      sourceTitle: r.source ? r.source.title : '',
       dateValue: `${target.getFullYear()}-${this.pad(target.getMonth() + 1)}-${this.pad(target.getDate())}`,
       timeValue: this.fmtTimeOnly(target),
       onDateChange: this.onDateChange, onTimeChange: this.onTimeChange,

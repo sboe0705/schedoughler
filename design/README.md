@@ -69,6 +69,11 @@ width). Sections top → bottom:
 
 #### 3. Setup card (background `#FBF5EA`, border `1px solid #EADCC4`, radius 20px, padding 18px)
 - Recipe name (Bitter 700, 17px, `#2E2218`) + subtitle (12.5px, 500, `#9A8156`).
+  When the recipe has a `source`, a small **link icon** sits to the right of the
+  name: 26×26, radius 8px, background `#F4EBDD`, border `1px solid #E7D6BB`,
+  icon `#6B4426` (a 13px chain/link glyph). On hover it inverts to background
+  `#6B4426` / icon `#FBF5EA`. It is an `<a>` opening `source.url` in a new tab,
+  with `source.title` as its tooltip.
 - Label "BROT FERTIG AM" (11px, 700, `#A8946C`, uppercase).
 - **Date input** (flex:1) + **Time input** (width 108px), `gap:10px`.
   Each: background `#F4EBDD`, border `1px solid #E5D5BB`, radius 12px, padding
@@ -194,7 +199,7 @@ Kind pill background = kind color + `22` alpha hex; faint ring = kind color + `5
 
 ## Recipe data model (see `scheduler.js` for the full data + functions)
 ```
-recipe = { id, name, totalShort, subtitle, steps: [step, ...] }
+recipe = { id, name, totalShort, subtitle, source?: { url, title }, steps: [step, ...] }
 step   = {
   title, desc,
   dur,                       // default duration in MINUTES
@@ -223,6 +228,10 @@ overrides)`, `defaultFinishTime(recipe)`, `nudgeDuration(...)`, `rangeLabel(step
 - **Room-temperature adjustment** — scale rise durations by ambient temp.
 
 ## Changelog
+- **2026-06-24** — Added optional **`recipe.source`** (`{ url, title }`). When set,
+  the setup card shows a small link icon next to the recipe name linking to the
+  original recipe (opens in a new tab; `title` is the tooltip). Only the
+  sourdough has a real source; the other three recipes are illustrative.
 - **2026-06-24** — Switched ingredients to a **structured schema**: each
   ingredient is now `{ amount?: number, unit?: string, name: string, note?:
   string }` instead of a pre-formatted `{ amount, name }` string pair. Amount and

@@ -24,6 +24,8 @@ export const KINDS = {
 
 // ---------------------------------------------------------------------------
 // Recipe data model.
+//   recipe.source       optional { url, title }: link to the original recipe.
+//                       When present, the UI shows a small link icon by the name.
 //   step.dur            default duration in MINUTES
 //   step.min/max/step   present => step is "flexible" (range adjustable in UI)
 //   step.kind           key into KINDS
@@ -44,6 +46,7 @@ export const RECIPES = [
     name: 'Sauerteigbrot',
     totalShort: '~28 Std',
     subtitle: 'Knusprige Kruste, aromatische Krume · Marcel Paa',
+    source: { url: 'https://www.marcelpaa.com/rezepte/sauerteig-brot/', title: 'Originalrezept auf marcelpaa.com' },
     steps: [
       { title: 'Vorteig ansetzen', dur: 15, kind: 'prep', ingredients: [{ amount: 30, unit: 'g', name: 'Sauerteig' }, { amount: 110, unit: 'g', name: 'Wasser', note: 'handwarm' }, { amount: 145, unit: 'g', name: 'Weissmehl', note: 'Weizenmehl Type 405/550' }], desc: 'Sauerteig, handwarmes Wasser und Weissmehl verkneten, zur Kugel formen und im Gefäss markieren.' },
       { title: 'Vorteig gären lassen', dur: 720, min: 480, max: 840, step: 30, kind: 'rise', sleep: true, desc: 'Bei Raumtemperatur gehen lassen, bis sich das Volumen verdreifacht hat.' },
