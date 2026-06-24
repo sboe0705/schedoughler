@@ -11,6 +11,12 @@
     <section class="section">
       <div class="section-label">REZEPT WÄHLEN</div>
       <RecipePicker :recipes="RECIPES" v-model="recipeId" :saved-bakes="savedBakes" @long-press="onLongPress" />
+      <div v-if="showSaveHint" class="save-hint">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#B5532A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 2h12a1 1 0 0 1 1 1v18l-7-4-7 4V3a1 1 0 0 1 1-1z"/>
+        </svg>
+        <span>Tipp: Rezept <b>gedrückt halten</b>, um die Backzeit zu speichern.</span>
+      </div>
     </section>
 
     <SetupCard
@@ -64,6 +70,7 @@ function pruneAndPersist(saved) {
 const savedBakes = ref(pruneAndPersist(loadSavedBakes(localStorage)))
 
 const schedule = computed(() => computeSchedule(recipe.value, finishAt.value, overrides.value))
+const showSaveHint = ref(Object.keys(savedBakes.value).length === 0)
 
 watch(recipeId, () => {
   const entry = savedBakes.value[recipeId.value]
@@ -95,6 +102,7 @@ function onLongPress(r) {
   })
   savedBakes.value = next
   persistSavedBakes(localStorage, next)
+  if (Object.keys(next).length > 0) showSaveHint.value = false
 }
 
 let pruneInterval
@@ -213,4 +221,19 @@ body {
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
+
+.save-hint {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 12px;
+  background: #F6EEDF;
+  border: 1px dashed #E0CBA8;
+  border-radius: 12px;
+  font-size: 11.5px;
+  color: #8A7350;
+  font-weight: 600;
+  line-height: 1.3;
+}
+.save-hint b { color: var(--color-brown); font-weight: 700; }
 </style>

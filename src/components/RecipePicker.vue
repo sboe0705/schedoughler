@@ -1,29 +1,30 @@
 <template>
   <div class="picker">
-    <div
+    <button
       v-for="r in recipes"
       :key="r.id"
-      class="chip-wrapper"
+      class="chip"
+      :class="{ selected: r.id === modelValue }"
+      @pointerdown="startLongPress(r, $event)"
+      @pointerup="cancelLongPress"
+      @pointermove="onPointerMove"
+      @pointercancel="cancelLongPress"
+      @contextmenu.prevent
+      @click="onChipClick(r.id)"
     >
-      <button
-        class="chip"
-        :class="{ selected: r.id === modelValue }"
-        @pointerdown="startLongPress(r, $event)"
-        @pointerup="cancelLongPress"
-        @pointermove="onPointerMove"
-        @pointercancel="cancelLongPress"
-        @contextmenu.prevent
-        @click="onChipClick(r.id)"
+      <span class="chip-name">{{ r.name }}</span>
+      <span class="chip-meta">{{ r.totalShort }}</span>
+      <span
+        v-if="savedBakes[r.id]"
+        class="saved-badge"
+        title="Gespeicherte Backzeit – lange drücken zum Entfernen"
+        aria-hidden="true"
       >
-        <span class="chip-name">{{ r.name }}</span>
-        <span class="chip-meta">{{ r.totalShort }}</span>
-      </button>
-      <div v-if="savedBakes[r.id]" class="saved-badge" aria-label="Gespeichert">
-        <svg viewBox="0 0 10 13" width="11" height="13" fill="white" aria-hidden="true">
-          <path d="M1 0h8v13L5 9.5 1 13V0z"/>
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="#FBF5EA">
+          <path d="M6 2h12a1 1 0 0 1 1 1v18l-7-4-7 4V3a1 1 0 0 1 1-1z"/>
         </svg>
-      </div>
-    </div>
+      </span>
+    </button>
   </div>
 </template>
 
@@ -44,12 +45,10 @@ let timer = null
 let longPressActive = false
 let startX = 0
 let startY = 0
-let pendingRecipe = null
 
 function startLongPress(recipe, event) {
   cancelLongPress()
   longPressActive = false
-  pendingRecipe = recipe
   startX = event.clientX
   startY = event.clientY
   timer = setTimeout(() => {
@@ -88,17 +87,12 @@ function onChipClick(id) {
 }
 .picker::-webkit-scrollbar { display: none; }
 
-.chip-wrapper {
-  position: relative;
-  flex-shrink: 0;
-}
-
 .chip {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 3px;
   min-width: 120px;
-  width: 100%;
   padding: 13px 15px;
   border-radius: 16px;
   border: 1.5px solid #E5D5BB;
@@ -106,6 +100,7 @@ function onChipClick(id) {
   cursor: pointer;
   text-align: left;
   transition: all .15s;
+  flex-shrink: 0;
   user-select: none;
   -webkit-user-select: none;
   touch-action: none;
@@ -135,15 +130,15 @@ function onChipClick(id) {
 
 .saved-badge {
   position: absolute;
-  top: -6px;
-  right: -6px;
+  bottom: 7px;
+  right: 7px;
   width: 20px;
   height: 20px;
   border-radius: 7px;
   background: #B5532A;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  pointer-events: none;
+  box-shadow: 0 1px 3px rgba(0,0,0,.3);
 }
 </style>
