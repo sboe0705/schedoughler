@@ -16,6 +16,7 @@ The full model lives in `src/scheduler.js` and is made up of three nested types.
   name:       string,   // display name, e.g. 'Sauerteigbrot'
   totalShort: string,   // human duration hint, e.g. '~28 Std'
   subtitle:   string,   // short tagline / attribution
+  source?:    { url: string, title: string },  // optional link to original recipe
   steps:      Step[],   // ordered list, first to last
 }
 ```
@@ -90,6 +91,7 @@ Recipe object:
   name       – human display name
   totalShort – rough total time as a string, e.g. '~28 Std' or '~3,5 Std'
   subtitle   – one-line tagline (flavour + source if known)
+  source     – optional { url, title } — add only when a real URL to the original recipe is known
   steps      – ordered array of Step objects
 
 Step object (required fields):

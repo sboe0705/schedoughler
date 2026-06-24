@@ -59,7 +59,7 @@ CLAUDE.md             # This file — Claude Code context for this repository
 
 ## Recipe Data Model
 
-Recipes live in the `RECIPES` array exported from `src/scheduler.js`. The full schema (Recipe, Step, Ingredient fields, step kinds and their colors) is documented in `README.md`.
+Recipes live in the `RECIPES` array exported from `src/scheduler.js`. The full schema (Recipe, Step, Ingredient fields, step kinds and their colors) is documented in `README.md`. Recipes may carry an optional `source: { url, title }` field; when present, `SetupCard.vue` renders a link icon next to the recipe name.
 
 ## Important Constraints
 

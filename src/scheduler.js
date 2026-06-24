@@ -24,6 +24,7 @@ export const KINDS = {
 
 // ---------------------------------------------------------------------------
 // Recipe data model.
+//   recipe.source       optional { url, title } — shown as a link icon in SetupCard
 //   step.dur            default duration in MINUTES
 //   step.min/max/step   present => step is "flexible" (range adjustable in UI)
 //   step.kind           key into KINDS
@@ -36,6 +37,7 @@ export const RECIPES = [
     name: 'Sauerteigbrot',
     totalShort: '~28 Std',
     subtitle: 'Knusprige Kruste, aromatische Krume · Marcel Paa',
+    source: { url: 'https://www.marcelpaa.com/rezepte/sauerteigbrot/', title: 'Marcel Paa – Sauerteig Brot' },
     steps: [
       { title: 'Vorteig ansetzen', dur: 15, kind: 'prep', desc: 'Sauerteig, handwarmes Wasser und Weissmehl verkneten, zur Kugel formen und im Gefäss markieren.', ingredients: [
         { amount: 30,  unit: 'g', name: 'Sauerteig' },
@@ -62,6 +64,7 @@ export const RECIPES = [
     name: "Sauerteig Cracker",
     totalShort: "~3,5 Std",
     subtitle: "Knuspriges Knäckebrot aus Anstellgut – Marcel Paa",
+    source: { url: 'https://www.marcelpaa.com/rezepte/knaeckebrot-aus-sauerteig/', title: 'Marcel Paa - Sauerteig Cracker' },
     steps: [
       {
         title: "Teig mischen",
@@ -116,6 +119,7 @@ export const RECIPES = [
     name: 'Guinness Brot',
     totalShort: '~15 Std',
     subtitle: 'Würzig-malziges Sauerteigbrot mit Guinness – von Marcel Paa',
+    source: { url: 'https://www.marcelpaa.com/rezepte/guinness-brot/', title: 'Marcel Paa - Guinness Brot' },
     steps: [
       {
         title: 'Teig kneten',
@@ -198,6 +202,7 @@ export const RECIPES = [
     name: 'Pane di Altamura',
     totalShort: '~14 Std',
     subtitle: 'Hartweizenmehl-Sauerteigbrot mit langer Kaltgare – von Oliver',
+    source: { url: 'https://cookin.eu/pane-di-altamura/', title: 'cookin.eu - Pane di Altamura' },
     steps: [
       {
         title: 'Autolyse',
