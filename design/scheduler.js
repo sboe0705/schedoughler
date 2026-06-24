@@ -28,6 +28,15 @@ export const KINDS = {
 //   step.min/max/step   present => step is "flexible" (range adjustable in UI)
 //   step.kind           key into KINDS
 //   step.sleep          true => overnight step (blue highlight + "über Nacht")
+//   step.ingredients    optional array of Ingredient objects — what to add/use at
+//                       this step. Shown as a small list inside the step card.
+//                       Only on steps where new ingredients are introduced.
+//
+// Ingredient object:
+//   amount  number (omit for references like the preferment)
+//   unit    string such as 'g' or 'ml' (omit when not applicable)
+//   name    ingredient name
+//   note    optional parenthetical, e.g. 'handwarm' or 'Weizenmehl Type 550'
 // ---------------------------------------------------------------------------
 export const RECIPES = [
   {
@@ -36,9 +45,9 @@ export const RECIPES = [
     totalShort: '~28 Std',
     subtitle: 'Knusprige Kruste, aromatische Krume · Marcel Paa',
     steps: [
-      { title: 'Vorteig ansetzen', dur: 15, kind: 'prep', desc: 'Sauerteig, handwarmes Wasser und Weissmehl verkneten, zur Kugel formen und im Gefäss markieren.' },
+      { title: 'Vorteig ansetzen', dur: 15, kind: 'prep', ingredients: [{ amount: 30, unit: 'g', name: 'Sauerteig' }, { amount: 110, unit: 'g', name: 'Wasser', note: 'handwarm' }, { amount: 145, unit: 'g', name: 'Weissmehl', note: 'Weizenmehl Type 405/550' }], desc: 'Sauerteig, handwarmes Wasser und Weissmehl verkneten, zur Kugel formen und im Gefäss markieren.' },
       { title: 'Vorteig gären lassen', dur: 720, min: 480, max: 840, step: 30, kind: 'rise', sleep: true, desc: 'Bei Raumtemperatur gehen lassen, bis sich das Volumen verdreifacht hat.' },
-      { title: 'Hauptteig kneten', dur: 15, kind: 'prep', desc: 'Alle Zutaten 10–12 Min. kneten, bis der Teig die Fensterprobe besteht.' },
+      { title: 'Hauptteig kneten', dur: 15, kind: 'prep', ingredients: [{ name: 'Reifer Vorteig', note: 'komplett' }, { amount: 300, unit: 'g', name: 'Wasser', note: 'handwarm' }, { amount: 285, unit: 'g', name: 'Weissmehl', note: 'Weizenmehl Type 405/550' }, { amount: 140, unit: 'g', name: 'Roggenmehl hell', note: 'Type 610/815' }, { amount: 9, unit: 'g', name: 'Salz' }], desc: 'Alle Zutaten 10–12 Min. kneten, bis der Teig die Fensterprobe besteht.' },
       { title: 'Stockgare', dur: 120, min: 90, max: 180, step: 15, kind: 'rise', desc: 'Rund vorformen und zugedeckt bei Raumtemperatur aufgehen lassen.' },
       { title: 'Rund formen', dur: 15, kind: 'prep', desc: 'Teig schleifen, Spannung aufbauen und mit Verschluss nach oben in den bemehlten Gärkorb setzen.' },
       { title: 'Stückgare im Kühlschrank', dur: 720, min: 600, max: 960, step: 30, kind: 'cold', sleep: true, desc: 'Zugedeckt im Kühlschrank reifen lassen – entwickelt Aroma und Triebkraft.' },
@@ -52,7 +61,7 @@ export const RECIPES = [
     totalShort: '~3,5 Std',
     subtitle: 'Locker und schnell – ein Hefebrot für denselben Tag',
     steps: [
-      { title: 'Teig kneten', dur: 15, kind: 'prep', desc: 'Mehl, Wasser, Hefe und Salz glatt und geschmeidig auskneten.' },
+      { title: 'Teig kneten', dur: 15, kind: 'prep', ingredients: [{ amount: 500, unit: 'g', name: 'Weissmehl', note: 'Type 550' }, { amount: 320, unit: 'g', name: 'Wasser', note: 'handwarm' }, { amount: 7, unit: 'g', name: 'Trockenhefe' }, { amount: 10, unit: 'g', name: 'Salz' }], desc: 'Mehl, Wasser, Hefe und Salz glatt und geschmeidig auskneten.' },
       { title: 'Stockgare', dur: 90, min: 60, max: 150, step: 15, kind: 'rise', desc: 'Zugedeckt gehen lassen, bis sich das Volumen verdoppelt hat.' },
       { title: 'Formen', dur: 10, kind: 'prep', desc: 'Entgasen, straff zu einem Laib formen und in den Gärkorb legen.' },
       { title: 'Stückgare', dur: 45, min: 30, max: 75, step: 15, kind: 'rise', desc: 'Bei Raumtemperatur bis zur vollen Gare aufgehen lassen.' },
@@ -66,9 +75,9 @@ export const RECIPES = [
     totalShort: '~16 Std',
     subtitle: 'Kräftig & saftig – Sauerteig mit Roggen und Weizen',
     steps: [
-      { title: 'Sauerteig auffrischen', dur: 10, kind: 'prep', desc: 'Anstellgut mit Roggenmehl und Wasser verrühren.' },
+      { title: 'Sauerteig auffrischen', dur: 10, kind: 'prep', ingredients: [{ amount: 50, unit: 'g', name: 'Anstellgut' }, { amount: 200, unit: 'g', name: 'Roggenmehl', note: 'Type 1150' }, { amount: 200, unit: 'g', name: 'Wasser', note: 'handwarm' }], desc: 'Anstellgut mit Roggenmehl und Wasser verrühren.' },
       { title: 'Sauerteig reifen', dur: 720, min: 600, max: 900, step: 30, kind: 'rise', sleep: true, desc: 'Über Nacht bei Raumtemperatur reifen lassen, bis er schön sauer duftet.' },
-      { title: 'Hauptteig mischen', dur: 15, kind: 'prep', desc: 'Sauerteig mit Roggen-, Weizenmehl, Wasser und Salz zu einem klebrigen Teig mischen.' },
+      { title: 'Hauptteig mischen', dur: 15, kind: 'prep', ingredients: [{ name: 'Reifer Sauerteig', note: 'komplett' }, { amount: 300, unit: 'g', name: 'Wasser', note: 'handwarm' }, { amount: 300, unit: 'g', name: 'Weizenmehl', note: 'Type 1050' }, { amount: 250, unit: 'g', name: 'Roggenmehl', note: 'Type 1150' }, { amount: 14, unit: 'g', name: 'Salz' }], desc: 'Sauerteig mit Roggen-, Weizenmehl, Wasser und Salz zu einem klebrigen Teig mischen.' },
       { title: 'Teigruhe', dur: 60, min: 30, max: 90, step: 15, kind: 'rise', desc: 'Abgedeckt entspannen lassen.' },
       { title: 'Formen', dur: 15, kind: 'prep', desc: 'Mit nassen Händen rund wirken und in den Gärkorb setzen.' },
       { title: 'Stückgare', dur: 90, min: 60, max: 120, step: 15, kind: 'rise', desc: 'Gehen lassen, bis sich feine Risse an der Oberfläche zeigen.' },
@@ -82,7 +91,7 @@ export const RECIPES = [
     totalShort: '~12 Std',
     subtitle: 'Knusprige Frühstücksbrötchen ohne Kneten',
     steps: [
-      { title: 'Teig anrühren', dur: 10, kind: 'prep', desc: 'Alle Zutaten mit wenig Hefe nur kurz vermengen – nicht kneten.' },
+      { title: 'Teig anrühren', dur: 10, kind: 'prep', ingredients: [{ amount: 500, unit: 'g', name: 'Weissmehl', note: 'Type 550' }, { amount: 350, unit: 'g', name: 'Wasser', note: 'kalt' }, { amount: 2, unit: 'g', name: 'Trockenhefe' }, { amount: 10, unit: 'g', name: 'Salz' }], desc: 'Alle Zutaten mit wenig Hefe nur kurz vermengen – nicht kneten.' },
       { title: 'Übernachtgare im Kühlschrank', dur: 600, min: 480, max: 840, step: 30, kind: 'cold', sleep: true, desc: 'Zugedeckt über Nacht im Kühlschrank reifen lassen.' },
       { title: 'Abstechen & formen', dur: 20, kind: 'prep', desc: 'Teig auf die bemehlte Fläche geben und Brötchen abstechen.' },
       { title: 'Stückgare', dur: 30, min: 20, max: 60, step: 10, kind: 'rise', desc: 'Kurz akklimatisieren und antreiben lassen.' },

@@ -94,6 +94,16 @@ Each step is a row: `[time column 60px] [rail 28px] [content card flex:1]`, `gap
     `#EDE9F4`, 10px 700, radius 999px, with a small crescent-moon dot
     (a circle with `box-shadow: inset -3px -1px 0 0 #EDE9F4`).
   - Title: Bitter 700, 15.5px, `#2E2218`. Description: 12.5px, `#6E6253`, line-height 1.45.
+  - **Ingredients block (steps with an `ingredients` array — the hands-on `prep`
+    steps where dough is mixed):** appears right after the description. A rounded
+    box (radius 12px, padding 12×13px) — background `#F4EBDD` border `1px solid
+    #E7D6BB` on normal steps, background `#E2E7EF` border `1px solid #CFD8E2` on
+    overnight steps so it stays legible on the blue card. Inside: a label
+    "ZUTATEN" (10px, 700, `#B6A485`, uppercase) then one row per ingredient:
+    right-aligned **amount + unit** (Bitter 700, 12.5px, `#6B4426`, fixed 58px
+    column) + **name** (12.5px, 500, `#4D4438`) with an optional **note** in
+    parentheses (`#9A8156`). Ingredients with no `amount` (e.g. "Reifer Vorteig")
+    are references to something made earlier — render a `+` in the amount column.
   - Meta row: a **kind pill** (background `<kind>22`, text `<kind>`, 11px 700,
     radius 999px) + duration label (11.5px, 600, `#9A8156`).
   - **Flexible step (`min` present):** a divider (`1px dashed #E7D6BB`) then:
@@ -190,7 +200,15 @@ step   = {
   dur,                       // default duration in MINUTES
   kind,                      // 'prep' | 'rise' | 'cold' | 'bake'
   sleep?: true,              // overnight → blue highlight + pill
-  min?, max?, step?          // present → flexible (range-adjustable) step
+  min?, max?, step?,         // present → flexible (range-adjustable) step
+  ingredients?: [            // present → render the ingredients block
+    {                        // Ingredient object:
+      amount?,               //   number — omit for references (e.g. the preferment)
+      unit?,                 //   'g' | 'ml' | … — omit when not applicable
+      name,                  //   ingredient name
+      note?                  //   parenthetical, e.g. 'handwarm', 'Weizenmehl Type 550'
+    }
+  ]
 }
 ```
 `scheduler.js` exports: `RECIPES`, `KINDS`, `computeSchedule(recipe, finishAt,
@@ -203,6 +221,19 @@ overrides)`, `defaultFinishTime(recipe)`, `nudgeDuration(...)`, `rangeLabel(step
 - **Live / active-bake mode** — highlight the current/next step against the clock.
 - **User-editable & custom recipes** — CRUD on the recipe model.
 - **Room-temperature adjustment** — scale rise durations by ambient temp.
+
+## Changelog
+- **2026-06-24** — Switched ingredients to a **structured schema**: each
+  ingredient is now `{ amount?: number, unit?: string, name: string, note?:
+  string }` instead of a pre-formatted `{ amount, name }` string pair. Amount and
+  unit are separate numeric/string fields; the note renders in parentheses;
+  references with no amount (the preferment) render a `+`. The UI composes the
+  display strings at render time.
+- **2026-06-24** — Added per-step **ingredients** (`step.ingredients: [{amount,
+  name}]`) on the dough-mixing `prep` steps, rendered as an ingredients block in
+  each step card (see Step timeline spec). Sourdough quantities are from the
+  source recipe; the other three recipes use representative quantities. Removed
+  the earlier horizontal overview timeline.
 
 ## Files in this bundle
 | File | What it is |
