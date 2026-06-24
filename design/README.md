@@ -60,6 +60,9 @@ width). Sections top → bottom:
 #### 2. Recipe picker
 - Section label "REZEPT WÄHLEN": 11px, 700, `#A8946C`, uppercase, letter-spacing 0.1em.
 - Horizontal scroll row of recipe chips, `gap: 10px`.
+- **Saved-bake badge:** when a recipe has a saved bake, a 20×20 rounded-square
+  badge (radius 7px, background `#B5532A`, white bookmark glyph) sits at the
+  chip's top-right corner. Long-press interactions below.
 - **Chip** (min-width 120px): column layout, padding 13×15px, `border-radius: 16px`.
   - Unselected: background `#FBF5EA`, border `1.5px solid #E5D5BB`. Name `#2E2218`,
     meta `#A8946C`.
@@ -126,8 +129,18 @@ Each step is a row: `[time column 60px] [rail 28px] [content card flex:1]`, `gap
 ---
 
 ## Interactions & Behavior
-- **Select recipe** → switches active recipe, resets `overrides` to `{}`, and
-  recomputes a fresh default finish time (`defaultFinishTime`).
+- **Select recipe (tap)** → switches active recipe. If that recipe has a **saved
+  bake**, restore its finish time + overrides; otherwise reset overrides and
+  compute a fresh default finish time (`defaultFinishTime`).
+- **Save bake (long-press a recipe chip, ~550 ms)** → toggles a saved bookmark
+  for that recipe. Saving stores the current finish time + overrides for the
+  active recipe (or the recipe's default plan if it isn't the active one).
+  Long-pressing a chip that is already saved **removes** the saved bake. A small
+  badge marks saved chips. Long-press should suppress the context menu and the
+  follow-up tap-select, and ideally fire a short haptic (`navigator.vibrate`).
+- **Auto-expiry** → a saved bake is dropped automatically once its finish time is
+  more than **2 hours** in the past. Prune on launch and on a periodic timer
+  (the prototype checks every 60 s).
 - **Change date / time** → updates the target finish; whole timeline recomputes.
 - **"früher beginnen" / "später ›"** → on a flexible step, lengthens / shortens
   that step's duration by `step.step` minutes, clamped to `[min,max]`. Because
@@ -147,6 +160,14 @@ overrides  : { [stepIndex:number]: minutes }  // per flexible-step duration over
 Everything displayed is **derived** from these via `computeSchedule()` — do not
 store computed times in state; recompute on render. Persist all three (e.g.
 AsyncStorage / localStorage) so an in-progress plan survives app restart.
+
+**Saved bakes** are a separate persisted map, keyed by recipe id:
+```
+saved : { [recipeId]: { target: <ms epoch>, overrides: { [stepIndex]: minutes } } }
+```
+Stored as JSON under `SAVED_KEY` (`'schedoughler.saved.v1'`). See the *Saved
+bakes* helpers in `scheduler.js` (`loadSavedBakes`, `persistSavedBakes`,
+`toggleSavedBake`, `pruneSavedBakes`, `SAVED_EXPIRY_MS`).
 
 ## Design Tokens
 
@@ -218,7 +239,9 @@ step   = {
 ```
 `scheduler.js` exports: `RECIPES`, `KINDS`, `computeSchedule(recipe, finishAt,
 overrides)`, `defaultFinishTime(recipe)`, `nudgeDuration(...)`, `rangeLabel(step)`,
-`durationLabel(min)`, `effectiveDuration(step, override)`. **Reuse these verbatim.**
+`durationLabel(min)`, `effectiveDuration(step, override)`, plus the saved-bake
+helpers `loadSavedBakes`, `persistSavedBakes`, `toggleSavedBake`,
+`pruneSavedBakes` and the constants `SAVED_KEY` / `SAVED_EXPIRY_MS`. **Reuse these verbatim.**
 
 ## Out of scope (suggested next features, not part of this handoff)
 - **Local notifications** at each step's start time — the killer feature; wire
@@ -228,6 +251,12 @@ overrides)`, `defaultFinishTime(recipe)`, `nudgeDuration(...)`, `rangeLabel(step
 - **Room-temperature adjustment** — scale rise durations by ambient temp.
 
 ## Changelog
+- **2026-06-24** — Added **saved bakes**: long-press a recipe chip to bookmark its
+  current bake (finish time + overrides); a badge marks saved chips; tapping a
+  saved recipe restores its plan; long-press again removes it; saved bakes
+  auto-expire 2 h after their finish time. Persisted under `'schedoughler.saved.v1'`.
+  New `scheduler.js` helpers: `loadSavedBakes`, `persistSavedBakes`,
+  `toggleSavedBake`, `pruneSavedBakes`, `SAVED_KEY`, `SAVED_EXPIRY_MS`.
 - **2026-06-24** — Added optional **`recipe.source`** (`{ url, title }`). When set,
   the setup card shows a small link icon next to the recipe name linking to the
   original recipe (opens in a new tab; `title` is the tooltip). Only the

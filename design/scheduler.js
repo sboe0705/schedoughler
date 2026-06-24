@@ -192,3 +192,60 @@ export function durationLabel(minutes) {
   const h = Math.floor(minutes / 60), m = minutes % 60;
   return m ? `${h} Std ${m} Min` : `${h} Std`;
 }
+
+// ---------------------------------------------------------------------------
+// Saved bakes
+// --------------------------------------------------------------------------
+// A "saved bake" bookmarks a planned bake for a recipe so the user can come
+// back to it. In the UI it is created/removed by LONG-PRESSING a recipe chip,
+// shown as a small badge on that chip, and restored when the recipe is tapped.
+// A saved bake auto-expires 2 hours after its finish time (the bake is over).
+//
+// Shape (one map, persisted as JSON under SAVED_KEY):
+//   { [recipeId]: { target: <ms epoch finish time>, overrides: { [stepIndex]: minutes } } }
+// These helpers are storage-agnostic (pass any { getItem, setItem } store, e.g.
+// localStorage / AsyncStorage); they never touch storage themselves except via it.
+
+export const SAVED_KEY = 'schedoughler.saved.v1';
+export const SAVED_EXPIRY_MS = 2 * 60 * 60 * 1000; // 2 hours past finish time
+
+/** Parse the saved-bakes map from a storage backend. Safe on missing/corrupt data. */
+export function loadSavedBakes(store) {
+  try { const raw = store.getItem(SAVED_KEY); return raw ? JSON.parse(raw) : {}; }
+  catch (e) { return {}; }
+}
+
+/** Persist the saved-bakes map. */
+export function persistSavedBakes(store, saved) {
+  try { store.setItem(SAVED_KEY, JSON.stringify(saved)); } catch (e) {}
+}
+
+/**
+ * Toggle a recipe's saved bake.
+ *   - already saved  -> removed
+ *   - not saved      -> stored (use the live finish time + overrides if this is
+ *                       the active recipe, else the recipe's default finish time)
+ * Returns a NEW map (does not mutate the input).
+ */
+export function toggleSavedBake(saved, recipe, { isActive, finishAt, overrides } = {}) {
+  const next = { ...saved };
+  if (next[recipe.id]) {
+    delete next[recipe.id];
+  } else if (isActive && finishAt) {
+    next[recipe.id] = { target: finishAt.getTime(), overrides: { ...(overrides || {}) } };
+  } else {
+    next[recipe.id] = { target: defaultFinishTime(recipe).getTime(), overrides: {} };
+  }
+  return next;
+}
+
+/**
+ * Drop any saved bakes whose finish time is more than SAVED_EXPIRY_MS in the
+ * past. Returns { saved, changed } so the caller knows whether to re-persist.
+ */
+export function pruneSavedBakes(saved, now = Date.now()) {
+  const cutoff = now - SAVED_EXPIRY_MS;
+  const next = { ...saved }; let changed = false;
+  Object.keys(next).forEach(k => { if (next[k].target < cutoff) { delete next[k]; changed = true; } });
+  return { saved: next, changed };
+}
