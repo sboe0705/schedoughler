@@ -63,6 +63,12 @@ width). Sections top → bottom:
 - **Saved-bake badge:** when a recipe has a saved bake, a 20×20 rounded-square
   badge (radius 7px, background `#B5532A`, white bookmark glyph) sits at the
   chip's top-right corner. Long-press interactions below.
+- **Discoverability:** a one-time hint row sits under the picker (dashed
+  `#E0CBA8` border on `#F6EEDF`, bookmark icon + "Tipp: Rezept *gedrückt halten*,
+  um die Backzeit zu speichern"). It hides permanently after the first save
+  (persisted flag `'schedoughler.hintSeen'`). While a chip is held, a 3px fill
+  bar grows along its bottom edge (`#B5532A`) over the 550 ms hold, giving live
+  feedback before the save fires.
 - **Chip** (min-width 120px): column layout, padding 13×15px, `border-radius: 16px`.
   - Unselected: background `#FBF5EA`, border `1.5px solid #E5D5BB`. Name `#2E2218`,
     meta `#A8946C`.
@@ -138,6 +144,8 @@ Each step is a row: `[time column 60px] [rail 28px] [content card flex:1]`, `gap
   Long-pressing a chip that is already saved **removes** the saved bake. A small
   badge marks saved chips. Long-press should suppress the context menu and the
   follow-up tap-select, and ideally fire a short haptic (`navigator.vibrate`).
+  Show a growing hold-progress bar during the press, and a one-time teaching
+  hint until the user's first save (flag `'schedoughler.hintSeen'`).
 - **Auto-expiry** → a saved bake is dropped automatically once its finish time is
   more than **2 hours** in the past. Prune on launch and on a periodic timer
   (the prototype checks every 60 s).
@@ -251,6 +259,9 @@ helpers `loadSavedBakes`, `persistSavedBakes`, `toggleSavedBake`,
 - **Room-temperature adjustment** — scale rise durations by ambient temp.
 
 ## Changelog
+- **2026-06-24** — Made the saved-bake gesture **discoverable**: a one-time hint
+  row under the picker (auto-hides after first save, flag `'schedoughler.hintSeen'`)
+  and a live hold-progress fill bar on the chip during the long-press.
 - **2026-06-24** — Added **saved bakes**: long-press a recipe chip to bookmark its
   current bake (finish time + overrides); a badge marks saved chips; tapping a
   saved recipe restores its plan; long-press again removes it; saved bakes
