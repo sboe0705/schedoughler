@@ -103,7 +103,7 @@ function onChipClick(id) {
   flex-shrink: 0;
   user-select: none;
   -webkit-user-select: none;
-  touch-action: none;
+  touch-action: pan-x;
 }
 
 .chip.selected {
