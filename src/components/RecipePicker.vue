@@ -87,6 +87,18 @@ function onChipClick(id) {
 }
 .picker::-webkit-scrollbar { display: none; }
 
+@media (pointer: fine) {
+  .picker {
+    scrollbar-width: thin;
+    scrollbar-color: #D4BC98 transparent;
+    padding-bottom: 10px;
+  }
+  .picker::-webkit-scrollbar { display: block; height: 4px; }
+  .picker::-webkit-scrollbar-track { background: transparent; }
+  .picker::-webkit-scrollbar-thumb { background: #D4BC98; border-radius: 2px; }
+  .picker::-webkit-scrollbar-thumb:hover { background: #B5976E; }
+}
+
 .chip {
   position: relative;
   display: flex;
