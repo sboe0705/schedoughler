@@ -43,7 +43,7 @@ The full model lives in `src/scheduler.js` and is made up of three nested types.
 }
 ```
 
-**Rule of thumb for `min`/`max`/`step`:** add these whenever a baker would reasonably shift the duration (bulk ferments, cold retards). Leave them off for mechanical steps like kneading or baking where the time is fixed.
+**Rule of thumb for `min`/`max`/`step`:** add these whenever a baker would reasonably shift the duration (bulk ferments, cold retards). Leave them off for mechanical steps like kneading, and always leave them off `bake` steps — oven time is fixed and must not be manually adjustable.
 
 ### KINDS
 
@@ -118,7 +118,9 @@ Step object (required fields):
 Step object (optional fields):
   min, max, step  – add when the duration is genuinely flexible (e.g. proof times):
                     min/max are the acceptable range in minutes,
-                    step is the nudge increment (usually 15 or 30)
+                    step is the nudge increment (usually 15 or 30).
+                    NEVER add these to a 'bake' step — oven time is fixed,
+                    not something a baker nudges mid-schedule.
   sleep: true     – add when the step spans overnight
   ingredients     – array of Ingredient objects (see below), only on steps
                     where new ingredients are introduced
@@ -133,12 +135,14 @@ Ingredient object:
 - 'prep'  active hands-on work: mixing, kneading, shaping, scoring
 - 'rise'  room-temperature fermentation or proofing
 - 'cold'  cold retard in the fridge
-- 'bake'  time in the oven
+- 'bake'  time in the oven — always fixed duration, never min/max/step
 
 ## Rules
 1. One step per distinct phase — do not merge kneading and bulk ferment into one step.
 2. Add min/max/step only to steps with a real flexibility window (proof times, retards).
-   Fixed steps like kneading or baking get only 'dur'.
+   Fixed steps like kneading or baking get only 'dur'. 'bake' steps in particular
+   must NEVER carry min/max/step, even if a source recipe gives a time range —
+   collapse the range into a single representative 'dur' instead.
 3. Baking temperature and vessel info belong in 'desc', not a separate step.
 4. Never give the oven preheat its own step. Fold it into the 'desc' of the
    'bake' step it precedes (temperature, vessel, e.g. "Ofen mit Gusseisentopf auf

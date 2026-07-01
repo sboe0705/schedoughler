@@ -213,7 +213,7 @@ describe('rangeLabel', () => {
   })
 
   it('formats minute ranges', () => {
-    const step = RECIPES[1].steps[3] // Backen: 10–15 min
-    expect(rangeLabel(step)).toBe('10–15 Min')
+    const step = RECIPES[2].steps[6] // Guinness Brot Stückgare: 40–50 min
+    expect(rangeLabel(step)).toBe('40–50 Min')
   })
 })

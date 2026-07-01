@@ -99,9 +99,6 @@ export const RECIPES = [
       {
         title: "Backen",
         dur: 12,
-        min: 10,
-        max: 15,
-        step: 1,
         kind: "bake",
         desc: "Backofen auf 210 °C Ober-/Unterhitze vorheizen, Cracker auf dem Backpapier in der Ofenmitte goldbraun und knusprig ausbacken, dann vollständig auskühlen lassen.",
       },
@@ -304,9 +301,6 @@ export const RECIPES = [
       {
         title: 'Backen',
         dur: 18,
-        min: 15,
-        max: 20,
-        step: 5,
         kind: 'bake',
         desc: 'Ofen mit Wasserschale in der unteren Hälfte auf 210 °C Ober-/Unterhitze vorheizen, Brötchen mit der Naht nach oben einschießen, rund 15 Minuten mit Schwaden backen, Schale entfernen und weitere 5–10 Minuten fertig backen.',
       },
@@ -361,9 +355,6 @@ export const RECIPES = [
       {
         title: 'Backen',
         dur: 22,
-        min: 20,
-        max: 25,
-        step: 5,
         kind: 'bake',
         desc: 'Ofen in der Zwischenzeit auf 230 °C vorheizen; Brötchen mit der Naht nach oben auf ein geöltes Lochblech setzen, mit Mehl bestäuben, einschießen, schwaden und bei 210 °C 20–25 Minuten knusprig backen.',
       },
@@ -418,9 +409,6 @@ export const RECIPES = [
       {
         title: 'Backen',
         dur: 27,
-        min: 25,
-        max: 30,
-        step: 5,
         kind: 'bake',
         desc: 'Ofen mit feuerfester Schale im unteren Rost in der Zwischenzeit auf 230 °C Ober-/Unterhitze vorheizen; Brötchen mit der Naht nach oben auf ein geöltes Lochblech stürzen, bemehlen, einschießen, Wasser in die heisse Schale giessen und 15 Minuten schwaden, dann Schale entfernen und weitere 10–15 Minuten knusprig fertig backen.',
       },
