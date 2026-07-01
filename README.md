@@ -130,7 +130,7 @@ Ingredient object:
   note    – optional parenthetical, e.g. 'handwarm' or 'Weizenmehl Type 550'
 
 ## Kind guide
-- 'prep'  active hands-on work: mixing, kneading, shaping, scoring, preheating
+- 'prep'  active hands-on work: mixing, kneading, shaping, scoring
 - 'rise'  room-temperature fermentation or proofing
 - 'cold'  cold retard in the fridge
 - 'bake'  time in the oven
@@ -140,7 +140,11 @@ Ingredient object:
 2. Add min/max/step only to steps with a real flexibility window (proof times, retards).
    Fixed steps like kneading or baking get only 'dur'.
 3. Baking temperature and vessel info belong in 'desc', not a separate step.
-4. Preheating the oven is always its own 'prep' step immediately before baking.
+4. Never give the oven preheat its own step. Fold it into the 'desc' of the
+   'bake' step it precedes (temperature, vessel, e.g. "Ofen mit Gusseisentopf auf
+   230 °C vorheizen, dann ..."), and do not add its time to the step's 'dur' —
+   preheating happens in parallel with earlier steps, so it should not add to
+   the total schedule length.
 5. Assign ingredients to the step where they are first introduced.
    A 'Vorteig' used in a later step appears as { name: 'Vorteig' } (no amount/unit).
 6. Output only valid JavaScript — a single object literal, no imports or exports.

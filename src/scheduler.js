@@ -55,14 +55,13 @@ export const RECIPES = [
       { title: 'Stockgare', dur: 120, min: 90, max: 180, step: 15, kind: 'rise', desc: 'Rund vorformen und zugedeckt bei Raumtemperatur aufgehen lassen.' },
       { title: 'Rund formen', dur: 15, kind: 'prep', desc: 'Teig schleifen, Spannung aufbauen und mit Verschluss nach oben in den bemehlten Gärkorb setzen.' },
       { title: 'Stückgare im Kühlschrank', dur: 720, min: 600, max: 960, step: 30, kind: 'cold', sleep: true, desc: 'Zugedeckt im Kühlschrank reifen lassen – entwickelt Aroma und Triebkraft.' },
-      { title: 'Ofen vorheizen', dur: 45, kind: 'prep', desc: 'Mit Gusseisentopf auf 230 °C Ober-/Unterhitze vorheizen.' },
-      { title: 'Einschneiden & backen', dur: 50, kind: 'bake', desc: 'Stürzen, übers Kreuz einschneiden, 40 Min. im Topf, dann 10 Min. offen ausbacken.' },
+      { title: 'Einschneiden & backen', dur: 50, kind: 'bake', desc: 'Ofen mit Gusseisentopf auf 230 °C Ober-/Unterhitze vorheizen, Teigling stürzen, übers Kreuz einschneiden, 40 Min. im Topf, dann 10 Min. offen ausbacken.' },
     ],
   },
   {
     id: "sauerteig-cracker",
     name: "Sauerteig Cracker",
-    totalShort: "~3,5 Std",
+    totalShort: "~3 Std",
     subtitle: "Knuspriges Knäckebrot aus Anstellgut – Marcel Paa",
     source: { url: 'https://www.marcelpaa.com/rezepte/knaeckebrot-aus-sauerteig/', title: 'Marcel Paa - Sauerteig Cracker' },
     steps: [
@@ -92,12 +91,6 @@ export const RECIPES = [
         desc: "Teig abgedeckt bei Raumtemperatur 2,5–3 Stunden aufgehen lassen.",
       },
       {
-        title: "Ofen vorheizen",
-        dur: 15,
-        kind: "prep",
-        desc: "Backofen auf 210 °C Ober-/Unterhitze vorheizen.",
-      },
-      {
         title: "Formen & schneiden",
         dur: 10,
         kind: "prep",
@@ -110,7 +103,7 @@ export const RECIPES = [
         max: 15,
         step: 1,
         kind: "bake",
-        desc: "Cracker auf dem Backpapier in der Ofenmitte bei 210 °C Ober-/Unterhitze goldbraun und knusprig ausbacken, dann vollständig auskühlen lassen.",
+        desc: "Backofen auf 210 °C Ober-/Unterhitze vorheizen, Cracker auf dem Backpapier in der Ofenmitte goldbraun und knusprig ausbacken, dann vollständig auskühlen lassen.",
       },
     ],
   },
@@ -172,12 +165,6 @@ export const RECIPES = [
         desc: 'Teig auf bemehlter Fläche rund vorformen, dann straff länglich formen und auf Backpapier absetzen.',
       },
       {
-        title: 'Ofen vorheizen',
-        dur: 45,
-        kind: 'prep',
-        desc: 'Ofen mit Backstahl in der unteren Hälfte auf 250 °C Ober-/Unterhitze vorheizen.',
-      },
-      {
         title: 'Stückgare',
         dur: 45,
         min: 40,
@@ -190,7 +177,7 @@ export const RECIPES = [
         title: 'Einschießen & Backen',
         dur: 55,
         kind: 'bake',
-        desc: 'Oberfläche mit Guinness bestreichen, längs einschneiden, auf den heißen Backstahl einschießen; Ofen sofort auf 210 °C reduzieren, Dampf erzeugen und 20 Min. backen; Dampf ablassen, weitere 35 Min. fertig backen.',
+        desc: 'Ofen mit Backstahl in der unteren Hälfte auf 250 °C Ober-/Unterhitze vorheizen, Oberfläche mit Guinness bestreichen, längs einschneiden, auf den heißen Backstahl einschießen; Ofen sofort auf 210 °C reduzieren, Dampf erzeugen und 20 Min. backen; Dampf ablassen, weitere 35 Min. fertig backen.',
         ingredients: [
           { name: 'Guinness', note: 'zum Bestreichen' },
         ],
@@ -253,12 +240,6 @@ export const RECIPES = [
         desc: 'Teig am Backtag 30 Minuten bei Raumtemperatur akklimatisieren lassen.',
       },
       {
-        title: 'Ofen vorheizen',
-        dur: 45,
-        kind: 'prep',
-        desc: 'Ofen mit Backstahl oder Topf auf 250 °C Ober-/Unterhitze vorheizen.',
-      },
-      {
         title: 'Wirken & Stückgare',
         dur: 60,
         min: 30,
@@ -271,7 +252,7 @@ export const RECIPES = [
         title: 'Einschießen & Backen',
         dur: 40,
         kind: 'bake',
-        desc: 'Teig ggf. einschneiden und bei 250 °C mit kräftigen Schwaden einschießen; nach 10 Minuten Dampf ablassen und fallend auf 200 °C ca. 30 weitere Minuten fertig backen (Topf-Variante: 20 min mit Deckel bei 250 °C, dann 20–25 min ohne Deckel bei 230 °C).',
+        desc: 'Ofen mit Backstahl oder Topf auf 250 °C Ober-/Unterhitze vorheizen, Teig ggf. einschneiden und mit kräftigen Schwaden einschießen; nach 10 Minuten Dampf ablassen und fallend auf 200 °C ca. 30 weitere Minuten fertig backen (Topf-Variante: 20 min mit Deckel bei 250 °C, dann 20–25 min ohne Deckel bei 230 °C).',
       },
     ],
   },

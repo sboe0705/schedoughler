@@ -213,7 +213,7 @@ describe('rangeLabel', () => {
   })
 
   it('formats minute ranges', () => {
-    const step = RECIPES[1].steps[4] // Backen: 10–15 min
+    const step = RECIPES[1].steps[3] // Backen: 10–15 min
     expect(rangeLabel(step)).toBe('10–15 Min')
   })
 })
