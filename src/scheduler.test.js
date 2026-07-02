@@ -8,6 +8,7 @@ import {
   effectiveDuration,
   durationLabel,
   rangeLabel,
+  matchesQuery,
 } from './scheduler.js'
 
 const FINISH = new Date('2025-01-15T10:00:00')
@@ -215,5 +216,37 @@ describe('rangeLabel', () => {
   it('formats minute ranges', () => {
     const step = RECIPES[2].steps[6] // Guinness Brot Stückgare: 40–50 min
     expect(rangeLabel(step)).toBe('40–50 Min')
+  })
+})
+
+describe('matchesQuery', () => {
+  const recipe = RECIPES[0] // Sauerteigbrot - wie vom Bäcker
+
+  it('matches everything for an empty query', () => {
+    expect(matchesQuery(recipe, '')).toBe(true)
+  })
+
+  it('matches everything for a whitespace-only query', () => {
+    expect(matchesQuery(recipe, '   ')).toBe(true)
+  })
+
+  it('matches on the recipe name, case-insensitively', () => {
+    expect(matchesQuery(recipe, 'SAUERTEIGBROT')).toBe(true)
+  })
+
+  it('matches on a word that only appears in a step title/description', () => {
+    expect(matchesQuery(recipe, 'Gusseisentopf')).toBe(true)
+  })
+
+  it('requires every word to match (AND semantics)', () => {
+    expect(matchesQuery(recipe, 'Gusseisentopf zzzznotfound')).toBe(false)
+  })
+
+  it('matches when every word occurs somewhere in the recipe', () => {
+    expect(matchesQuery(recipe, 'Vorteig ansetzen')).toBe(true)
+  })
+
+  it('returns false when nothing matches', () => {
+    expect(matchesQuery(recipe, 'zzzznotfound')).toBe(false)
   })
 })

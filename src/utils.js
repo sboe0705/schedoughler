@@ -8,6 +8,10 @@ export function formatDayLabel(date) {
   return DAYS[date.getDay()] + ', ' + date.getDate() + '.' + (date.getMonth() + 1) + '.';
 }
 
+export function formatWeekdayTime(date) {
+  return DAYS[date.getDay()] + ' · ' + formatTime(date);
+}
+
 export function formatDateInput(date) {
   const y = date.getFullYear();
   const m = String(date.getMonth() + 1).padStart(2, '0');

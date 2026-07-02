@@ -1,26 +1,5 @@
 <template>
   <div class="setup-card">
-    <div class="recipe-info">
-      <div class="recipe-name-row">
-        <span class="recipe-name">{{ recipe.name }}</span>
-        <a
-          v-if="recipe.source?.url"
-          :href="recipe.source.url"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="source-link"
-          :title="recipe.source.title"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-            <polyline points="15 3 21 3 21 9"/>
-            <line x1="10" y1="14" x2="21" y2="3"/>
-          </svg>
-        </a>
-      </div>
-      <span class="recipe-subtitle">{{ recipe.subtitle }}</span>
-    </div>
-
     <div class="field-group">
       <div class="field-label">BROT FERTIG AM</div>
       <div class="inputs-row">
@@ -59,7 +38,6 @@ import { durationLabel } from '../scheduler.js'
 import { formatDateInput, formatTimeInput, formatTime, formatDayLabel } from '../utils.js'
 
 const props = defineProps({
-  recipe: Object,
   finishAt: Date,
   schedule: Object,
 })
@@ -95,47 +73,6 @@ function onTimeChange(e) {
   display: flex;
   flex-direction: column;
   gap: 16px;
-}
-
-.recipe-info {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-
-.recipe-name-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.source-link {
-  width: 26px;
-  height: 26px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--color-muted);
-  flex-shrink: 0;
-  border-radius: 6px;
-  transition: color 0.15s;
-}
-
-.source-link:hover {
-  color: var(--color-brown);
-}
-
-.recipe-name {
-  font-family: var(--font-serif);
-  font-size: 17px;
-  font-weight: 700;
-  color: var(--color-ink);
-}
-
-.recipe-subtitle {
-  font-size: 12.5px;
-  font-weight: 500;
-  color: var(--color-muted);
 }
 
 .field-group {

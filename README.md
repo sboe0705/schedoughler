@@ -71,11 +71,12 @@ Ingredients live on the step where they are **first introduced**. A step that on
 
 ## Saved bakes
 
-Long-pressing a recipe chip (~550 ms) saves the current bake — the active recipe's finish time and any duration overrides — as a bookmark. A small rust-coloured badge appears on saved chips.
+Each row in the recipe selection view has a bookmark button that saves or removes a bake — the active recipe's finish time and any duration overrides — as a bookmark. Saved recipes are pinned in their own "Gespeicherte Backzeiten" section at the top of the list (soonest finish time first); everything else stays in the alphabetical "Alle Rezepte" section.
 
-- **Tap** a chip that has a saved bake → restores its saved finish time and overrides
-- **Tap** a chip without a saved bake → resets to a fresh default finish time
-- **Long-press** a chip that already has a saved bake → removes the bookmark
+- **Tap** a row's body → opens the scheduler, restoring the saved finish time and overrides if that recipe has a saved bake, otherwise starting from a fresh default finish time
+- **Tap** the outline bookmark button on a row without a saved bake → saves it (the live finish time + overrides if it's the recipe currently open in the scheduler, otherwise a fresh default plan); the button click does not also open the scheduler
+- **Tap** the filled bookmark button on a saved row → removes the bookmark, without opening the scheduler
+- **Editing a saved recipe's plan** (changing the finish date/time or nudging a flexible step) while it is open in the scheduler immediately re-persists the saved bake with the new values
 - **Auto-expiry** — saved bakes are dropped automatically 2 hours after their finish time, both on app launch and every 60 seconds while the page is open
 
 Saved bakes are persisted to `localStorage` under the key `schedoughler.saved.v1`.

@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-Schedoughler is a single-page bread-baking scheduler. The user picks a recipe and sets a target finish time; the app calculates every step's start and end by working backwards from that time. Step durations can be nudged where the recipe allows a flexible range. Long-pressing a recipe chip saves its current bake plan (finish time + overrides) as a bookmark that is restored on the next tap.
+Schedoughler is a two-view bread-baking scheduler. The **recipe selection view** is a searchable, vertical list of recipes (saved bakes pinned in their own section at the top, sorted by finish time; all others follow alphabetically); the **scheduler view** shows the plan for one recipe. The user picks a recipe and sets a target finish time; the app calculates every step's start and end by working backwards from that time. Step durations can be nudged where the recipe allows a flexible range. Tapping the bookmark button on a recipe row saves its current bake plan (finish time + overrides) as a bookmark that is restored on the next tap; editing a saved recipe's plan keeps the bookmark in sync automatically.
 
 **Tech stack:** Vue 3 (Composition API) · Vite 8 · Vitest 4 · plain JavaScript (no TypeScript) · scoped CSS in SFCs · no routing library · no component library · no external state manager.
 
@@ -26,16 +26,18 @@ CI runs `npm test` then `npm run build` on every push and PR; pushes to `main` a
 
 ```
 src/
-├── scheduler.js          # All recipe data (RECIPES array) + core scheduling algorithm
-├── scheduler.test.js     # Vitest unit tests — scheduler.js functions only
-├── App.vue               # Root component; owns all reactive state
-├── utils.js              # Date/time formatting helpers
+├── scheduler.js           # All recipe data (RECIPES array) + core scheduling algorithm
+├── scheduler.test.js      # Vitest unit tests — scheduler.js functions only
+├── App.vue                # Root component; owns all reactive state, toggles between the two views
+├── utils.js               # Date/time formatting helpers
 └── components/
-    ├── SetupCard.vue     # Finish-time picker + derived start-time display
-    ├── RecipePicker.vue  # Horizontal recipe selector chips
-    ├── StepTimeline.vue  # Container that renders all step rows
-    ├── StepRow.vue       # Individual step card with timeline rail
-    └── NudgeControls.vue # ± buttons for flexible step durations
+    ├── RecipeSelectView.vue # Recipe selection view: header, search field, saved/all-recipes sections
+    ├── RecipeRow.vue       # Single recipe row (saved vs. normal variant) with a bookmark button
+    ├── SchedulerHeader.vue # Scheduler view title bar: back button, recipe name/subtitle, source link
+    ├── SetupCard.vue       # Finish-time picker + derived start-time display
+    ├── StepTimeline.vue    # Container that renders all step rows
+    ├── StepRow.vue         # Individual step card with timeline rail
+    └── NudgeControls.vue   # ± buttons for flexible step durations
 
 index.html            # HTML entry point; loads Google Fonts; lang="de"
 vite.config.js        # Vite config — Vue plugin + dynamic base path for GitHub Pages
@@ -49,7 +51,7 @@ CLAUDE.md             # This file — Claude Code context for this repository
 
 **Vue components** use `<script setup>` with the Composition API. Props are declared with `defineProps`, events with `defineEmits`. Two-way binding follows the `modelValue` / `update:modelValue` convention.
 
-**State** lives in `App.vue` as Vue `ref`s (`recipeId`, `finishAt`, `overrides`, `savedBakes`). A `watch` persists `recipeId`/`finishAt`/`overrides` to `localStorage`; `savedBakes` is persisted separately under `schedoughler.saved.v1` via helpers in `scheduler.js`. The schedule itself is a `computed` ref derived from `computeSchedule(recipe, finishAt, overrides)` — a pure, framework-agnostic function in `scheduler.js`. Data flows down via props; events flow up via `$emit`.
+**State** lives in `App.vue` as Vue `ref`s (`view`, `recipeId`, `finishAt`, `overrides`, `savedBakes`). `view` (`'select' | 'plan'`) toggles between the two views and is not persisted — every fresh page load opens on the recipe selection view. A `watch` persists `recipeId`/`finishAt`/`overrides` to `localStorage`; `savedBakes` is persisted separately under `schedoughler.saved.v1` via helpers in `scheduler.js`. A second watcher on `finishAt`/`overrides` keeps an already-saved recipe's bookmark in sync while its plan is being edited. The schedule itself is a `computed` ref derived from `computeSchedule(recipe, finishAt, overrides)` — a pure, framework-agnostic function in `scheduler.js`. `RecipeSelectView.vue` owns its own local `query` ref (search text) — it is UI-only and not lifted to `App.vue` or persisted. Data flows down via props; events flow up via `$emit`.
 
 **Styling** uses scoped CSS inside each SFC — no preprocessor, no utility framework. Fonts are Bitter (headings) and Hanken Grotesk (body), loaded from Google Fonts in `index.html`.
 
@@ -59,11 +61,15 @@ CLAUDE.md             # This file — Claude Code context for this repository
 
 ## Recipe Data Model
 
-Recipes live in the `RECIPES` array exported from `src/scheduler.js`. The full schema (Recipe, Step, Ingredient fields, step kinds and their colors) is documented in `README.md`. Recipes may carry an optional `source: { url, title }` field; when present, `SetupCard.vue` renders a link icon next to the recipe name.
+Recipes live in the `RECIPES` array exported from `src/scheduler.js`. The full schema (Recipe, Step, Ingredient fields, step kinds and their colors) is documented in `README.md`. Recipes may carry an optional `source: { url, title }` field; when present, `SchedulerHeader.vue` renders a link icon next to the recipe name in the scheduler view's title bar.
+
+## Search
+
+`RecipeSelectView.vue` filters both list sections live against a local `query` ref using `matchesQuery(recipe, query)` from `scheduler.js` — case-insensitive, whitespace-split, every word must occur in the recipe's title or any step's title/description. An empty query matches everything.
 
 ## Saved Bakes
 
-Long-pressing a recipe chip (~550 ms) saves the active bake plan (finish time + overrides) for that recipe. `RecipePicker.vue` handles the long-press detection (pointer events + 550 ms timer, scroll-cancelled by movement threshold) and emits a `long-press` event. `App.vue` calls `toggleSavedBake` from `scheduler.js` and persists via `persistSavedBakes`. Saved bakes auto-expire 2 hours after their finish time and are pruned on mount and every 60 s. A small rust-coloured badge (`saved-badge`) overlays the top-right corner of saved chips.
+Tapping the bookmark button on a `RecipeRow.vue` saves or removes the active bake plan (finish time + overrides) for that recipe — an explicit tap, not a gesture; the button click calls `stopPropagation` so it never also opens the scheduler. `App.vue` calls `toggleSavedBake` from `scheduler.js` and persists via `persistSavedBakes`. Saved recipes are pinned in their own "Gespeicherte Backzeiten" section at the top of the selection list (sorted by saved finish time ascending) and rendered with a filled bookmark button and a "Fertig …" pill; unsaved recipes live in the alphabetical "Alle Rezepte" section with an outline bookmark button. Editing a saved recipe's plan (date/time or a step nudge) in the scheduler view immediately re-persists the saved bake with the new values via a dedicated `watch` in `App.vue`. Saved bakes auto-expire 2 hours after their finish time and are pruned on mount and every 60 s.
 
 ## Important Constraints
 

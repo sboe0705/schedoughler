@@ -1,37 +1,29 @@
 <template>
   <div class="app">
-    <header class="header">
-      <div class="app-icon">S</div>
-      <div class="wordmark-group">
-        <span class="wordmark">Schedoughler</span>
-        <span class="sub-label">BROT NACH PLAN</span>
-      </div>
-    </header>
-
-    <section class="section">
-      <div class="section-label">REZEPT WÄHLEN</div>
-      <RecipePicker :recipes="RECIPES" v-model="recipeId" :saved-bakes="savedBakes" @long-press="onLongPress" />
-      <div v-if="showSaveHint" class="save-hint">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#B5532A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M6 2h12a1 1 0 0 1 1 1v18l-7-4-7 4V3a1 1 0 0 1 1-1z"/>
-        </svg>
-        <span>Tipp: Rezept <b>gedrückt halten</b>, um die Backzeit zu speichern.</span>
-      </div>
-    </section>
-
-    <SetupCard
-      :recipe="recipe"
-      :finish-at="finishAt"
-      :schedule="schedule"
-      @update:finish-at="finishAt = $event"
+    <RecipeSelectView
+      v-if="view === 'select'"
+      :recipes="RECIPES"
+      :saved-bakes="savedBakes"
+      @select-recipe="onSelectRecipe"
+      @toggle-save="onToggleSave"
     />
 
-    <StepTimeline
-      :schedule="schedule"
-      :overrides="overrides"
-      :recipe="recipe"
-      @nudge="onNudge"
-    />
+    <template v-else>
+      <SchedulerHeader :recipe="recipe" @back="onBack" />
+
+      <SetupCard
+        :finish-at="finishAt"
+        :schedule="schedule"
+        @update:finish-at="finishAt = $event"
+      />
+
+      <StepTimeline
+        :schedule="schedule"
+        :overrides="overrides"
+        :recipe="recipe"
+        @nudge="onNudge"
+      />
+    </template>
   </div>
 </template>
 
@@ -41,7 +33,8 @@ import {
   RECIPES, computeSchedule, defaultFinishTime, nudgeDuration,
   loadSavedBakes, persistSavedBakes, toggleSavedBake, pruneSavedBakes,
 } from './scheduler.js'
-import RecipePicker from './components/RecipePicker.vue'
+import RecipeSelectView from './components/RecipeSelectView.vue'
+import SchedulerHeader from './components/SchedulerHeader.vue'
 import SetupCard from './components/SetupCard.vue'
 import StepTimeline from './components/StepTimeline.vue'
 
@@ -56,6 +49,7 @@ function loadFinishAt(recipeId) {
   return defaultFinishTime(r)
 }
 
+const view = ref('select')
 const recipeId = ref(localStorage.getItem('recipeId') ?? RECIPES[0].id)
 const recipe = computed(() => RECIPES.find(r => r.id === recipeId.value) ?? RECIPES[0])
 const finishAt = ref(loadFinishAt(recipeId.value))
@@ -70,7 +64,6 @@ function pruneAndPersist(saved) {
 const savedBakes = ref(pruneAndPersist(loadSavedBakes(localStorage)))
 
 const schedule = computed(() => computeSchedule(recipe.value, finishAt.value, overrides.value))
-const showSaveHint = ref(Object.keys(savedBakes.value).length === 0)
 
 watch(recipeId, () => {
   const entry = savedBakes.value[recipeId.value]
@@ -89,12 +82,31 @@ watch([recipeId, finishAt, overrides], ([id, fa]) => {
   localStorage.setItem('overrides', JSON.stringify(overrides.value))
 }, { deep: true })
 
+// Keep an already-saved bake's bookmark in sync while its plan is being edited.
+watch([finishAt, overrides], () => {
+  if (!savedBakes.value[recipeId.value]) return
+  const next = {
+    ...savedBakes.value,
+    [recipeId.value]: { target: finishAt.value.getTime(), overrides: { ...overrides.value } },
+  }
+  savedBakes.value = next
+  persistSavedBakes(localStorage, next)
+}, { deep: true })
+
 function onNudge(stepIndex, dir) {
   overrides.value = nudgeDuration(recipe.value, overrides.value, stepIndex, dir)
 }
 
-function onLongPress(r) {
-  navigator.vibrate?.(50)
+function onSelectRecipe(id) {
+  recipeId.value = id
+  view.value = 'plan'
+}
+
+function onBack() {
+  view.value = 'select'
+}
+
+function onToggleSave(r) {
   const next = toggleSavedBake(savedBakes.value, r, {
     isActive: r.id === recipeId.value,
     finishAt: finishAt.value,
@@ -102,7 +114,6 @@ function onLongPress(r) {
   })
   savedBakes.value = next
   persistSavedBakes(localStorage, next)
-  if (Object.keys(next).length > 0) showSaveHint.value = false
 }
 
 let pruneInterval
@@ -161,79 +172,4 @@ body {
   flex-direction: column;
   gap: 24px;
 }
-
-.header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding-top: 8px;
-}
-
-.app-icon {
-  width: 34px;
-  height: 34px;
-  border-radius: 11px;
-  background: var(--color-brown);
-  color: #fff;
-  font-family: var(--font-serif);
-  font-size: 19px;
-  font-weight: 800;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: inset 0 -3px 0 rgba(0,0,0,.18);
-  flex-shrink: 0;
-}
-
-.wordmark-group {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-}
-
-.wordmark {
-  font-family: var(--font-serif);
-  font-size: 24px;
-  font-weight: 800;
-  color: var(--color-ink);
-  letter-spacing: -0.01em;
-  line-height: 1;
-}
-
-.sub-label {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--color-muted);
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-.section {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.section-label {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--color-tan);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-.save-hint {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  padding: 9px 12px;
-  background: #F6EEDF;
-  border: 1px dashed #E0CBA8;
-  border-radius: 12px;
-  font-size: 11.5px;
-  color: #8A7350;
-  font-weight: 600;
-  line-height: 1.3;
-}
-.save-hint b { color: var(--color-brown); font-weight: 700; }
 </style>

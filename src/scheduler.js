@@ -569,6 +569,18 @@ export function durationLabel(minutes) {
   return m ? `${h} Std ${m} Min` : `${h} Std`;
 }
 
+/**
+ * Recipe search (selection view). Case-insensitive; the query is split on
+ * whitespace and EVERY word must occur somewhere in the recipe's title or its
+ * step titles/descriptions. Empty query matches everything.
+ */
+export function matchesQuery(recipe, query) {
+  const q = (query || '').trim().toLowerCase();
+  if (!q) return true;
+  const hay = [recipe.name, ...recipe.steps.map(s => s.title + ' ' + s.desc)].join(' ').toLowerCase();
+  return q.split(/\s+/).filter(Boolean).every(w => hay.includes(w));
+}
+
 // ---------------------------------------------------------------------------
 // Saved bakes
 // ---------------------------------------------------------------------------

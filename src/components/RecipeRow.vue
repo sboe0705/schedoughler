@@ -1,0 +1,138 @@
+<template>
+  <div class="row" :class="{ saved }" @click="$emit('select')">
+    <div class="row-main">
+      <div class="row-name">{{ recipe.name }}</div>
+      <div v-if="saved" class="row-meta">
+        <span class="finish-pill">Fertig {{ savedLabel }}</span>
+        <span class="row-total">{{ recipe.totalShort }}</span>
+      </div>
+      <template v-else>
+        <div class="row-subtitle">{{ recipe.subtitle }}</div>
+        <div class="row-total">{{ recipe.totalShort }}</div>
+      </template>
+    </div>
+
+    <button
+      class="bookmark-btn"
+      :class="{ saved }"
+      :title="saved ? 'Gespeicherte Backzeit entfernen' : 'Backzeit speichern'"
+      @click.stop="$emit('toggle-save')"
+    >
+      <svg v-if="saved" width="14" height="14" viewBox="0 0 24 24" fill="#FBF5EA">
+        <path d="M6 2h12a1 1 0 0 1 1 1v18l-7-4-7 4V3a1 1 0 0 1 1-1z"/>
+      </svg>
+      <svg v-else width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6 2h12a1 1 0 0 1 1 1v18l-7-4-7 4V3a1 1 0 0 1 1-1z"/>
+      </svg>
+    </button>
+  </div>
+</template>
+
+<script setup>
+defineProps({
+  recipe: Object,
+  saved: { type: Boolean, default: false },
+  savedLabel: { type: String, default: '' },
+})
+defineEmits(['select', 'toggle-save'])
+</script>
+
+<style scoped>
+.row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 15px;
+  border-radius: 16px;
+  background: var(--color-card);
+  border: 1.5px solid #E5D5BB;
+  cursor: pointer;
+  transition: border-color .15s;
+}
+
+.row:hover {
+  border-color: var(--color-brown);
+}
+
+.row.saved {
+  border-color: #D9BE93;
+  box-shadow: 0 1px 0 #fff inset;
+}
+
+.row-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.row-name {
+  font-family: var(--font-serif);
+  font-size: 15.5px;
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
+.row-subtitle {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-muted);
+  line-height: 1.35;
+  margin-top: 3px;
+}
+
+.row-total {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--color-tan);
+  margin-top: 5px;
+}
+
+.row-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.row-meta .row-total {
+  margin-top: 0;
+}
+
+.finish-pill {
+  display: inline-flex;
+  align-items: center;
+  background: var(--color-bake);
+  color: var(--color-card);
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 999px;
+  letter-spacing: 0.02em;
+}
+
+.bookmark-btn {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 11px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: #F4EBDD;
+  border: 1px solid #E0CBA8;
+  color: #B6A485;
+  transition: color .15s, border-color .15s;
+}
+
+.bookmark-btn:hover {
+  color: var(--color-bake);
+  border-color: var(--color-bake);
+}
+
+.bookmark-btn.saved {
+  background: var(--color-bake);
+  border: none;
+  color: var(--color-card);
+  box-shadow: 0 1px 3px rgba(0,0,0,.25);
+}
+</style>
