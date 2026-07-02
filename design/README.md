@@ -3,15 +3,25 @@
 ## Overview
 Schedoughler is a **mobile app** that schedules the steps of a bread recipe by
 working **backwards from the moment the bread should be finished**. The baker
-picks a pre-defined recipe and a target finish date/time; the app calculates
-when every step must start (preferment, knead, bulk proof, shape, cold proof,
-preheat, bake) and presents them as a vertical timeline. Overnight steps are
-visually flagged so the baker can plan around sleep, and flexible proofing steps
-(those with a duration *range*, e.g. "8–14 h") can be nudged earlier/later,
-which shifts the start time while keeping the finish fixed.
+picks a recipe and a target finish date/time; the app calculates when every
+step must start (preferment, knead, bulk proof, shape, cold proof, preheat,
+bake) and presents them as a vertical timeline. Overnight steps are visually
+flagged so the baker can plan around sleep, and flexible proofing steps (those
+with a duration *range*, e.g. "8–14 h") can be nudged earlier/later, which
+shifts the start time while keeping the finish fixed.
+
+The app has **two views**:
+
+1. **Recipe selection** — a searchable vertical list of recipes. Recipes with a
+   **saved bake** (bookmark) are pinned in their own section at the top, sorted
+   by finish time; all other recipes follow, sorted alphabetically. Each row
+   has a bookmark button to save/remove a bake.
+2. **Scheduler** — the plan for one recipe: finish date/time inputs, the
+   computed "start now" banner, and the step-by-step timeline. A back button
+   returns to the selection view.
 
 The source recipe is a sourdough loaf by Marcel Paa (German); three more breads
-were added to populate the picker.
+were added to populate the list.
 
 ## About the Design Files
 The files in this bundle are **design references created in HTML** — a working
@@ -27,8 +37,9 @@ useful. Plain React (web) + a PWA wrapper is a valid lighter-weight alternative.
 
 **The single most valuable asset in this bundle is [`scheduler.js`](./scheduler.js)** —
 a framework-agnostic, dependency-free module containing the recipe data model and
-the entire backward-scheduling engine. It is already extracted from the prototype
-and ready to drop into the new project unchanged. Build the UI around it.
+the entire backward-scheduling engine (plus saved-bake and search helpers). It is
+already extracted from the prototype and ready to drop into the new project
+unchanged. Build the UI around it.
 
 ## Fidelity
 **High-fidelity (hifi).** Colors, typography, spacing, and interactions are final.
@@ -40,16 +51,15 @@ date/time picker instead of HTML `<input type="date">`).
 
 ## Screens / Views
 
-The prototype is a **single scrolling screen**. For the production app it is
-clearest to think of it as one main screen with logical sections. (Future screens
-— recipe editor, live/active-bake mode, notification settings — are noted at the
-end as out of scope for this handoff.)
+Phone width (design drawn at 392 px logical width). Both views share the cream
+canvas `#F4EBDD` and scroll vertically. Navigation: selection → tap a row →
+scheduler; scheduler → back button → selection. In production, use the
+platform's stack navigation (slide transition); the prototype swaps instantly.
 
-### Main screen — "Plan a bake"
-**Purpose:** select a recipe + finish time, read the calculated schedule.
+### View 1 — Recipe selection (`data-screen-label="Rezeptauswahl"`)
+**Purpose:** find a recipe (search), manage saved bakes, open the scheduler.
 
-Vertical scroll, single column. Phone width (design drawn at 392 px logical
-width). Sections top → bottom:
+Sections top → bottom:
 
 #### 1. Header
 - App icon: 34×34, `border-radius: 11px`, background `#6B4426`, white serif "S"
@@ -57,32 +67,73 @@ width). Sections top → bottom:
 - Wordmark "Schedoughler": Bitter 800, 24px, `#2E2218`, letter-spacing −0.01em.
 - Sub-label "BROT NACH PLAN": 12px, 600, `#9A8156`, uppercase, letter-spacing 0.04em.
 
-#### 2. Recipe picker
-- Section label "REZEPT WÄHLEN": 11px, 700, `#A8946C`, uppercase, letter-spacing 0.1em.
-- Horizontal scroll row of recipe chips, `gap: 10px`.
-- **Saved-bake badge:** when a recipe has a saved bake, a 20×20 rounded-square
-  badge (radius 7px, background `#B5532A`, white bookmark glyph) sits at the
-  chip's top-right corner. Long-press interactions below.
-- **Discoverability:** a one-time hint row sits under the picker (dashed
-  `#E0CBA8` border on `#F6EEDF`, bookmark icon + "Tipp: Rezept *gedrückt halten*,
-  um die Backzeit zu speichern"). It hides permanently after the first save
-  (persisted flag `'schedoughler.hintSeen'`). While a chip is held, a 3px fill
-  bar grows along its bottom edge (`#B5532A`) over the 550 ms hold, giving live
-  feedback before the save fires.
-- **Chip** (min-width 120px): column layout, padding 13×15px, `border-radius: 16px`.
-  - Unselected: background `#FBF5EA`, border `1.5px solid #E5D5BB`. Name `#2E2218`,
-    meta `#A8946C`.
-  - Selected: background `#6B4426`, border `1.5px solid #6B4426`. Name `#FBF5EA`,
-    meta (total time) `#E7C9A0`.
-  - Name: Bitter 700, 14.5px. Meta: 11px, 600. Transition `all .15s`.
+#### 2. Search field
+- One rounded row: background `#FBF5EA`, border `1.5px solid #E5D5BB`,
+  radius 14px, padding 11×14px, flex row `gap: 9px`.
+- Left: 15px magnifier icon, stroke `#A8946C`.
+- Input: borderless/transparent, Hanken Grotesk 14px 600, text `#3D2817`,
+  placeholder "Rezepte durchsuchen …".
+- Right (only while a query is present): a 22px round clear button —
+  background `#E5D5BB`, `#6B4426` ✕ glyph — resets the query.
+- **Search semantics:** case-insensitive; query is split on whitespace and
+  every word must occur in the recipe **title** or any **step title/description**
+  (see `matchesQuery()` in `scheduler.js`). Filtering applies to BOTH list
+  sections live on every keystroke. If nothing matches, show a centered empty
+  state: `Keine Rezepte gefunden für „<query>“` (12.5px, 600, `#A8946C`).
 
-#### 3. Setup card (background `#FBF5EA`, border `1px solid #EADCC4`, radius 20px, padding 18px)
-- Recipe name (Bitter 700, 17px, `#2E2218`) + subtitle (12.5px, 500, `#9A8156`).
-  When the recipe has a `source`, a small **link icon** sits to the right of the
-  name: 26×26, radius 8px, background `#F4EBDD`, border `1px solid #E7D6BB`,
-  icon `#6B4426` (a 13px chain/link glyph). On hover it inverts to background
-  `#6B4426` / icon `#FBF5EA`. It is an `<a>` opening `source.url` in a new tab,
-  with `source.title` as its tooltip.
+#### 3. Saved list — "GESPEICHERTE BACKZEITEN" (only when ≥1 saved bake matches)
+- Section label: 11px, 700, `#A8946C`, uppercase, letter-spacing 0.1em.
+- Vertical stack, `gap: 9px`, **sorted by saved finish time ascending**
+  (soonest bake first).
+- **Saved row**: flex row `gap:12px`, padding 14×15px, radius 16px, background
+  `#FBF5EA`, border `1.5px solid #D9BE93` (slightly darker than normal rows to
+  read as "pinned"), subtle top inset highlight `0 1px 0 #fff inset`.
+  Hover/press: border → `#6B4426`. Whole row is tappable → opens scheduler
+  with the saved plan restored.
+  - Name: Bitter 700, 15.5px, `#2E2218`.
+  - Below the name: a **finish pill** — background `#B5532A`, text `#FBF5EA`,
+    10.5px 700, radius 999px, padding 4×8px — reading `Fertig <Wd> · <HH:MM>`
+    (e.g. "Fertig Do · 18:00"), followed by the recipe's total duration
+    (11.5px, 600, `#A8946C`).
+  - Right: **bookmark button (saved state)** — 36×36, radius 11px, background
+    `#B5532A`, no border, filled white bookmark glyph (14px), shadow
+    `0 1px 3px rgba(0,0,0,.25)`. Tap **removes** the saved bake (must
+    `stopPropagation` so the row doesn't also open).
+
+#### 4. Full list — "ALLE REZEPTE"
+- Same section-label style. Vertical stack, `gap: 9px`, **sorted alphabetically**
+  (German collation, `localeCompare(…, 'de')`). Contains every recipe **without**
+  a saved bake (saved ones live only in the pinned section — no duplicates).
+- **Row**: flex row `gap:12px`, padding 14×15px, radius 16px, background
+  `#FBF5EA`, border `1.5px solid #E5D5BB`. Hover/press: border → `#6B4426`.
+  Whole row tappable → opens scheduler with a fresh default plan.
+  - Name: Bitter 700, 15.5px, `#2E2218`.
+  - Subtitle: 12px, 500, `#9A8156`, line-height 1.35.
+  - Total duration (e.g. "~28 Std"): 11.5px, 600, `#A8946C`.
+  - Right: **bookmark button (unsaved state)** — 36×36, radius 11px, background
+    `#F4EBDD`, border `1px solid #E0CBA8`, outlined bookmark glyph stroke
+    `#B6A485`. Hover: glyph + border → `#B5532A`. Tap **saves** a bake for this
+    recipe (`stopPropagation`): if it is the recipe currently configured in the
+    scheduler, the configured finish time + overrides are stored; otherwise the
+    recipe's default plan (`defaultFinishTime`) is stored.
+
+### View 2 — Scheduler (`data-screen-label="Zeitplan"`)
+**Purpose:** set the finish time and read the calculated schedule for one recipe.
+
+Sections top → bottom:
+
+#### 1. Title bar
+- **Back button**: 36×36, radius 12px, background `#FBF5EA`, border
+  `1px solid #E0CBA8`, `#6B4426` chevron-left (16px). Hover inverts to
+  `#6B4426` bg / `#FBF5EA` glyph. Returns to the selection view (state is
+  kept — reopening the same recipe resumes the plan).
+- Recipe name: Bitter 800, 20px, `#2E2218` + subtitle 11.5px, 500, `#9A8156`.
+- When the recipe has a `source`: a **link icon** on the right — 30×30,
+  radius 9px, background `#FBF5EA`, border `1px solid #E7D6BB`, icon `#6B4426`
+  (13px chain glyph); hover inverts to `#6B4426`/`#FBF5EA`. An `<a>` opening
+  `source.url` in a new tab, `source.title` as tooltip.
+
+#### 2. Setup card (background `#FBF5EA`, border `1px solid #EADCC4`, radius 20px, padding 18px)
 - Label "BROT FERTIG AM" (11px, 700, `#A8946C`, uppercase).
 - **Date input** (flex:1) + **Time input** (width 108px), `gap:10px`.
   Each: background `#F4EBDD`, border `1px solid #E5D5BB`, radius 12px, padding
@@ -93,7 +144,7 @@ width). Sections top → bottom:
   computed start day/time (Bitter 800, 21px, `#FBF5EA`); right side "Gesamt" +
   total duration (Bitter 700, 15px, `#FBF5EA`).
 
-#### 4. Step timeline — section label "ABLAUF"
+#### 3. Step timeline — section label "ABLAUF"
 Each step is a row: `[time column 60px] [rail 28px] [content card flex:1]`, `gap:12px`.
 
 - **Time column** (right-aligned): start time (Bitter 700, 18px, **colored by step
@@ -135,20 +186,26 @@ Each step is a row: `[time column 60px] [rail 28px] [content card flex:1]`, `gap
 ---
 
 ## Interactions & Behavior
-- **Select recipe (tap)** → switches active recipe. If that recipe has a **saved
-  bake**, restore its finish time + overrides; otherwise reset overrides and
-  compute a fresh default finish time (`defaultFinishTime`).
-- **Save bake (long-press a recipe chip, ~550 ms)** → toggles a saved bookmark
-  for that recipe. Saving stores the current finish time + overrides for the
-  active recipe (or the recipe's default plan if it isn't the active one).
-  Long-pressing a chip that is already saved **removes** the saved bake. A small
-  badge marks saved chips. Long-press should suppress the context menu and the
-  follow-up tap-select, and ideally fire a short haptic (`navigator.vibrate`).
-  Show a growing hold-progress bar during the press, and a one-time teaching
-  hint until the user's first save (flag `'schedoughler.hintSeen'`).
+- **Open recipe (tap a list row)** → navigates to the scheduler. If that recipe
+  has a **saved bake**, restore its finish time + overrides; otherwise reset
+  overrides and compute a fresh default finish time (`defaultFinishTime`).
+- **Save / remove bake (bookmark button on a list row)** → toggles the saved
+  bake for that recipe (see `toggleSavedBake`). Saving stores the currently
+  configured finish time + overrides if it is the active recipe, otherwise the
+  default plan. The recipe moves between the pinned "Gespeicherte Backzeiten"
+  section and the alphabetical "Alle Rezepte" list. The button tap must not
+  trigger the row's open action.
+- **Search** → filters both sections live per keystroke against title + step
+  titles/descriptions (`matchesQuery`). Clear button resets. Show the empty
+  state when nothing matches. The query is UI-only state — no need to persist.
+- **Back** (scheduler) → returns to the selection view; scheduler state is kept
+  in memory so returning to the same recipe resumes where the user left off.
+- **Editing a saved recipe's plan keeps the bookmark in sync** — changing the
+  finish date/time or nudging a flexible step while that recipe is saved
+  immediately re-persists the saved bake with the new values.
 - **Auto-expiry** → a saved bake is dropped automatically once its finish time is
-  more than **2 hours** in the past. Prune on launch and on a periodic timer
-  (the prototype checks every 60 s).
+  more than **2 hours** in the past (`pruneSavedBakes`). Prune on launch and on
+  a periodic timer (the prototype checks every 60 s).
 - **Change date / time** → updates the target finish; whole timeline recomputes.
 - **"früher beginnen" / "später ›"** → on a flexible step, lengthens / shortens
   that step's duration by `step.step` minutes, clamped to `[min,max]`. Because
@@ -156,18 +213,21 @@ Each step is a row: `[time column 60px] [rail 28px] [content card flex:1]`, `gap
   (and all earlier steps') start **earlier**; shortening moves them **later**.
   Buttons disable at the range bounds.
 - All recalculation is **synchronous and instant** — no async, no fetching.
-- No animations beyond the chip `all .15s` color transition. Keep it calm.
+- No animations beyond hover border-color transitions. Keep it calm.
 
 ## State Management
-Minimal. Three pieces of state drive everything:
+Minimal. These drive everything:
 ```
-recipeId   : string          // which recipe is selected
-finishAt   : Date            // target "bread done" moment
+view       : 'select' | 'plan'  // which view is showing (or use stack navigation)
+query      : string             // search text (selection view, not persisted)
+recipeId   : string             // which recipe is open in the scheduler
+finishAt   : Date               // target "bread done" moment
 overrides  : { [stepIndex:number]: minutes }  // per flexible-step duration override
 ```
-Everything displayed is **derived** from these via `computeSchedule()` — do not
-store computed times in state; recompute on render. Persist all three (e.g.
-AsyncStorage / localStorage) so an in-progress plan survives app restart.
+Everything displayed is **derived** — list sections via filter/sort +
+`matchesQuery`, the timeline via `computeSchedule()`. Do not store computed
+times in state; recompute on render. Persist `recipeId`/`finishAt`/`overrides`
+(e.g. AsyncStorage / localStorage) so an in-progress plan survives app restart.
 
 **Saved bakes** are a separate persisted map, keyed by recipe id:
 ```
@@ -177,25 +237,33 @@ Stored as JSON under `SAVED_KEY` (`'schedoughler.saved.v1'`). See the *Saved
 bakes* helpers in `scheduler.js` (`loadSavedBakes`, `persistSavedBakes`,
 `toggleSavedBake`, `pruneSavedBakes`, `SAVED_EXPIRY_MS`).
 
+**List derivation (selection view):**
+```
+savedList = RECIPES where saved[id] && matchesQuery,  sort by saved[id].target asc
+otherList = RECIPES where !saved[id] && matchesQuery, sort by name (localeCompare 'de')
+```
+
 ## Design Tokens
 
 ### Colors
 | Token | Hex | Use |
 |---|---|---|
 | Cream background | `#F4EBDD` | app canvas |
-| Card cream | `#FBF5EA` | cards, inputs-bg accents |
+| Card cream | `#FBF5EA` | cards, list rows |
 | Card border | `#EADCC4` | card borders |
-| Brown primary | `#6B4426` | brand, selected chip, start banner |
+| Row border | `#E5D5BB` | list rows, search field, inputs |
+| Saved row border | `#D9BE93` | pinned saved rows |
+| Brown primary | `#6B4426` | brand, hover borders, start banner |
 | Brown dark | `#5a3820` | banner gradient bottom |
 | Ink | `#2E2218` | primary text |
-| Ink soft | `#3D2817` | input text |
+| Ink soft | `#3D2817` | input + search text |
 | Muted brown | `#9A8156` | secondary text |
-| Muted tan | `#A8946C` | section labels |
+| Muted tan | `#A8946C` | section labels, search icon |
 | Faint tan | `#C2B393` | footer note |
 | Accent gold (prep) | `#C28A3D` | kind: Handarbeit |
 | Accent olive (rise) | `#A8894E` | kind: Gärzeit |
 | Accent slate (cold) | `#6E8597` | kind: Kühlschrank |
-| Accent rust (bake) | `#B5532A` | kind: Backen, "fertig" |
+| Accent rust (bake) | `#B5532A` | kind: Backen, "fertig", bookmark saved, finish pill |
 | Overnight bg | `#EBEEF3` | sleep step card |
 | Overnight border | `#D6DEE6` | sleep step card border |
 | Overnight pill bg | `#3D3450` | "über Nacht" pill |
@@ -207,21 +275,24 @@ Kind pill background = kind color + `22` alpha hex; faint ring = kind color + `5
 ### Typography
 - **Display / numerals / brand:** `Bitter` (serif), weights 700/800. Google Fonts.
 - **Body / UI:** `Hanken Grotesk` (sans), weights 400/500/600/700. Google Fonts.
-- Scale used: 24 (wordmark) / 21 (start time) / 18 (step time) / 17 (recipe name,
-  fertig) / 15.5 (step title) / 15 (inputs) / 14.5 (chip name) / 12.5 (desc,
-  buttons) / 11.5 (duration) / 11 (section labels) / 10.5 (day, micro-labels).
+- Scale used: 24 (wordmark) / 21 (start time) / 20 (scheduler title) / 18 (step
+  time) / 17 (fertig) / 15.5 (row + step title) / 15 (inputs) / 14 (search) /
+  12.5 (desc, buttons) / 11.5 (duration) / 11 (section labels) / 10.5 (day,
+  finish pill, micro-labels).
 
 ### Spacing / radius / shadow
-- Radii: chips/inputs 11–16px, cards 16–20px, pills 999px, phone frame 46px.
-- Card padding 18px; step card padding 13×15px.
+- Radii: buttons/inputs 11–14px, rows/cards 16–20px, pills 999px, phone frame 46px.
+- Card padding 18px; row + step card padding 13–14×15px; list `gap: 9px`.
 - Section gaps ~18–24px; step row gap 12px.
 - Dots use layered `box-shadow` halos (see timeline spec). No heavy drop shadows
   in content; the only large shadow is the phone frame in the prototype (drop in production).
 
 ## Assets
-- **No bitmap/icon assets.** The "S" logo is a styled text glyph. The crescent
-  moon on the overnight pill is a CSS `box-shadow` trick on a circle — reproduce
-  with an icon (e.g. a moon glyph) on native if easier.
+- **No bitmap/icon assets.** The "S" logo is a styled text glyph; magnifier,
+  bookmark, chevron, ✕ and link icons are simple inline strokes — use any icon
+  set (e.g. Lucide: `search`, `bookmark`, `chevron-left`, `x`, `link`).
+  The crescent moon on the overnight pill is a CSS `box-shadow` trick on a
+  circle — reproduce with a moon glyph on native if easier.
 - **Fonts:** Bitter + Hanken Grotesk from Google Fonts (bundle them in the app).
 - `recipe-source.pdf` — the original German sourdough recipe, for reference /
   verifying step descriptions and durations.
@@ -247,9 +318,10 @@ step   = {
 ```
 `scheduler.js` exports: `RECIPES`, `KINDS`, `computeSchedule(recipe, finishAt,
 overrides)`, `defaultFinishTime(recipe)`, `nudgeDuration(...)`, `rangeLabel(step)`,
-`durationLabel(min)`, `effectiveDuration(step, override)`, plus the saved-bake
-helpers `loadSavedBakes`, `persistSavedBakes`, `toggleSavedBake`,
-`pruneSavedBakes` and the constants `SAVED_KEY` / `SAVED_EXPIRY_MS`. **Reuse these verbatim.**
+`durationLabel(min)`, `effectiveDuration(step, override)`, `matchesQuery(recipe,
+query)`, plus the saved-bake helpers `loadSavedBakes`, `persistSavedBakes`,
+`toggleSavedBake`, `pruneSavedBakes` and the constants `SAVED_KEY` /
+`SAVED_EXPIRY_MS`. **Reuse these verbatim.**
 
 ## Out of scope (suggested next features, not part of this handoff)
 - **Local notifications** at each step's start time — the killer feature; wire
@@ -259,36 +331,43 @@ helpers `loadSavedBakes`, `persistSavedBakes`, `toggleSavedBake`,
 - **Room-temperature adjustment** — scale rise durations by ambient temp.
 
 ## Changelog
-- **2026-06-24** — Made the saved-bake gesture **discoverable**: a one-time hint
-  row under the picker (auto-hides after first save, flag `'schedoughler.hintSeen'`)
-  and a live hold-progress fill bar on the chip during the long-press.
-- **2026-06-24** — Added **saved bakes**: long-press a recipe chip to bookmark its
-  current bake (finish time + overrides); a badge marks saved chips; tapping a
-  saved recipe restores its plan; long-press again removes it; saved bakes
-  auto-expire 2 h after their finish time. Persisted under `'schedoughler.saved.v1'`.
-  New `scheduler.js` helpers: `loadSavedBakes`, `persistSavedBakes`,
-  `toggleSavedBake`, `pruneSavedBakes`, `SAVED_KEY`, `SAVED_EXPIRY_MS`.
+- **2026-07-02** — Added **search** to the selection view: filters both list
+  sections live against recipe title + step titles/descriptions (every query
+  word must match; case-insensitive), with a clear button and an empty state.
+  New `scheduler.js` helper: `matchesQuery(recipe, query)`. Removed the
+  long-press teaching hint (obsolete — saving is now an explicit button).
+- **2026-07-02** — **Split the app into two views**: a recipe-selection list and
+  the scheduler. Saved recipes are pinned at the top ("Gespeicherte
+  Backzeiten", sorted by finish time, showing a "Fertig …" pill); all other
+  recipes follow alphabetically. Saving moved from a long-press gesture to an
+  explicit **bookmark button** on each row (long-press machinery removed).
+  Editing a saved recipe's plan in the scheduler now keeps its bookmark in sync.
+- **2026-06-24** — Added **saved bakes**: bookmark a recipe's current bake
+  (finish time + overrides); opening a saved recipe restores its plan; saved
+  bakes auto-expire 2 h after their finish time. Persisted under
+  `'schedoughler.saved.v1'`. `scheduler.js` helpers: `loadSavedBakes`,
+  `persistSavedBakes`, `toggleSavedBake`, `pruneSavedBakes`, `SAVED_KEY`,
+  `SAVED_EXPIRY_MS`.
 - **2026-06-24** — Added optional **`recipe.source`** (`{ url, title }`). When set,
-  the setup card shows a small link icon next to the recipe name linking to the
-  original recipe (opens in a new tab; `title` is the tooltip). Only the
-  sourdough has a real source; the other three recipes are illustrative.
+  the scheduler title bar shows a small link icon linking to the original recipe
+  (opens in a new tab; `title` is the tooltip). Only the sourdough has a real
+  source; the other three recipes are illustrative.
 - **2026-06-24** — Switched ingredients to a **structured schema**: each
-  ingredient is now `{ amount?: number, unit?: string, name: string, note?:
-  string }` instead of a pre-formatted `{ amount, name }` string pair. Amount and
-  unit are separate numeric/string fields; the note renders in parentheses;
+  ingredient is `{ amount?: number, unit?: string, name: string, note?: string }`.
+  Amount and unit are separate fields; the note renders in parentheses;
   references with no amount (the preferment) render a `+`. The UI composes the
   display strings at render time.
-- **2026-06-24** — Added per-step **ingredients** (`step.ingredients: [{amount,
-  name}]`) on the dough-mixing `prep` steps, rendered as an ingredients block in
-  each step card (see Step timeline spec). Sourdough quantities are from the
-  source recipe; the other three recipes use representative quantities. Removed
-  the earlier horizontal overview timeline.
+- **2026-06-24** — Added per-step **ingredients** on the dough-mixing `prep`
+  steps, rendered as an ingredients block in each step card (see Step timeline
+  spec). Sourdough quantities are from the source recipe; the other three
+  recipes use representative quantities. Removed the earlier horizontal
+  overview timeline.
 
 ## Files in this bundle
 | File | What it is |
 |---|---|
-| `scheduler.js` | ⭐ Recipe data + backward-scheduling engine. Drop-in, no deps. |
-| `Schedoughler.dc.html` | The editable prototype source (markup + logic). |
-| `Schedoughler.standalone.html` | Self-contained build — open in any browser to interact with the reference. |
+| `scheduler.js` | ⭐ Recipe data + scheduling engine + saved-bake/search helpers. Drop-in, no deps. |
+| `Schedoughler v2.dc.html` | The editable prototype source (markup + logic). |
+| `Schedoughler v2.standalone.html` | Self-contained build — open in any browser to interact with the reference. |
 | `recipe-source.pdf` | Original German sourdough recipe (Marcel Paa). |
 | `README.md` | This document. |

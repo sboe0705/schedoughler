@@ -23,8 +23,6 @@
 body{margin:0;font-family:'Hanken Grotesk',system-ui,sans-serif}
 .sd-scroll::-webkit-scrollbar{display:none}
 .sd-scroll{scrollbar-width:none}
-.sd-x::-webkit-scrollbar{display:none}
-.sd-x{scrollbar-width:none}
 input[type=date],input[type=time]{font-family:'Bitter',serif}
 </style>
 </helmet>
@@ -39,130 +37,171 @@ input[type=date],input[type=time]{font-family:'Bitter',serif}
       </div>
     </div>
 
-    <div class="sd-scroll" style="flex:1;overflow-y:auto;padding:6px 20px 40px">
+    <sc-if value="{{ isSelect }}" hint-placeholder-val="{{ true }}">
+      <div class="sd-scroll" data-screen-label="Rezeptauswahl" style="flex:1;overflow-y:auto;padding:6px 20px 40px">
 
-      <header style="padding:8px 2px 18px">
-        <div style="display:flex;align-items:center;gap:10px">
-          <div style="width:34px;height:34px;border-radius:11px;background:#6B4426;display:flex;align-items:center;justify-content:center;font-family:'Bitter',serif;font-weight:800;color:#F4EBDD;font-size:19px;box-shadow:inset 0 -3px 0 rgba(0,0,0,.18)">S</div>
-          <div>
-            <div style="font-family:'Bitter',serif;font-weight:800;font-size:24px;color:#2E2218;letter-spacing:-.01em;line-height:1">Schedoughler</div>
-            <div style="font-size:12px;color:#9A8156;font-weight:600;margin-top:3px;letter-spacing:.04em;text-transform:uppercase">Brot nach Plan</div>
+        <header style="padding:8px 2px 20px">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:34px;height:34px;border-radius:11px;background:#6B4426;display:flex;align-items:center;justify-content:center;font-family:'Bitter',serif;font-weight:800;color:#F4EBDD;font-size:19px;box-shadow:inset 0 -3px 0 rgba(0,0,0,.18)">S</div>
+            <div>
+              <div style="font-family:'Bitter',serif;font-weight:800;font-size:24px;color:#2E2218;letter-spacing:-.01em;line-height:1">Schedoughler</div>
+              <div style="font-size:12px;color:#9A8156;font-weight:600;margin-top:3px;letter-spacing:.04em;text-transform:uppercase">Brot nach Plan</div>
+            </div>
           </div>
-        </div>
-      </header>
+        </header>
 
-      <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#A8946C;margin:0 2px 9px">Rezept wählen</div>
-      <div class="sd-x" style="display:flex;gap:10px;overflow-x:auto;margin:0 -20px 12px;padding:2px 20px 6px">
-        <sc-for list="{{ recipes }}" as="r" hint-placeholder-count="4">
-          <button onClick="{{ r.onSelect }}" onPointerDown="{{ r.onPressStart }}" onPointerUp="{{ r.onPressEnd }}" onPointerLeave="{{ r.onPressEnd }}" onContextMenu="{{ noMenu }}" style="{{ r.chipStyle }}">
-            <span style="{{ r.nameStyle }}">{{ r.name }}</span>
-            <span style="{{ r.metaStyle }}">{{ r.totalShort }}</span>
-            <sc-if value="{{ r.saved }}" hint-placeholder-val="{{ false }}">
-              <span title="Gespeicherte Backzeit – lange drücken zum Entfernen" style="position:absolute;top:7px;right:7px;width:20px;height:20px;border-radius:7px;background:#B5532A;display:inline-flex;align-items:center;justify-content:center;box-shadow:0 1px 3px rgba(0,0,0,.3)">
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="#FBF5EA"><path d="M6 2h12a1 1 0 0 1 1 1v18l-7-4-7 4V3a1 1 0 0 1 1-1z"></path></svg>
-              </span>
-            </sc-if>
-            <span style="position:absolute;left:0;bottom:0;height:3px;width:{{ r.pressPct }};max-width:100%;background:#B5532A;border-bottom-left-radius:14px"></span>
-          </button>
-        </sc-for>
+        <div style="display:flex;align-items:center;gap:9px;margin-bottom:18px;padding:11px 14px;background:#FBF5EA;border:1.5px solid #E5D5BB;border-radius:14px">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#A8946C" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+          <input type="search" value="{{ query }}" onInput="{{ onQuery }}" placeholder="Rezepte durchsuchen …" style="flex:1;min-width:0;border:none;outline:none;background:transparent;font-family:'Hanken Grotesk';font-size:14px;font-weight:600;color:#3D2817">
+          <sc-if value="{{ hasQuery }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ onClearQuery }}" title="Suche löschen" style="flex:none;width:22px;height:22px;border:none;border-radius:50%;background:#E5D5BB;color:#6B4426;display:inline-flex;align-items:center;justify-content:center;cursor:pointer">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"></path></svg>
+            </button>
+          </sc-if>
+        </div>
+
+        <sc-if value="{{ hasSaved }}" hint-placeholder-val="{{ false }}">
+          <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#A8946C;margin:0 2px 9px">Gespeicherte Backzeiten</div>
+          <div style="display:flex;flex-direction:column;gap:9px;margin-bottom:22px">
+            <sc-for list="{{ savedRecipes }}" as="r" hint-placeholder-count="1">
+              <div onClick="{{ r.onSelect }}" style="display:flex;align-items:center;gap:12px;padding:14px 15px;border-radius:16px;border:1.5px solid #D9BE93;background:#FBF5EA;cursor:pointer;box-shadow:0 1px 0 #fff inset" style-hover="border-color:#6B4426">
+                <div style="flex:1;min-width:0">
+                  <div style="font-family:'Bitter',serif;font-weight:700;font-size:15.5px;color:#2E2218">{{ r.name }}</div>
+                  <div style="display:flex;align-items:center;gap:6px;margin-top:4px">
+                    <span style="display:inline-flex;align-items:center;gap:5px;background:#B5532A;color:#FBF5EA;font-size:10.5px;font-weight:700;padding:4px 8px;border-radius:999px;letter-spacing:.02em">Fertig {{ r.savedLabel }}</span>
+                    <span style="font-size:11.5px;font-weight:600;color:#A8946C">{{ r.totalShort }}</span>
+                  </div>
+                </div>
+                <button onClick="{{ r.onToggleSave }}" title="Gespeicherte Backzeit entfernen" style="flex:none;width:36px;height:36px;border-radius:11px;border:none;background:#B5532A;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.25)">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="#FBF5EA"><path d="M6 2h12a1 1 0 0 1 1 1v18l-7-4-7 4V3a1 1 0 0 1 1-1z"></path></svg>
+                </button>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#A8946C;margin:0 2px 9px">Alle Rezepte</div>
+        <div style="display:flex;flex-direction:column;gap:9px">
+          <sc-for list="{{ otherRecipes }}" as="r" hint-placeholder-count="4">
+            <div onClick="{{ r.onSelect }}" style="display:flex;align-items:center;gap:12px;padding:14px 15px;border-radius:16px;border:1.5px solid #E5D5BB;background:#FBF5EA;cursor:pointer" style-hover="border-color:#6B4426">
+              <div style="flex:1;min-width:0">
+                <div style="font-family:'Bitter',serif;font-weight:700;font-size:15.5px;color:#2E2218">{{ r.name }}</div>
+                <div style="font-size:12px;color:#9A8156;font-weight:500;margin-top:3px;line-height:1.35">{{ r.subtitle }}</div>
+                <div style="font-size:11.5px;font-weight:600;color:#A8946C;margin-top:5px">{{ r.totalShort }}</div>
+              </div>
+              <button onClick="{{ r.onToggleSave }}" title="Backzeit speichern" style="flex:none;width:36px;height:36px;border-radius:11px;border:1px solid #E0CBA8;background:#F4EBDD;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;color:#B6A485" style-hover="color:#B5532A;border-color:#B5532A">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h12a1 1 0 0 1 1 1v18l-7-4-7 4V3a1 1 0 0 1 1-1z"></path></svg>
+              </button>
+            </div>
+          </sc-for>
+        </div>
+
+        <sc-if value="{{ noResults }}" hint-placeholder-val="{{ false }}">
+          <div style="text-align:center;padding:26px 12px;font-size:12.5px;color:#A8946C;font-weight:600">Keine Rezepte gefunden für „{{ query }}“</div>
+        </sc-if>
+
       </div>
-      <sc-if value="{{ showHint }}" hint-placeholder-val="{{ true }}">
-        <div style="display:flex;align-items:center;gap:7px;margin:0 2px 22px;padding:9px 12px;background:#F6EEDF;border:1px dashed #E0CBA8;border-radius:12px">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#B5532A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h12a1 1 0 0 1 1 1v18l-7-4-7 4V3a1 1 0 0 1 1-1z"></path></svg>
-          <span style="font-size:11.5px;color:#8A7350;font-weight:600;line-height:1.3">Tipp: Rezept <b style="color:#6B4426">gedrückt halten</b>, um die Backzeit zu speichern.</span>
-        </div>
-      </sc-if>
+    </sc-if>
 
-      <div style="background:#FBF5EA;border:1px solid #EADCC4;border-radius:20px;padding:18px;box-shadow:0 1px 0 #fff inset;margin-bottom:18px">
-        <div style="display:flex;align-items:center;gap:9px">
-          <div style="font-family:'Bitter',serif;font-weight:700;font-size:17px;color:#2E2218">{{ currentName }}</div>
-          <sc-if value="{{ hasSource }}" hint-placeholder-val="{{ true }}">
-            <a href="{{ sourceUrl }}" target="_blank" rel="noopener" title="{{ sourceTitle }}" style="flex:none;width:26px;height:26px;display:inline-flex;align-items:center;justify-content:center;border-radius:8px;background:#F4EBDD;border:1px solid #E7D6BB;color:#6B4426;text-decoration:none" style-hover="background:#6B4426;border-color:#6B4426;color:#FBF5EA">
+    <sc-if value="{{ isPlan }}" hint-placeholder-val="{{ false }}">
+      <div class="sd-scroll" data-screen-label="Zeitplan" style="flex:1;overflow-y:auto;padding:6px 20px 40px">
+
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 0 16px">
+          <button onClick="{{ onBack }}" title="Zur Rezeptauswahl" style="flex:none;width:36px;height:36px;border-radius:12px;border:1px solid #E0CBA8;background:#FBF5EA;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;color:#6B4426" style-hover="background:#6B4426;color:#FBF5EA">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg>
+          </button>
+          <div style="flex:1;min-width:0">
+            <div style="font-family:'Bitter',serif;font-weight:800;font-size:20px;color:#2E2218;letter-spacing:-.01em;line-height:1.1">{{ currentName }}</div>
+            <div style="font-size:11.5px;color:#9A8156;font-weight:500;margin-top:3px">{{ currentSubtitle }}</div>
+          </div>
+          <sc-if value="{{ hasSource }}" hint-placeholder-val="{{ false }}">
+            <a href="{{ sourceUrl }}" target="_blank" rel="noopener" title="{{ sourceTitle }}" style="flex:none;width:30px;height:30px;display:inline-flex;align-items:center;justify-content:center;border-radius:9px;background:#FBF5EA;border:1px solid #E7D6BB;color:#6B4426;text-decoration:none" style-hover="background:#6B4426;border-color:#6B4426;color:#FBF5EA">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
             </a>
           </sc-if>
         </div>
-        <div style="font-size:12.5px;color:#9A8156;font-weight:500;margin-top:2px;margin-bottom:16px">{{ currentSubtitle }}</div>
 
-        <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#A8946C;margin-bottom:8px">Brot fertig am</div>
-        <div style="display:flex;gap:10px">
-          <input type="date" value="{{ dateValue }}" onChange="{{ onDateChange }}" style="flex:1;min-width:0;background:#F4EBDD;border:1px solid #E5D5BB;border-radius:12px;padding:11px 12px;font-size:15px;color:#3D2817;font-weight:600;font-family:'Bitter',serif">
-          <input type="time" value="{{ timeValue }}" onChange="{{ onTimeChange }}" style="width:108px;flex:none;background:#F4EBDD;border:1px solid #E5D5BB;border-radius:12px;padding:11px 12px;font-size:15px;color:#3D2817;font-weight:600;font-family:'Bitter',serif">
-        </div>
+        <div style="background:#FBF5EA;border:1px solid #EADCC4;border-radius:20px;padding:18px;box-shadow:0 1px 0 #fff inset;margin-bottom:18px">
+          <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#A8946C;margin-bottom:8px">Brot fertig am</div>
+          <div style="display:flex;gap:10px">
+            <input type="date" value="{{ dateValue }}" onChange="{{ onDateChange }}" style="flex:1;min-width:0;background:#F4EBDD;border:1px solid #E5D5BB;border-radius:12px;padding:11px 12px;font-size:15px;color:#3D2817;font-weight:600;font-family:'Bitter',serif">
+            <input type="time" value="{{ timeValue }}" onChange="{{ onTimeChange }}" style="width:108px;flex:none;background:#F4EBDD;border:1px solid #E5D5BB;border-radius:12px;padding:11px 12px;font-size:15px;color:#3D2817;font-weight:600;font-family:'Bitter',serif">
+          </div>
 
-        <div style="display:flex;align-items:center;gap:12px;margin-top:16px;padding:14px;background:linear-gradient(180deg,#6B4426,#5a3820);border-radius:14px">
-          <div style="flex:1">
-            <div style="font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#E7C9A0">Jetzt loslegen</div>
-            <div style="font-family:'Bitter',serif;font-weight:800;font-size:21px;color:#FBF5EA;margin-top:2px;letter-spacing:-.01em">{{ startLabel }}</div>
-          </div>
-          <div style="text-align:right">
-            <div style="font-size:11px;color:#E7C9A0;font-weight:600">Gesamt</div>
-            <div style="font-family:'Bitter',serif;font-weight:700;font-size:15px;color:#FBF5EA;margin-top:2px">{{ totalLabel }}</div>
-          </div>
-        </div>
-      </div>
-
-      <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#A8946C;margin:0 2px 14px">Ablauf</div>
-      <sc-for list="{{ steps }}" as="s" hint-placeholder-count="8">
-        <div style="display:flex;gap:12px;align-items:stretch">
-          <div style="width:60px;flex:none;text-align:right;padding-top:1px">
-            <div style="{{ s.timeStyle }}">{{ s.timeBig }}</div>
-            <div style="font-size:10.5px;color:#A8946C;font-weight:600;margin-top:2px">{{ s.dayLabel }}</div>
-          </div>
-          <div style="width:28px;flex:none;position:relative">
-            <div style="{{ s.lineStyle }}"></div>
-            <div style="{{ s.dotStyle }}"></div>
-          </div>
-          <div style="flex:1;min-width:0;padding-bottom:14px">
-            <div style="{{ s.cardStyle }}">
-              <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px">
-                <div style="font-family:'Bitter',serif;font-weight:700;font-size:15.5px;color:#2E2218;line-height:1.2">{{ s.title }}</div>
-                <sc-if value="{{ s.sleep }}" hint-placeholder-val="{{ true }}">
-                  <span style="flex:none;display:inline-flex;align-items:center;gap:5px;background:#3D3450;color:#EDE9F4;font-size:10px;font-weight:700;padding:5px 8px;border-radius:999px;letter-spacing:.02em"><span style="width:9px;height:9px;border-radius:50%;box-shadow:inset -3px -1px 0 0 #EDE9F4"></span>über Nacht</span>
-                </sc-if>
-              </div>
-              <div style="font-size:12.5px;color:#6E6253;line-height:1.45;margin-top:6px">{{ s.desc }}</div>
-              <sc-if value="{{ s.hasIngredients }}" hint-placeholder-val="{{ false }}">
-                <div style="{{ s.ingBoxStyle }}">
-                  <div style="font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#B6A485;margin-bottom:8px">Zutaten</div>
-                  <sc-for list="{{ s.ingredients }}" as="ing" hint-placeholder-count="3">
-                    <div style="display:flex;align-items:baseline;gap:9px;padding:3px 0">
-                      <span style="flex:none;width:58px;text-align:right;font-family:'Bitter',serif;font-weight:700;font-size:12.5px;color:#6B4426">{{ ing.amountText }}</span>
-                      <span style="flex:1;min-width:0;font-size:12.5px;color:#4D4438;font-weight:500;line-height:1.3">{{ ing.nameText }}<span style="color:#9A8156;font-weight:500">{{ ing.noteText }}</span></span>
-                    </div>
-                  </sc-for>
-                </div>
-              </sc-if>
-              <div style="display:flex;align-items:center;gap:8px;margin-top:11px">
-                <span style="{{ s.pillStyle }}">{{ s.kindLabel }}</span>
-                <span style="font-size:11.5px;color:#9A8156;font-weight:600">{{ s.durLabel }}</span>
-              </div>
-              <sc-if value="{{ s.flex }}" hint-placeholder-val="{{ false }}">
-                <div style="margin-top:11px;padding-top:11px;border-top:1px dashed #E7D6BB">
-                  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
-                    <span style="font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#B6A485">Gärzeit anpassen</span>
-                    <span style="font-size:11px;font-weight:600;color:#B6A485">{{ s.rangeLabel }}</span>
-                  </div>
-                  <div style="display:flex;gap:8px">
-                    <button onClick="{{ s.onEarlier }}" style="{{ s.earlierStyle }}">‹ früher beginnen</button>
-                    <button onClick="{{ s.onLater }}" style="{{ s.laterStyle }}">später ›</button>
-                  </div>
-                </div>
-              </sc-if>
-              <sc-if value="{{ s.isLast }}" hint-placeholder-val="{{ false }}">
-                <div style="display:flex;align-items:center;gap:8px;margin-top:12px;padding-top:11px;border-top:1px dashed #E0CBA8">
-                  <span style="font-size:12px;color:#9A8156;font-weight:600">Brot fertig</span>
-                  <span style="font-family:'Bitter',serif;font-weight:800;font-size:17px;color:#B5532A;margin-left:auto">{{ s.fertigLabel }}</span>
-                </div>
-              </sc-if>
+          <div style="display:flex;align-items:center;gap:12px;margin-top:16px;padding:14px;background:linear-gradient(180deg,#6B4426,#5a3820);border-radius:14px">
+            <div style="flex:1">
+              <div style="font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#E7C9A0">Jetzt loslegen</div>
+              <div style="font-family:'Bitter',serif;font-weight:800;font-size:21px;color:#FBF5EA;margin-top:2px;letter-spacing:-.01em">{{ startLabel }}</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-size:11px;color:#E7C9A0;font-weight:600">Gesamt</div>
+              <div style="font-family:'Bitter',serif;font-weight:700;font-size:15px;color:#FBF5EA;margin-top:2px">{{ totalLabel }}</div>
             </div>
           </div>
         </div>
-      </sc-for>
 
-      <div style="text-align:center;font-size:11px;color:#C2B393;font-weight:600;margin-top:8px">Zeiten rückwärts berechnet · Raumtemperatur ~22&nbsp;°C</div>
+        <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#A8946C;margin:0 2px 14px">Ablauf</div>
+        <sc-for list="{{ steps }}" as="s" hint-placeholder-count="8">
+          <div style="display:flex;gap:12px;align-items:stretch">
+            <div style="width:60px;flex:none;text-align:right;padding-top:1px">
+              <div style="{{ s.timeStyle }}">{{ s.timeBig }}</div>
+              <div style="font-size:10.5px;color:#A8946C;font-weight:600;margin-top:2px">{{ s.dayLabel }}</div>
+            </div>
+            <div style="width:28px;flex:none;position:relative">
+              <div style="{{ s.lineStyle }}"></div>
+              <div style="{{ s.dotStyle }}"></div>
+            </div>
+            <div style="flex:1;min-width:0;padding-bottom:14px">
+              <div style="{{ s.cardStyle }}">
+                <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px">
+                  <div style="font-family:'Bitter',serif;font-weight:700;font-size:15.5px;color:#2E2218;line-height:1.2">{{ s.title }}</div>
+                  <sc-if value="{{ s.sleep }}" hint-placeholder-val="{{ true }}">
+                    <span style="flex:none;display:inline-flex;align-items:center;gap:5px;background:#3D3450;color:#EDE9F4;font-size:10px;font-weight:700;padding:5px 8px;border-radius:999px;letter-spacing:.02em"><span style="width:9px;height:9px;border-radius:50%;box-shadow:inset -3px -1px 0 0 #EDE9F4"></span>über Nacht</span>
+                  </sc-if>
+                </div>
+                <div style="font-size:12.5px;color:#6E6253;line-height:1.45;margin-top:6px">{{ s.desc }}</div>
+                <sc-if value="{{ s.hasIngredients }}" hint-placeholder-val="{{ false }}">
+                  <div style="{{ s.ingBoxStyle }}">
+                    <div style="font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#B6A485;margin-bottom:8px">Zutaten</div>
+                    <sc-for list="{{ s.ingredients }}" as="ing" hint-placeholder-count="3">
+                      <div style="display:flex;align-items:baseline;gap:9px;padding:3px 0">
+                        <span style="flex:none;width:58px;text-align:right;font-family:'Bitter',serif;font-weight:700;font-size:12.5px;color:#6B4426">{{ ing.amountText }}</span>
+                        <span style="flex:1;min-width:0;font-size:12.5px;color:#4D4438;font-weight:500;line-height:1.3">{{ ing.nameText }}<span style="color:#9A8156;font-weight:500">{{ ing.noteText }}</span></span>
+                      </div>
+                    </sc-for>
+                  </div>
+                </sc-if>
+                <div style="display:flex;align-items:center;gap:8px;margin-top:11px">
+                  <span style="{{ s.pillStyle }}">{{ s.kindLabel }}</span>
+                  <span style="font-size:11.5px;color:#9A8156;font-weight:600">{{ s.durLabel }}</span>
+                </div>
+                <sc-if value="{{ s.flex }}" hint-placeholder-val="{{ false }}">
+                  <div style="margin-top:11px;padding-top:11px;border-top:1px dashed #E7D6BB">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+                      <span style="font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#B6A485">Gärzeit anpassen</span>
+                      <span style="font-size:11px;font-weight:600;color:#B6A485">{{ s.rangeLabel }}</span>
+                    </div>
+                    <div style="display:flex;gap:8px">
+                      <button onClick="{{ s.onEarlier }}" style="{{ s.earlierStyle }}">‹ früher beginnen</button>
+                      <button onClick="{{ s.onLater }}" style="{{ s.laterStyle }}">später ›</button>
+                    </div>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ s.isLast }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex;align-items:center;gap:8px;margin-top:12px;padding-top:11px;border-top:1px dashed #E0CBA8">
+                    <span style="font-size:12px;color:#9A8156;font-weight:600">Brot fertig</span>
+                    <span style="font-family:'Bitter',serif;font-weight:800;font-size:17px;color:#B5532A;margin-left:auto">{{ s.fertigLabel }}</span>
+                  </div>
+                </sc-if>
+              </div>
+            </div>
+          </div>
+        </sc-for>
 
-    </div>
+        <div style="text-align:center;font-size:11px;color:#C2B393;font-weight:600;margin-top:8px">Zeiten rückwärts berechnet · Raumtemperatur ~22&nbsp;°C</div>
+
+      </div>
+    </sc-if>
   </div>
 </div>
 </x-dc>
@@ -235,13 +274,12 @@ class Component extends DCLogic {
   MON = ['Jan.', 'Feb.', 'März', 'Apr.', 'Mai', 'Juni', 'Juli', 'Aug.', 'Sep.', 'Okt.', 'Nov.', 'Dez.'];
 
   state = {
+    view: 'select',
     recipeId: 'sauerteig',
     target: this._defaultTarget('sauerteig'),
     overrides: {},
     saved: (() => { try { const raw = localStorage.getItem('schedoughler.saved.v1'); return raw ? JSON.parse(raw) : {}; } catch (e) { return {}; } })(),
-    hintSeen: (() => { try { return localStorage.getItem('schedoughler.hintSeen') === '1'; } catch (e) { return false; } })(),
-    pressId: null,
-    pressProgress: 0,
+    query: '',
   };
 
   componentDidMount() {
@@ -250,8 +288,6 @@ class Component extends DCLogic {
   }
   componentWillUnmount() {
     clearInterval(this._pruneTimer);
-    clearTimeout(this._pressTimer);
-    cancelAnimationFrame(this._raf);
   }
 
   _persistSaved(saved) {
@@ -266,55 +302,32 @@ class Component extends DCLogic {
     if (changed) this._persistSaved(saved);
   }
 
-  // Tap = select. If the recipe has a saved bake, restore it; otherwise default.
+  // Tap a list row = open the scheduler. If the recipe has a saved bake, restore it.
   selectRecipe(id) {
-    if (this._longFired) { this._longFired = false; return; }
     const s = this.state.saved[id];
-    if (s) this.setState({ recipeId: id, target: new Date(s.target), overrides: { ...(s.overrides || {}) } });
-    else this.setState({ recipeId: id, target: this._defaultTarget(id), overrides: {} });
+    if (s) this.setState({ view: 'plan', recipeId: id, target: new Date(s.target), overrides: { ...(s.overrides || {}) } });
+    else this.setState({ view: 'plan', recipeId: id, target: this._defaultTarget(id), overrides: {} });
   }
-  // Long-press = toggle saving the current bake time. A rAF loop drives a
-  // hold-progress bar so the gesture is visible and confirms before it fires.
-  startPress(id) {
-    this._longFired = false;
-    clearTimeout(this._pressTimer);
-    cancelAnimationFrame(this._raf);
-    // Authoritative trigger on a timer (reliable even if rAF is throttled).
-    this._pressTimer = setTimeout(() => {
-      this._longFired = true;
-      cancelAnimationFrame(this._raf);
-      this.setState({ pressId: null, pressProgress: 0 });
-      this.toggleSave(id);
-      if (navigator.vibrate) navigator.vibrate(15);
-    }, 550);
-    // rAF drives only the visual hold-progress bar.
-    const t0 = performance.now();
-    const tick = (now) => {
-      if (this.state.pressId !== id) return;
-      this.setState({ pressProgress: Math.min(1, (now - t0) / 550) });
-      this._raf = requestAnimationFrame(tick);
-    };
-    this.setState({ pressId: id, pressProgress: 0 }, () => { this._raf = requestAnimationFrame(tick); });
-  }
-  endPress() {
-    clearTimeout(this._pressTimer);
-    cancelAnimationFrame(this._raf);
-    if (this.state.pressId !== null) this.setState({ pressId: null, pressProgress: 0 });
-  }
+  goBack() { this.setState({ view: 'select' }); }
+
+  // Bookmark on the selection view toggles saving a recipe's bake time.
+  // If the recipe was last planned in the scheduler, its configured time is kept;
+  // otherwise a sensible default target is stored.
   toggleSave(id) {
     const saved = { ...this.state.saved };
-    let added = false;
     if (saved[id]) { delete saved[id]; }
     else {
-      added = true;
       if (id === this.state.recipeId) saved[id] = { target: this.state.target.getTime(), overrides: { ...this.state.overrides } };
       else saved[id] = { target: this._defaultTarget(id).getTime(), overrides: {} };
     }
     this._persistSaved(saved);
-    if (added && !this.state.hintSeen) {
-      this.setState({ hintSeen: true });
-      try { localStorage.setItem('schedoughler.hintSeen', '1'); } catch (e) {}
-    }
+  }
+
+  // Case-insensitive match against recipe title and step titles/descriptions.
+  _matches(rr, q) {
+    if (!q) return true;
+    const hay = [rr.name, ...rr.steps.map(s => s.title + ' ' + s.desc)].join(' ').toLowerCase();
+    return q.toLowerCase().split(/\s+/).filter(Boolean).every(w => hay.includes(w));
   }
 
   setDur(i, dir) {
@@ -325,6 +338,12 @@ class Component extends DCLogic {
     const cur = ov[key] != null ? ov[key] : s.dur;
     ov[key] = Math.min(s.max, Math.max(s.min, cur + dir * s.step));
     this.setState({ overrides: ov });
+    // Keep a saved bake in sync while adjusting it in the scheduler.
+    if (this.state.saved[r.id]) {
+      const saved = { ...this.state.saved };
+      saved[r.id] = { target: this.state.target.getTime(), overrides: ov };
+      this._persistSaved(saved);
+    }
   }
 
   _defaultTarget(id) {
@@ -334,6 +353,16 @@ class Component extends DCLogic {
     t.setMinutes(0, 0, 0);
     t.setHours(t.getHours() + 1);
     return t;
+  }
+
+  _setTarget(t) {
+    this.setState({ target: t });
+    // Keep a saved bake in sync while adjusting it in the scheduler.
+    if (this.state.saved[this.state.recipeId]) {
+      const saved = { ...this.state.saved };
+      saved[this.state.recipeId] = { target: t.getTime(), overrides: { ...this.state.overrides } };
+      this._persistSaved(saved);
+    }
   }
 
   pad(n) { return String(n).padStart(2, '0'); }
@@ -350,13 +379,13 @@ class Component extends DCLogic {
     const v = e.target.value; if (!v) return;
     const [y, mo, da] = v.split('-').map(Number);
     const t = new Date(this.state.target); t.setFullYear(y, mo - 1, da);
-    this.setState({ target: t });
+    this._setTarget(t);
   };
   onTimeChange = (e) => {
     const v = e.target.value; if (!v) return;
     const [h, mi] = v.split(':').map(Number);
     const t = new Date(this.state.target); t.setHours(h, mi, 0, 0);
-    this.setState({ target: t });
+    this._setTarget(t);
   };
 
   renderVals() {
@@ -364,6 +393,24 @@ class Component extends DCLogic {
     const target = this.state.target;
     const K = this.KIND;
 
+    // --- Selection view lists ---
+    const rowOf = (rr) => ({
+      name: rr.name, subtitle: rr.subtitle, totalShort: rr.totalShort,
+      onSelect: () => this.selectRecipe(rr.id),
+      onToggleSave: (e) => { e.stopPropagation(); this.toggleSave(rr.id); },
+      savedLabel: this.state.saved[rr.id] ? this.fmtDayTime(this.state.saved[rr.id].target) : '',
+    });
+    const q = this.state.query.trim();
+    const savedRecipes = this.RECIPES
+      .filter(rr => !!this.state.saved[rr.id] && this._matches(rr, q))
+      .sort((a, b) => this.state.saved[a.id].target - this.state.saved[b.id].target)
+      .map(rowOf);
+    const otherRecipes = this.RECIPES
+      .filter(rr => !this.state.saved[rr.id] && this._matches(rr, q))
+      .sort((a, b) => a.name.localeCompare(b.name, 'de'))
+      .map(rowOf);
+
+    // --- Scheduler view ---
     const ov = this.state.overrides || {};
     const steps = r.steps.map((s, i) => {
       const dur = s.min != null
@@ -378,7 +425,6 @@ class Component extends DCLogic {
       cursor = steps[i].start;
     }
     const firstStart = steps[0].start;
-    const span = target.getTime() - firstStart || 1;
     const totalMin = steps.reduce((a, s) => a + s.dur, 0);
     const hrs = (m) => { const h = m / 60; return (Number.isInteger(h) ? h : h.toFixed(1).replace('.', ',')) + ' Std'; };
     const rng = (mn, mx) => mn >= 60 ? hrs(mn) + '–' + hrs(mx) : mn + '–' + mx + ' Min';
@@ -413,52 +459,18 @@ class Component extends DCLogic {
       };
     });
 
-    const bands = [];
-    for (let kk = -1; kk <= 4; kk++) {
-      const ns = new Date(firstStart); ns.setHours(22, 0, 0, 0); ns.setDate(ns.getDate() + kk);
-      const a = Math.max(ns.getTime(), firstStart);
-      const b = Math.min(ns.getTime() + 8 * 3600000, target.getTime());
-      if (b > a) bands.push({ style: `position:absolute;top:0;bottom:0;left:${(a - firstStart) / span * 100}%;width:${(b - a) / span * 100}%;background:#2E22181A;border-radius:7px` });
-    }
-
-    const ticks = [];
-    const m = new Date(firstStart); m.setHours(0, 0, 0, 0); m.setDate(m.getDate() + 1);
-    let guard = 0;
-    while (m.getTime() < target.getTime() && guard < 8) {
-      const left = (m.getTime() - firstStart) / span * 100;
-      ticks.push({
-        label: this.WD[m.getDay()],
-        style: `position:absolute;top:0;bottom:0;left:${left}%;width:1px;background:#0000001A`,
-        labelStyle: `position:absolute;top:100%;left:${left}%;transform:translateX(-50%);margin-top:7px;font-size:10px;font-weight:700;color:#A8946C;white-space:nowrap`,
-      });
-      m.setDate(m.getDate() + 1); guard++;
-    }
-
-    const markers = steps.map(s => ({
-      style: `position:absolute;top:50%;left:${(s.start - firstStart) / span * 100}%;transform:translate(-50%,-50%);width:11px;height:11px;border-radius:50%;background:${K[s.kind].c};border:2px solid #FBF5EA;box-shadow:0 1px 2px rgba(0,0,0,.15);z-index:2`,
-    }));
-    markers.push({ style: `position:absolute;top:50%;left:100%;transform:translate(-50%,-50%);width:15px;height:15px;border-radius:50%;background:#B5532A;border:3px solid #FBF5EA;box-shadow:0 0 0 2px #B5532A55;z-index:3` });
-
-    const recipes = this.RECIPES.map(rr => {
-      const sel = rr.id === r.id;
-      return {
-        name: rr.name, totalShort: rr.totalShort,
-        onSelect: () => this.selectRecipe(rr.id),
-        onPressStart: () => this.startPress(rr.id),
-        onPressEnd: () => this.endPress(),
-        saved: !!this.state.saved[rr.id],
-        pressPct: (this.state.pressId === rr.id ? Math.round((this.state.pressProgress || 0) * 100) : 0) + '%',
-        chipStyle: `position:relative;flex:none;display:flex;flex-direction:column;align-items:flex-start;gap:3px;min-width:120px;text-align:left;cursor:pointer;padding:13px 15px;border-radius:16px;border:1.5px solid ${sel ? '#6B4426' : '#E5D5BB'};background:${sel ? '#6B4426' : '#FBF5EA'};transition:all .15s;-webkit-user-select:none;user-select:none;touch-action:manipulation`,
-        nameStyle: `font-family:'Bitter',serif;font-weight:700;font-size:14.5px;color:${sel ? '#FBF5EA' : '#2E2218'}`,
-        metaStyle: `font-size:11px;font-weight:600;color:${sel ? '#E7C9A0' : '#A8946C'}`,
-      };
-    });
-
     return {
-      recipes,
+      isSelect: this.state.view === 'select',
+      isPlan: this.state.view === 'plan',
+      onBack: () => this.goBack(),
+      savedRecipes, otherRecipes,
+      hasSaved: savedRecipes.length > 0,
+      query: this.state.query,
+      hasQuery: q.length > 0,
+      noResults: q.length > 0 && savedRecipes.length + otherRecipes.length === 0,
+      onQuery: (e) => this.setState({ query: e.target.value }),
+      onClearQuery: () => this.setState({ query: '' }),
       currentName: r.name, currentSubtitle: r.subtitle,
-      noMenu: (e) => e.preventDefault(),
-      showHint: !this.state.hintSeen,
       hasSource: !!(r.source && r.source.url),
       sourceUrl: r.source ? r.source.url : '#',
       sourceTitle: r.source ? r.source.title : '',
@@ -468,12 +480,6 @@ class Component extends DCLogic {
       startLabel: this.fmtDayTime(firstStart),
       totalLabel: this.fmtDur(totalMin),
       steps: stepViews,
-      overview: {
-        spanLabel: '≈ ' + Math.round(span / 3600000) + ' Std',
-        startLabel: this.fmtDayTime(firstStart),
-        endLabel: this.fmtTimeOnly(target),
-        nightBands: bands, ticks, markers,
-      },
     };
   }
 }

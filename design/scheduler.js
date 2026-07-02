@@ -193,12 +193,25 @@ export function durationLabel(minutes) {
   return m ? `${h} Std ${m} Min` : `${h} Std`;
 }
 
+/**
+ * Recipe search (selection view). Case-insensitive; the query is split on
+ * whitespace and EVERY word must occur somewhere in the recipe's title or its
+ * step titles/descriptions. Empty query matches everything.
+ */
+export function matchesQuery(recipe, query) {
+  const q = (query || '').trim().toLowerCase();
+  if (!q) return true;
+  const hay = [recipe.name, ...recipe.steps.map(s => s.title + ' ' + s.desc)].join(' ').toLowerCase();
+  return q.split(/\s+/).filter(Boolean).every(w => hay.includes(w));
+}
+
 // ---------------------------------------------------------------------------
 // Saved bakes
 // --------------------------------------------------------------------------
 // A "saved bake" bookmarks a planned bake for a recipe so the user can come
-// back to it. In the UI it is created/removed by LONG-PRESSING a recipe chip,
-// shown as a small badge on that chip, and restored when the recipe is tapped.
+// back to it. In the UI it is created/removed with the BOOKMARK BUTTON on each
+// row of the recipe-selection view; saved recipes are pinned in their own
+// section at the top of the list, and opening one restores its plan.
 // A saved bake auto-expires 2 hours after its finish time (the bake is over).
 //
 // Shape (one map, persisted as JSON under SAVED_KEY):
