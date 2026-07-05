@@ -478,6 +478,33 @@ export const RECIPES = [
       },
     ],
   },
+  {
+    id: 'naan',
+    name: 'Naan – Indisches Fladenbrot',
+    totalShort: '~3 Std',
+    subtitle: 'Fluffiges Fladenbrot mit Knoblauchbutter – von Marcel Paa',
+    source: { url: 'https://www.marcelpaa.com/rezepte/naan-indisches-fladenbrot/', title: 'Marcel Paa – Naan Indisches Fladenbrot' },
+    steps: [
+      { title: 'Teig kneten', dur: 25, kind: 'prep', desc: 'Alle Zutaten in die Küchenmaschine geben, 3–4 Min. auf niedriger Stufe mischen, dann rund 20 Min. auf mittlerer Stufe zu einem glatten, elastischen Teig kneten.', ingredients: [
+        { amount: 125, unit: 'g', name: 'Wasser' },
+        { amount: 300, unit: 'g', name: 'Weizenmehl', note: 'Type 550' },
+        { amount: 100, unit: 'g', name: 'Naturjoghurt' },
+        { amount: 15,  unit: 'g', name: 'Olivenöl' },
+        { amount: 6,   unit: 'g', name: 'Salz' },
+        { amount: 3,   unit: 'g', name: 'Zucker' },
+        { amount: 6,   unit: 'g', name: 'Frischhefe' },
+      ] },
+      { title: 'Stockgare', dur: 105, min: 90, max: 120, step: 15, kind: 'rise', desc: 'Teig in eine geölte Schüssel geben, mit Frischhaltefolie abdecken und bei Raumtemperatur gehen lassen; dabei 2–3 Mal dehnen und falten.' },
+      { title: 'Teiglinge formen', dur: 10, kind: 'prep', desc: 'Teig auf bemehlter Fläche vorsichtig entgasen, in 4 gleich große Stücke teilen und zu kleinen Fladen formen.' },
+      { title: 'Stückgare', dur: 25, min: 20, max: 30, step: 5, kind: 'rise', desc: 'Fladen mit Abstand auf ein Blech legen, mit Folie abdecken und ruhen lassen; in der Zwischenzeit für die Knoblauchbutter die Butter mit gepresstem Knoblauch schmelzen und Koriander fein hacken.', ingredients: [
+        { amount: 50, unit: 'g', name: 'Butter' },
+        { amount: 2,  name: 'Knoblauchzehen' },
+        { name: 'Koriander', note: 'ein paar Stängel, fein gehackt' },
+      ] },
+      { title: 'Backen', dur: 8, kind: 'bake', desc: 'Ofen mit Blech auf unterster Schiene auf 250 °C vorheizen, Fladen 4–5 Min. backen, wenden und weitere 2–3 Min. fertig backen, bis sie aufgehen und braune Stellen bekommen.' },
+      { title: 'Mit Knoblauchbutter bestreichen', dur: 5, kind: 'prep', desc: 'Naans auf einem Gitter kurz abkühlen lassen, sofort mit der heißen Knoblauchbutter bestreichen und mit gehacktem Koriander bestreuen.' },
+    ],
+  },
 ];
 
 // ---------------------------------------------------------------------------
