@@ -36,7 +36,7 @@ defineEmits(['back'])
 <style scoped>
 .scheduler-header {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 10px;
   padding: 8px 0 16px;
 }

@@ -102,7 +102,7 @@ const noResults = computed(() =>
 
 .header {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 10px;
   padding: 8px 2px 20px;
 }
