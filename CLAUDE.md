@@ -33,7 +33,7 @@ src/
 └── components/
     ├── RecipeSelectView.vue # Recipe selection view: header, search field, saved/all-recipes sections
     ├── RecipeRow.vue       # Single recipe row (saved vs. normal variant) with a bookmark button
-    ├── SchedulerHeader.vue # Scheduler view title bar: back button, recipe name/subtitle, source link
+    ├── SchedulerHeader.vue # Scheduler view title bar: back button, recipe name/subtitle, source link, bookmark button
     ├── SetupCard.vue       # Finish-time picker + derived start-time display
     ├── StepTimeline.vue    # Container that renders all step rows
     ├── StepRow.vue         # Individual step card with timeline rail
@@ -69,7 +69,7 @@ Recipes live in the `RECIPES` array exported from `src/scheduler.js`. The full s
 
 ## Saved Bakes
 
-Tapping the bookmark button on a `RecipeRow.vue` saves or removes the active bake plan (finish time + overrides) for that recipe — an explicit tap, not a gesture; the button click calls `stopPropagation` so it never also opens the scheduler. `App.vue` calls `toggleSavedBake` from `scheduler.js` and persists via `persistSavedBakes`. Saved recipes are pinned in their own "Gespeicherte Backzeiten" section at the top of the selection list (sorted by saved finish time ascending) and rendered with a filled bookmark button and a "Fertig …" pill; unsaved recipes live in the alphabetical "Alle Rezepte" section with an outline bookmark button. Editing a saved recipe's plan (date/time or a step nudge) in the scheduler view immediately re-persists the saved bake with the new values via a dedicated `watch` in `App.vue`. Saved bakes auto-expire 2 hours after their finish time and are pruned on mount and every 60 s.
+Tapping the bookmark button on a `RecipeRow.vue` (selection view) or the bookmark button in `SchedulerHeader.vue` (scheduler view, bottom-right of the title bar) saves or removes the active bake plan (finish time + overrides) for that recipe — an explicit tap, not a gesture; on `RecipeRow.vue` the button click calls `stopPropagation` so it never also opens the scheduler. `App.vue` calls `toggleSavedBake` from `scheduler.js` and persists via `persistSavedBakes`. Saved recipes are pinned in their own "Gespeicherte Backzeiten" section at the top of the selection list (sorted by saved finish time ascending) and rendered with a filled bookmark button and a "Fertig …" pill; unsaved recipes live in the alphabetical "Alle Rezepte" section with an outline bookmark button. Editing a saved recipe's plan (date/time or a step nudge) in the scheduler view immediately re-persists the saved bake with the new values via a dedicated `watch` in `App.vue`. Saved bakes auto-expire 2 hours after their finish time and are pruned on mount and every 60 s.
 
 ## Important Constraints
 

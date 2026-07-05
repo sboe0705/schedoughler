@@ -9,7 +9,12 @@
     />
 
     <template v-else>
-      <SchedulerHeader :recipe="recipe" @back="onBack" />
+      <SchedulerHeader
+        :recipe="recipe"
+        :saved="!!savedBakes[recipeId]"
+        @back="onBack"
+        @toggle-save="onToggleSave(recipe)"
+      />
 
       <SetupCard
         :finish-at="finishAt"
