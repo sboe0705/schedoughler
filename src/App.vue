@@ -29,6 +29,8 @@
         @nudge="onNudge"
       />
     </template>
+
+    <AppFooter />
   </div>
 </template>
 
@@ -42,6 +44,7 @@ import RecipeSelectView from './components/RecipeSelectView.vue'
 import SchedulerHeader from './components/SchedulerHeader.vue'
 import SetupCard from './components/SetupCard.vue'
 import StepTimeline from './components/StepTimeline.vue'
+import AppFooter from './components/AppFooter.vue'
 
 function loadFinishAt(recipeId) {
   const saved = localStorage.getItem('finishAt')
