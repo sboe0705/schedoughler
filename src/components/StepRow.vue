@@ -1,5 +1,5 @@
 <template>
-  <div class="step-row">
+  <div class="step-row" ref="rootEl">
     <!-- Time column -->
     <div class="time-col">
       <span class="step-time" :style="{ color: kindColor }">{{ formatTime(step.start) }}</span>
@@ -55,7 +55,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { KINDS, durationLabel } from '../scheduler.js'
 import { formatTime, formatDayLabel } from '../utils.js'
 import NudgeControls from './NudgeControls.vue'
@@ -76,6 +76,9 @@ const displayIngredients = computed(() =>
     noteText: ing.note ? ' (' + ing.note + ')' : '',
   }))
 )
+
+const rootEl = ref(null)
+defineExpose({ el: rootEl })
 </script>
 
 <style scoped>

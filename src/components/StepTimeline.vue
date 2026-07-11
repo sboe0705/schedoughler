@@ -6,6 +6,7 @@
       <StepRow
         v-for="(step, i) in schedule.steps"
         :key="i"
+        :ref="(el) => { stepRefs[i] = el }"
         :step="step"
         :override="overrides[i] ?? null"
         :step-index="i"
@@ -35,15 +36,26 @@
 </template>
 
 <script setup>
+import { onMounted } from 'vue'
 import { formatTime, formatDayLabel } from '../utils.js'
+import { currentStepIndex } from '../scheduler.js'
 import StepRow from './StepRow.vue'
 
-defineProps({
+const props = defineProps({
   schedule: Object,
   overrides: Object,
   recipe: Object,
+  autoScrollToNow: { type: Boolean, default: false },
 })
 defineEmits(['nudge'])
+
+const stepRefs = []
+
+onMounted(() => {
+  if (!props.autoScrollToNow) return
+  const index = currentStepIndex(props.schedule.steps)
+  stepRefs[index]?.el?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+})
 </script>
 
 <style scoped>

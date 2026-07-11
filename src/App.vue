@@ -26,6 +26,7 @@
         :schedule="schedule"
         :overrides="overrides"
         :recipe="recipe"
+        :auto-scroll-to-now="autoScrollToNow"
         @nudge="onNudge"
       />
     </template>
@@ -70,6 +71,7 @@ function pruneAndPersist(saved) {
 }
 
 const savedBakes = ref(pruneAndPersist(loadSavedBakes(localStorage)))
+const autoScrollToNow = ref(false)
 
 const schedule = computed(() => computeSchedule(recipe.value, finishAt.value, overrides.value))
 
@@ -106,6 +108,7 @@ function onNudge(stepIndex, dir) {
 }
 
 function onSelectRecipe(id) {
+  autoScrollToNow.value = !!savedBakes.value[id]
   recipeId.value = id
   view.value = 'plan'
 }

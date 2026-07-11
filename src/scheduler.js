@@ -577,6 +577,17 @@ export function nudgeDuration(recipe, overrides, stepIndex, dir) {
   return { ...overrides, [stepIndex]: next };
 }
 
+/**
+ * Index of the step that is currently in progress, or the next one to come,
+ * based on `now`. Returns the last step's index once the whole bake is past
+ * its finish time.
+ */
+export function currentStepIndex(steps, now = new Date()) {
+  const t = now instanceof Date ? now.getTime() : now;
+  const idx = steps.findIndex(s => s.end.getTime() > t);
+  return idx === -1 ? steps.length - 1 : idx;
+}
+
 /** Human range label, e.g. "8–14 Std" or "20–60 Min". */
 export function rangeLabel(step) {
   if (step.min == null) return '';

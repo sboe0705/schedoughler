@@ -9,6 +9,7 @@ import {
   durationLabel,
   rangeLabel,
   matchesQuery,
+  currentStepIndex,
 } from './scheduler.js'
 
 const FINISH = new Date('2025-01-15T10:00:00')
@@ -216,6 +217,35 @@ describe('rangeLabel', () => {
   it('formats minute ranges', () => {
     const step = RECIPES[2].steps[6] // Guinness Brot Stückgare: 40–50 min
     expect(rangeLabel(step)).toBe('40–50 Min')
+  })
+})
+
+describe('currentStepIndex', () => {
+  const recipe = RECIPES[0] // Sauerteigbrot
+  const { steps } = computeSchedule(recipe, FINISH)
+
+  it('returns 0 when now is before the first step starts', () => {
+    const before = new Date(steps[0].start.getTime() - 60000)
+    expect(currentStepIndex(steps, before)).toBe(0)
+  })
+
+  it('returns the step whose start/end window contains now', () => {
+    const midStep = 2
+    const inside = new Date((steps[midStep].start.getTime() + steps[midStep].end.getTime()) / 2)
+    expect(currentStepIndex(steps, inside)).toBe(midStep)
+  })
+
+  it('returns the next step exactly at a boundary (end is exclusive)', () => {
+    expect(currentStepIndex(steps, steps[0].end)).toBe(1)
+  })
+
+  it('returns the last step once the whole bake is past finish', () => {
+    const after = new Date(steps.at(-1).end.getTime() + 60000)
+    expect(currentStepIndex(steps, after)).toBe(steps.length - 1)
+  })
+
+  it('defaults to the current time when now is omitted', () => {
+    expect(() => currentStepIndex(steps)).not.toThrow()
   })
 })
 
