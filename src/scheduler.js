@@ -505,6 +505,334 @@ export const RECIPES = [
       { title: 'Mit Knoblauchbutter bestreichen', dur: 5, kind: 'prep', desc: 'Naans auf einem Gitter kurz abkühlen lassen, sofort mit der heißen Knoblauchbutter bestreichen und mit gehacktem Koriander bestreuen.' },
     ],
   },
+  {
+    id: 'sonnenblumenkern-vollkornbrot',
+    name: 'Sonnenblumenkern Vollkornbrot',
+    totalShort: '~14 Std',
+    subtitle: 'Saftiges Weizenvollkornbrot mit Kernen – nach Marcel Paa',
+    source: {
+      url: 'https://www.marcelpaa.com/rezepte/vollkornbrot-mit-sonnenblumenkernen/',
+      title: 'Sonnenblumenkern Vollkornbrot – Marcel Paa'
+    },
+    steps: [
+      {
+        title: 'Sauerteig-Vorteig ansetzen',
+        dur: 5,
+        kind: 'prep',
+        desc: 'Sauerteig im Wasser aufschlämmen, Mehl dazugeben und gut verkneten.',
+        ingredients: [
+          { amount: 100, unit: 'g', name: 'Weizenvollkornmehl' },
+          { amount: 100, unit: 'g', name: 'Wasser' },
+          { amount: 10, unit: 'g', name: 'Sauerteig', note: 'alternativ 2 g Frischhefe' }
+        ]
+      },
+      {
+        title: 'Quellstück ansetzen',
+        dur: 5,
+        kind: 'prep',
+        desc: 'Wasser und Sonnenblumenkerne in einem hohen Gefäss mischen und zudecken.',
+        ingredients: [
+          { amount: 200, unit: 'g', name: 'Wasser' },
+          { amount: 100, unit: 'g', name: 'Sonnenblumenkerne' }
+        ]
+      },
+      {
+        title: 'Brühstück ansetzen',
+        dur: 5,
+        kind: 'prep',
+        desc: 'Wasser aufkochen, über das Mehl giessen und klumpenfrei mischen.',
+        ingredients: [
+          { amount: 100, unit: 'g', name: 'Weizenvollkornmehl' },
+          { amount: 150, unit: 'g', name: 'Wasser', note: 'kochend' }
+        ]
+      },
+      {
+        title: 'Vorteige reifen lassen',
+        dur: 600,
+        min: 480,
+        max: 720,
+        step: 30,
+        kind: 'rise',
+        sleep: true,
+        desc: 'Vorteig, Quellstück und Brühstück zugedeckt 8–12 Std. bei Raumtemperatur reifen lassen.'
+      },
+      {
+        title: 'Hauptteig kneten',
+        dur: 15,
+        kind: 'prep',
+        desc: 'Alle Zutaten ohne zusätzliche Flüssigkeit ca. 6 Min. mischen, dann 4–6 Min. bei mittlerer Geschwindigkeit kneten, bis der Teig die Fensterprobe besteht.',
+        ingredients: [
+          { name: 'Sauerteig-Vorteig' },
+          { name: 'Quellstück' },
+          { name: 'Brühstück' },
+          { amount: 300, unit: 'g', name: 'Weizenvollkornmehl' },
+          { amount: 10, unit: 'g', name: 'Frischhefe' },
+          { amount: 13, unit: 'g', name: 'Salz' }
+        ]
+      },
+      {
+        title: 'Stockgare',
+        dur: 105,
+        min: 90,
+        max: 120,
+        step: 15,
+        kind: 'rise',
+        desc: 'Teig in einem leicht gefetteten Becken zugedeckt bei Raumtemperatur gären lassen.'
+      },
+      {
+        title: 'Formen',
+        dur: 15,
+        kind: 'prep',
+        desc: 'Teig halbieren, rund schleifen, straff länglich rollen, mit Wasser bepinseln, in Sonnenblumenkernen wenden und in die Kastenformen setzen.',
+        ingredients: [
+          { name: 'Sonnenblumenkerne', note: 'zum Wälzen' }
+        ]
+      },
+      {
+        title: 'Stückgare',
+        dur: 45,
+        min: 40,
+        max: 50,
+        step: 5,
+        kind: 'rise',
+        desc: 'Teiglinge in den Formen zugedeckt bei Raumtemperatur gären lassen.'
+      },
+      {
+        title: 'Backen',
+        dur: 45,
+        kind: 'bake',
+        desc: 'Ofen mit feuerfester Schüssel auf 250 °C O/U vorheizen, einschieben, mit 1–2 dl Wasser bedampfen und auf 230 °C reduzieren; nach 20 Min. Schüssel entfernen, Brote ausformen und 20–25 Min. knusprig ausbacken.'
+      }
+    ]
+  },
+  {
+    id: 'pizzateig-48h',
+    name: 'Pizzateig mit 48 Std. Reifung',
+    totalShort: '~50 Std',
+    subtitle: 'Bekömmlicher Pizzateig mit langer kalter Gare – nach Marcel Paa',
+    source: {
+      url: 'https://www.marcelpaa.com/rezepte/pizza-teig/',
+      title: 'Pizzateig mit 48 Stunden Reifung – Marcel Paa'
+    },
+    steps: [
+      {
+        title: 'Teig kneten',
+        dur: 20,
+        kind: 'prep',
+        desc: 'Zutaten mit den Flüssigkeiten beginnend 5–6 Min. ankneten, dann 12–15 Min. auf mittlerer Stufe kneten, bis der Teig die Fensterprobe besteht.',
+        ingredients: [
+          { amount: 390, unit: 'g', name: 'Wasser', note: 'kalt' },
+          { amount: 20, unit: 'g', name: 'Olivenöl' },
+          { amount: 590, unit: 'g', name: 'Weissmehl', note: 'Weizenmehl Type 405/550' },
+          { amount: 12, unit: 'g', name: 'Salz' },
+          { amount: 3, unit: 'g', name: 'Frischhefe' }
+        ]
+      },
+      {
+        title: 'Teigruhe',
+        dur: 60,
+        kind: 'rise',
+        desc: 'Teig zugedeckt bei Raumtemperatur ruhen lassen.'
+      },
+      {
+        title: 'Portionieren & Kugeln formen',
+        dur: 15,
+        kind: 'prep',
+        desc: 'Teig in Stücke à 250 g portionieren, zu straffen Kugeln schleifen und in eine geölte Kunststoffbox legen.',
+        ingredients: [
+          { name: 'Olivenöl', note: 'für die Gärbox' }
+        ]
+      },
+      {
+        title: 'Kalte Reifung',
+        dur: 2880,
+        min: 1440,
+        max: 2880,
+        step: 30,
+        kind: 'cold',
+        sleep: true,
+        desc: 'Teigkugeln verschlossen bei 5–7 °C im Kühlschrank reifen lassen und in dieser Zeit 2–3 Mal dehnen, falten und neu rund formen.'
+      },
+      {
+        title: 'Tomatensauce zubereiten',
+        dur: 20,
+        kind: 'prep',
+        desc: 'Knoblauch mit Olivenöl und Tomatenmark anschwitzen, restliche Zutaten aufkochen, Basilikum unterrühren und die Sauce pürieren.',
+        ingredients: [
+          { amount: 15, unit: 'g', name: 'Olivenöl' },
+          { amount: 2, name: 'Knoblauchzehen' },
+          { amount: 5, name: 'Basilikumblätter' },
+          { amount: 100, unit: 'g', name: 'Tomatenmark' },
+          { amount: 400, unit: 'g', name: 'Tomaten', note: 'gehackt' },
+          { amount: 3, unit: 'g', name: 'Oregano', note: 'getrocknet' },
+          { amount: 3, unit: 'g', name: 'Zucker' },
+          { name: 'Salz' },
+          { name: 'Pfeffer' }
+        ]
+      },
+      {
+        title: 'Pizzen formen & belegen',
+        dur: 30,
+        kind: 'prep',
+        desc: 'Teiglinge auf Hartweizengriess zu Kreisen mit Rand ausdrücken, mit Tomatensauce bestreichen und mit Mozzarella und Belag nach Wahl belegen.',
+        ingredients: [
+          { name: 'Hartweizengriess' },
+          { name: 'Mozzarella' },
+          { name: 'Belag nach Wahl' }
+        ]
+      },
+      {
+        title: 'Backen',
+        dur: 5,
+        kind: 'bake',
+        desc: 'Grill mit Pizzastein auf 300 °C vorheizen, Pizzen abschieben und bei geschlossenem Deckel 4–5 Min. backen (alternativ im Backofen bei 230 °C O/U ca. 10–15 Min.).'
+      }
+    ]
+  },
+  {
+    id: 'alltags-roggenmischbrot-80-20',
+    name: 'Alltags-Roggenmischbrot 80/20',
+    totalShort: '~9 Std',
+    subtitle: 'Schnelles No-Knead-Sauerteigbrot für den Alltag – nach Marcel Paa',
+    source: {
+      url: 'https://www.marcelpaa.com/rezepte/alltags-roggenmischbrot-80-20/',
+      title: 'Alltags-Roggenmischbrot 80/20 – Marcel Paa'
+    },
+    steps: [
+      {
+        title: 'Teig mischen',
+        dur: 10,
+        kind: 'prep',
+        desc: 'Sauerteig im warmen Wasser aufschlämmen, restliche Zutaten dazugeben und ohne Kneten gründlich mischen, bis keine trockenen Stellen mehr vorhanden sind (bei weichem Teig mit 370 g Wasser starten).',
+        ingredients: [
+          { amount: 450, unit: 'g', name: 'Wasser', note: 'ca. 35 °C warm' },
+          { amount: 50, unit: 'g', name: 'Sauerteig' },
+          { amount: 12, unit: 'g', name: 'Salz' },
+          { amount: 100, unit: 'g', name: 'Weissmehl', note: 'Weizenmehl Type 550' },
+          { amount: 400, unit: 'g', name: 'Roggenmehl dunkel', note: 'Type 1150' },
+          { amount: 1, unit: 'TL', name: 'Brotgewürz', note: 'optional' }
+        ]
+      },
+      {
+        title: 'Stockgare',
+        dur: 480,
+        min: 360,
+        max: 600,
+        step: 30,
+        kind: 'rise',
+        sleep: true,
+        desc: 'Teig zugedeckt bei Raumtemperatur gehen lassen (alternativ 3–4 Std. anspringen lassen und bis zu 24 Std. kalt lagern).'
+      },
+      {
+        title: 'Formen',
+        dur: 10,
+        kind: 'prep',
+        desc: 'Teig auf reichlich Roggenmehl kräftig rund schleifen, ohne zu kneten, und auf einen bemehlten Schiesser oder Backpapier setzen.'
+      },
+      {
+        title: 'Kurze Stückgare',
+        dur: 3,
+        kind: 'rise',
+        desc: 'Teigling stehen lassen, bis sich erste Risse auf der Oberfläche bilden.'
+      },
+      {
+        title: 'Backen',
+        dur: 55,
+        kind: 'bake',
+        desc: 'Ofen mit Backstahl in der unteren Hälfte auf 250 °C O/U vorheizen, einschieben, kräftig bedampfen, auf 230 °C reduzieren und 50–55 Min. ausbacken; auf einem Gitter vollständig auskühlen lassen.'
+      }
+    ]
+  },
+  {
+    id: 'dinkel-roggen-vollkornbrot',
+    name: 'Dinkel-Roggen Vollkornbrot',
+    totalShort: '~18 Std',
+    subtitle: 'Saftiges Kastenbrot mit gerösteten Sonnenblumenkernen – nach Marcel Paa',
+    source: {
+      url: 'https://www.marcelpaa.com/rezepte/dinkel-roggen-vollkornbrot/',
+      title: 'Dinkel-Roggen Vollkornbrot – Marcel Paa'
+    },
+    steps: [
+      {
+        title: 'Sauerteig-Vorteig ansetzen',
+        dur: 5,
+        kind: 'prep',
+        desc: 'Sauerteig im warmen Wasser aufschlämmen und das Mehl gut untermischen.',
+        ingredients: [
+          { amount: 110, unit: 'g', name: 'Wasser', note: 'ca. 40 °C warm' },
+          { amount: 20, unit: 'g', name: 'Sauerteig', note: '15–20 g' },
+          { amount: 110, unit: 'g', name: 'Roggenvollkornmehl' }
+        ]
+      },
+      {
+        title: 'Brühstück ansetzen',
+        dur: 10,
+        kind: 'prep',
+        desc: 'Sonnenblumenkerne, Mehl und Salz mischen, mit kochendem Wasser übergiessen und gründlich vermengen.',
+        ingredients: [
+          { amount: 170, unit: 'g', name: 'Wasser', note: 'aufgekocht' },
+          { amount: 100, unit: 'g', name: 'Sonnenblumenkerne', note: 'geröstet' },
+          { amount: 70, unit: 'g', name: 'Dinkelvollkornmehl' },
+          { amount: 15, unit: 'g', name: 'Salz' }
+        ]
+      },
+      {
+        title: 'Vorteige reifen lassen',
+        dur: 840,
+        min: 720,
+        max: 960,
+        step: 30,
+        kind: 'rise',
+        sleep: true,
+        desc: 'Vorteig und Brühstück zugedeckt 12–16 Std. bei Raumtemperatur reifen bzw. quellen lassen.'
+      },
+      {
+        title: 'Hauptteig mischen',
+        dur: 10,
+        kind: 'prep',
+        desc: 'Vorteig, Brühstück und alle übrigen Zutaten ca. 8 Min. auf niedriger Stufe mischen; bei zu festem Teig schluckweise Wasser zugeben.',
+        ingredients: [
+          { name: 'Sauerteig-Vorteig' },
+          { name: 'Brühstück' },
+          { amount: 130, unit: 'g', name: 'Wasser' },
+          { amount: 300, unit: 'g', name: 'Dinkelvollkornmehl' },
+          { amount: 130, unit: 'g', name: 'Dinkelmehl hell', note: 'Type 630' },
+          { amount: 20, unit: 'g', name: 'Zuckerrübensirup', note: 'alternativ Honig' },
+          { amount: 6, unit: 'g', name: 'Frischhefe' }
+        ]
+      },
+      {
+        title: 'Stockgare',
+        dur: 75,
+        min: 60,
+        max: 90,
+        step: 15,
+        kind: 'rise',
+        desc: 'Teig zugedeckt bei Raumtemperatur ruhen lassen.'
+      },
+      {
+        title: 'Formen',
+        dur: 10,
+        kind: 'prep',
+        desc: 'Teig auf die bemehlte Arbeitsfläche stürzen, von beiden Seiten zur Mitte falten, leicht entgasen, länglich aufrollen und in die gefettete Toastbrotform legen.'
+      },
+      {
+        title: 'Stückgare',
+        dur: 90,
+        min: 60,
+        max: 120,
+        step: 15,
+        kind: 'rise',
+        desc: 'Teigling zugedeckt bei Raumtemperatur gären lassen, bis sich leichte Risse auf der Oberfläche bilden.'
+      },
+      {
+        title: 'Backen',
+        dur: 55,
+        kind: 'bake',
+        desc: 'Ofen auf 250 °C O/U vorheizen, einschieben und bedampfen, auf 230–240 °C reduzieren; nach 20 Min. Dampf ablassen, nach insgesamt 40–50 Min. ausformen und ca. 10 Min. knusprig ausbacken.'
+      }
+    ]
+  },
 ];
 
 // ---------------------------------------------------------------------------
