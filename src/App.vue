@@ -115,9 +115,15 @@ function onSelectRecipe(id) {
   autoScrollToNow.value = !!savedBakes.value[id]
   recipeId.value = id
   view.value = 'plan'
+  window.history.pushState({ schedoughlerView: 'plan' }, '')
 }
 
 function onBack() {
+  if (view.value !== 'plan') return
+  window.history.back()
+}
+
+function onPopState() {
   view.value = 'select'
 }
 
@@ -137,13 +143,32 @@ function onToggleSave(r) {
   persistSavedBakes(localStorage, next)
 }
 
+function isEditableTarget(el) {
+  const tag = el?.tagName
+  return tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || el?.isContentEditable
+}
+
+function onKeydown(event) {
+  if (event.key !== 'Backspace') return
+  if (view.value !== 'plan') return
+  if (isEditableTarget(event.target)) return
+  event.preventDefault()
+  onBack()
+}
+
 let pruneInterval
 onMounted(() => {
   pruneInterval = setInterval(() => {
     savedBakes.value = pruneAndPersist(savedBakes.value)
   }, 60_000)
+  window.addEventListener('keydown', onKeydown)
+  window.addEventListener('popstate', onPopState)
 })
-onUnmounted(() => clearInterval(pruneInterval))
+onUnmounted(() => {
+  clearInterval(pruneInterval)
+  window.removeEventListener('keydown', onKeydown)
+  window.removeEventListener('popstate', onPopState)
+})
 </script>
 
 <style>
