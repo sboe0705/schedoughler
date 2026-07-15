@@ -89,6 +89,14 @@ The persistence helpers (`loadSavedBakes`, `persistSavedBakes`, `toggleSavedBake
 
 ---
 
+## Starred recipes
+
+Each row also has a star button for marking a recipe as a favorite — meant for recipes you've already tried and rated highly. Starring is a plain local preference (no finish time attached) and never expires. Starred recipes that aren't currently saved are pinned in their own "Favoriten" section, sorted alphabetically, between the saved-bakes section and "Alle Rezepte"; a recipe that's both saved and starred stays in the saved-bakes section with its star shown filled.
+
+Starred recipes are persisted to `localStorage` under the key `schedoughler.starred.v1`. The persistence helpers (`loadStarredRecipes`, `persistStarredRecipes`, `toggleStarredRecipe`) and the constant `STARRED_KEY` live in `src/scheduler.js`.
+
+---
+
 ## Adding a recipe
 
 ### 1. Manual authoring

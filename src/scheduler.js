@@ -1038,3 +1038,34 @@ export function pruneSavedBakes(saved, now = Date.now()) {
   });
   return { saved: next, changed };
 }
+
+// ---------------------------------------------------------------------------
+// Starred recipes
+// ---------------------------------------------------------------------------
+// A "starred" recipe is one the user has tried and rated highly. Starring is
+// a local-only, per-browser preference (no finish time/overrides attached)
+// used solely to prioritize the recipe's position in the selection list.
+// Starred recipes never expire.
+//
+// Persisted shape (JSON under STARRED_KEY): { [recipeId]: true }
+
+export const STARRED_KEY = 'schedoughler.starred.v1';
+
+/** Parse the starred-recipes map from localStorage. Safe on missing/corrupt data. */
+export function loadStarredRecipes(store) {
+  try { const raw = store.getItem(STARRED_KEY); return raw ? JSON.parse(raw) : {}; }
+  catch (e) { return {}; }
+}
+
+/** Persist the starred-recipes map to localStorage. */
+export function persistStarredRecipes(store, starred) {
+  try { store.setItem(STARRED_KEY, JSON.stringify(starred)); } catch (e) {}
+}
+
+/** Toggle a recipe's starred state. Returns a NEW map (does not mutate the input). */
+export function toggleStarredRecipe(starred, recipeId) {
+  const next = { ...starred };
+  if (next[recipeId]) delete next[recipeId];
+  else next[recipeId] = true;
+  return next;
+}

@@ -35,8 +35,25 @@
           :recipe="entry.recipe"
           :saved="true"
           :saved-label="entry.savedLabel"
+          :starred="!!props.starredRecipes[entry.recipe.id]"
           @select="$emit('select-recipe', entry.recipe.id)"
           @toggle-save="$emit('toggle-save', entry.recipe)"
+          @toggle-star="$emit('toggle-star', entry.recipe.id)"
+        />
+      </div>
+    </template>
+
+    <template v-if="filteredStarred.length">
+      <div class="section-label">Favoriten</div>
+      <div class="starred-list">
+        <RecipeRow
+          v-for="r in filteredStarred"
+          :key="r.id"
+          :recipe="r"
+          :starred="true"
+          @select="$emit('select-recipe', r.id)"
+          @toggle-save="$emit('toggle-save', r)"
+          @toggle-star="$emit('toggle-star', r.id)"
         />
       </div>
     </template>
@@ -47,8 +64,10 @@
         v-for="r in filteredOther"
         :key="r.id"
         :recipe="r"
+        :starred="!!props.starredRecipes[r.id]"
         @select="$emit('select-recipe', r.id)"
         @toggle-save="$emit('toggle-save', r)"
+        @toggle-star="$emit('toggle-star', r.id)"
       />
     </div>
 
@@ -65,8 +84,9 @@ import RecipeRow from './RecipeRow.vue'
 const props = defineProps({
   recipes: Array,
   savedBakes: { type: Object, default: () => ({}) },
+  starredRecipes: { type: Object, default: () => ({}) },
 })
-defineEmits(['select-recipe', 'toggle-save'])
+defineEmits(['select-recipe', 'toggle-save', 'toggle-star'])
 
 const query = ref('')
 const hasQuery = computed(() => query.value.trim().length > 0)
@@ -82,15 +102,22 @@ const filteredSaved = computed(() =>
     .sort((a, b) => props.savedBakes[a.recipe.id].target - props.savedBakes[b.recipe.id].target)
 )
 
+const filteredStarred = computed(() =>
+  props.recipes
+    .filter(r => !props.savedBakes[r.id] && props.starredRecipes[r.id] && matchesQuery(r, query.value))
+    .slice()
+    .sort((a, b) => a.name.localeCompare(b.name, 'de'))
+)
+
 const filteredOther = computed(() =>
   props.recipes
-    .filter(r => !props.savedBakes[r.id] && matchesQuery(r, query.value))
+    .filter(r => !props.savedBakes[r.id] && !props.starredRecipes[r.id] && matchesQuery(r, query.value))
     .slice()
     .sort((a, b) => a.name.localeCompare(b.name, 'de'))
 )
 
 const noResults = computed(() =>
-  hasQuery.value && filteredSaved.value.length === 0 && filteredOther.value.length === 0
+  hasQuery.value && filteredSaved.value.length === 0 && filteredStarred.value.length === 0 && filteredOther.value.length === 0
 )
 </script>
 
@@ -193,6 +220,13 @@ const noResults = computed(() =>
 }
 
 .saved-list {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  margin-bottom: 22px;
+}
+
+.starred-list {
   display: flex;
   flex-direction: column;
   gap: 9px;

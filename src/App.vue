@@ -4,8 +4,10 @@
       v-if="view === 'select'"
       :recipes="RECIPES"
       :saved-bakes="savedBakes"
+      :starred-recipes="starredRecipes"
       @select-recipe="onSelectRecipe"
       @toggle-save="onToggleSave"
+      @toggle-star="onToggleStar"
     />
 
     <template v-else>
@@ -40,6 +42,7 @@ import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import {
   RECIPES, computeSchedule, defaultFinishTime, nudgeDuration,
   loadSavedBakes, persistSavedBakes, toggleSavedBake, pruneSavedBakes,
+  loadStarredRecipes, persistStarredRecipes, toggleStarredRecipe,
 } from './scheduler.js'
 import RecipeSelectView from './components/RecipeSelectView.vue'
 import SchedulerHeader from './components/SchedulerHeader.vue'
@@ -71,6 +74,7 @@ function pruneAndPersist(saved) {
 }
 
 const savedBakes = ref(pruneAndPersist(loadSavedBakes(localStorage)))
+const starredRecipes = ref(loadStarredRecipes(localStorage))
 const autoScrollToNow = ref(false)
 
 const schedule = computed(() => computeSchedule(recipe.value, finishAt.value, overrides.value))
@@ -115,6 +119,12 @@ function onSelectRecipe(id) {
 
 function onBack() {
   view.value = 'select'
+}
+
+function onToggleStar(recipeId) {
+  const next = toggleStarredRecipe(starredRecipes.value, recipeId)
+  starredRecipes.value = next
+  persistStarredRecipes(localStorage, next)
 }
 
 function onToggleSave(r) {

@@ -13,6 +13,20 @@
     </div>
 
     <button
+      class="star-btn"
+      :class="{ starred }"
+      :title="starred ? 'Aus Favoriten entfernen' : 'Zu Favoriten hinzufügen'"
+      @click.stop="$emit('toggle-star')"
+    >
+      <svg v-if="starred" width="14" height="14" viewBox="0 0 24 24" fill="#FBF5EA">
+        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.27 5.82 21 7 14.14l-5-4.87 6.91-1.01L12 2z"/>
+      </svg>
+      <svg v-else width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.27 5.82 21 7 14.14l-5-4.87 6.91-1.01L12 2z"/>
+      </svg>
+    </button>
+
+    <button
       class="bookmark-btn"
       :class="{ saved }"
       :title="saved ? 'Gespeicherte Backzeit entfernen' : 'Backzeit speichern'"
@@ -33,8 +47,9 @@ defineProps({
   recipe: Object,
   saved: { type: Boolean, default: false },
   savedLabel: { type: String, default: '' },
+  starred: { type: Boolean, default: false },
 })
-defineEmits(['select', 'toggle-save'])
+defineEmits(['select', 'toggle-save', 'toggle-star'])
 </script>
 
 <style scoped>
@@ -131,6 +146,33 @@ defineEmits(['select', 'toggle-save'])
 
 .bookmark-btn.saved {
   background: var(--color-bake);
+  border: none;
+  color: var(--color-card);
+  box-shadow: 0 1px 3px rgba(0,0,0,.25);
+}
+
+.star-btn {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 11px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: #F4EBDD;
+  border: 1px solid #E0CBA8;
+  color: #B6A485;
+  transition: color .15s, border-color .15s;
+}
+
+.star-btn:hover {
+  color: var(--color-prep);
+  border-color: var(--color-prep);
+}
+
+.star-btn.starred {
+  background: var(--color-prep);
   border: none;
   color: var(--color-card);
   box-shadow: 0 1px 3px rgba(0,0,0,.25);
