@@ -303,16 +303,20 @@ describe('matchesQuery', () => {
     expect(matchesQuery(recipe, 'SAUERTEIGBROT')).toBe(true)
   })
 
-  it('matches on a word that only appears in a step title/description', () => {
-    expect(matchesQuery(recipe, 'Gusseisentopf')).toBe(true)
+  it('matches on a word that only appears in the subtitle', () => {
+    expect(matchesQuery(recipe, 'Kruste')).toBe(true)
   })
 
   it('requires every word to match (AND semantics)', () => {
-    expect(matchesQuery(recipe, 'Gusseisentopf zzzznotfound')).toBe(false)
+    expect(matchesQuery(recipe, 'Kruste zzzznotfound')).toBe(false)
   })
 
-  it('matches when every word occurs somewhere in the recipe', () => {
-    expect(matchesQuery(recipe, 'Vorteig ansetzen')).toBe(true)
+  it('matches when every word occurs somewhere in name/subtitle', () => {
+    expect(matchesQuery(recipe, 'Sauerteigbrot Kruste')).toBe(true)
+  })
+
+  it('does not match text that only appears in a step title/description', () => {
+    expect(matchesQuery(recipe, 'Gusseisentopf')).toBe(false)
   })
 
   it('returns false when nothing matches', () => {

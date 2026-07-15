@@ -65,7 +65,7 @@ Recipes live in the `RECIPES` array exported from `src/scheduler.js`. The full s
 
 ## Search
 
-`RecipeSelectView.vue` filters both list sections live against a local `query` ref using `matchesQuery(recipe, query)` from `scheduler.js` — case-insensitive, whitespace-split, every word must occur in the recipe's title or any step's title/description. An empty query matches everything.
+`RecipeSelectView.vue` filters both list sections live against a local `query` ref using `matchesQuery(recipe, query)` from `scheduler.js` — case-insensitive, whitespace-split, every word must occur in the recipe's name or subtitle. An empty query matches everything.
 
 ## Saved Bakes
 

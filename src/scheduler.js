@@ -113,7 +113,7 @@ export const RECIPES = [
     id: 'guinness-brot',
     name: 'Guinness Brot',
     totalShort: '~15 Std',
-    subtitle: 'Würzig-malziges Sauerteigbrot mit Guinness – von Marcel Paa',
+    subtitle: 'Würzig-malziges Sauerteigbrot mit Guinness – Marcel Paa',
     source: { url: 'https://www.marcelpaa.com/rezepte/guinness-brot/', title: 'Marcel Paa - Guinness Brot' },
     idealFinish: { hour: 12, minute: 30 },
     steps: [
@@ -264,7 +264,7 @@ export const RECIPES = [
     id: 'madre-roggen-mischbroetchen',
     name: 'Madre Roggen Mischbrötchen',
     totalShort: '~20 Std',
-    subtitle: 'Knusprige, rustikale Roggenmischbrötchen mit Sauerteig – von Marcel Paa',
+    subtitle: 'Knusprige, rustikale Roggenmischbrötchen mit Sauerteig – Marcel Paa',
     source: { url: 'https://www.marcelpaa.com/rezepte/madre-roggen-mischbroetchen/', title: 'Marcel Paa – Madre Roggen Mischbrötchen' },
     idealFinish: { hour: 7, minute: 30 },
     steps: [
@@ -318,7 +318,7 @@ export const RECIPES = [
     id: 'lievito-madre-joghurt-broetchen',
     name: 'Lievito Madre Joghurt Brötchen',
     totalShort: '~13 Std',
-    subtitle: 'Knusprige Joghurt-Brötchen mit Lievito Madre, der ideale Start in den Tag – von Marcel Paa',
+    subtitle: 'Knusprige Joghurt-Brötchen mit Lievito Madre, der ideale Start in den Tag – Marcel Paa',
     source: { url: 'https://www.marcelpaa.com/rezepte/lievito-madre-joghurt-broetchen/', title: 'Marcel Paa – Lievito Madre Joghurt Brötchen' },
     idealFinish: { hour: 9, minute: 0 },
     steps: [
@@ -373,7 +373,7 @@ export const RECIPES = [
     id: 'lievito-madre-broetchen',
     name: 'Lievito Madre Brötchen',
     totalShort: '~13 Std',
-    subtitle: 'Rustikale Lievito-Madre-Brötchen aus Roggen- und Weizenmehl, ganz ohne Hefe – von Marcel Paa',
+    subtitle: 'Rustikale Lievito-Madre-Brötchen aus Roggen- und Weizenmehl, ganz ohne Hefe – Marcel Paa',
     source: { url: 'https://www.marcelpaa.com/rezepte/lievito-madre-broetchen-2/', title: 'Marcel Paa – Lievito Madre Brötchen' },
     idealFinish: { hour: 10, minute: 0 },
     steps: [
@@ -428,7 +428,7 @@ export const RECIPES = [
     id: 'walliser-roggenbrot',
     name: 'Walliser Roggenbrot',
     totalShort: '~34 Std',
-    subtitle: 'Rustikales Roggenbrot mit langer Kühlschrankgare – von Marcel Paa',
+    subtitle: 'Rustikales Roggenbrot mit langer Kühlschrankgare – Marcel Paa',
     source: { url: 'https://www.marcelpaa.com/rezepte/walliser-roggenbrot-mit-kuehlschrankgare/', title: 'Marcel Paa – Walliser Roggenbrot mit Kühlschrankgare' },
     idealFinish: { hour: 18, minute: 30 },
     steps: [
@@ -493,7 +493,7 @@ export const RECIPES = [
     id: 'naan',
     name: 'Naan – Indisches Fladenbrot',
     totalShort: '~3 Std',
-    subtitle: 'Fluffiges Fladenbrot mit Knoblauchbutter – von Marcel Paa',
+    subtitle: 'Fluffiges Fladenbrot mit Knoblauchbutter – Marcel Paa',
     source: { url: 'https://www.marcelpaa.com/rezepte/naan-indisches-fladenbrot/', title: 'Marcel Paa – Naan Indisches Fladenbrot' },
     idealFinish: { hour: 18, minute: 30 },
     steps: [
@@ -521,7 +521,7 @@ export const RECIPES = [
     id: 'sonnenblumenkern-vollkornbrot',
     name: 'Sonnenblumenkern Vollkornbrot',
     totalShort: '~14 Std',
-    subtitle: 'Saftiges Weizenvollkornbrot mit Kernen – nach Marcel Paa',
+    subtitle: 'Saftiges Weizenvollkornbrot mit Kernen – Marcel Paa',
     source: {
       url: 'https://www.marcelpaa.com/rezepte/vollkornbrot-mit-sonnenblumenkernen/',
       title: 'Sonnenblumenkern Vollkornbrot – Marcel Paa'
@@ -622,7 +622,7 @@ export const RECIPES = [
     id: 'pizzateig-48h',
     name: 'Pizzateig mit 48 Std. Reifung',
     totalShort: '~50 Std',
-    subtitle: 'Bekömmlicher Pizzateig mit langer kalter Gare – nach Marcel Paa',
+    subtitle: 'Bekömmlicher Pizzateig mit langer kalter Gare – Marcel Paa',
     source: {
       url: 'https://www.marcelpaa.com/rezepte/pizza-teig/',
       title: 'Pizzateig mit 48 Stunden Reifung – Marcel Paa'
@@ -707,7 +707,7 @@ export const RECIPES = [
     id: 'alltags-roggenmischbrot-80-20',
     name: 'Alltags-Roggenmischbrot 80/20',
     totalShort: '~9 Std',
-    subtitle: 'Schnelles No-Knead-Sauerteigbrot für den Alltag – nach Marcel Paa',
+    subtitle: 'Schnelles No-Knead-Sauerteigbrot für den Alltag – Marcel Paa',
     source: {
       url: 'https://www.marcelpaa.com/rezepte/alltags-roggenmischbrot-80-20/',
       title: 'Alltags-Roggenmischbrot 80/20 – Marcel Paa'
@@ -762,7 +762,7 @@ export const RECIPES = [
     id: 'dinkel-roggen-vollkornbrot',
     name: 'Dinkel-Roggen Vollkornbrot',
     totalShort: '~18 Std',
-    subtitle: 'Saftiges Kastenbrot mit gerösteten Sonnenblumenkernen – nach Marcel Paa',
+    subtitle: 'Saftiges Kastenbrot mit gerösteten Sonnenblumenkernen – Marcel Paa',
     source: {
       url: 'https://www.marcelpaa.com/rezepte/dinkel-roggen-vollkornbrot/',
       title: 'Dinkel-Roggen Vollkornbrot – Marcel Paa'
@@ -973,13 +973,13 @@ export function durationLabel(minutes) {
 
 /**
  * Recipe search (selection view). Case-insensitive; the query is split on
- * whitespace and EVERY word must occur somewhere in the recipe's title or its
- * step titles/descriptions. Empty query matches everything.
+ * whitespace and EVERY word must occur somewhere in the recipe's name or
+ * subtitle. Empty query matches everything.
  */
 export function matchesQuery(recipe, query) {
   const q = (query || '').trim().toLowerCase();
   if (!q) return true;
-  const hay = [recipe.name, ...recipe.steps.map(s => s.title + ' ' + s.desc)].join(' ').toLowerCase();
+  const hay = [recipe.name, recipe.subtitle].filter(Boolean).join(' ').toLowerCase();
   return q.split(/\s+/).filter(Boolean).every(w => hay.includes(w));
 }
 
