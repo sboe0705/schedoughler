@@ -4,11 +4,11 @@
       <div class="row-name">{{ recipe.name }}</div>
       <div v-if="saved" class="row-meta">
         <span class="finish-pill">Fertig {{ savedLabel }}</span>
-        <span class="row-total">{{ recipe.totalShort }}</span>
+        <span class="row-total">{{ recipe.totalShort }}<span v-if="idealFinishLabel" class="row-ideal"> · ideal {{ idealFinishLabel }}</span></span>
       </div>
       <template v-else>
         <div class="row-subtitle">{{ recipe.subtitle }}</div>
-        <div class="row-total">{{ recipe.totalShort }}</div>
+        <div class="row-total">{{ recipe.totalShort }}<span v-if="idealFinishLabel" class="row-ideal"> · ideal {{ idealFinishLabel }}</span></div>
       </template>
     </div>
 
@@ -43,13 +43,21 @@
 </template>
 
 <script setup>
-defineProps({
+import { computed } from 'vue'
+
+const props = defineProps({
   recipe: Object,
   saved: { type: Boolean, default: false },
   savedLabel: { type: String, default: '' },
   starred: { type: Boolean, default: false },
 })
 defineEmits(['select', 'toggle-save', 'toggle-star'])
+
+const idealFinishLabel = computed(() => {
+  const f = props.recipe.idealFinish
+  if (!f) return ''
+  return `${String(f.hour).padStart(2, '0')}:${String(f.minute).padStart(2, '0')}`
+})
 </script>
 
 <style scoped>
@@ -110,6 +118,11 @@ defineEmits(['select', 'toggle-save', 'toggle-star'])
 
 .row-meta .row-total {
   margin-top: 0;
+}
+
+.row-ideal {
+  color: var(--color-muted);
+  font-weight: 500;
 }
 
 .finish-pill {
