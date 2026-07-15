@@ -12,12 +12,16 @@ The full model lives in `src/scheduler.js` and is made up of three nested types.
 
 ```js
 {
-  id:         string,   // URL-safe identifier, e.g. 'sauerteig'
-  name:       string,   // display name, e.g. 'Sauerteigbrot'
-  totalShort: string,   // human duration hint, e.g. '~28 Std'
-  subtitle:   string,   // short tagline / attribution
-  source?:    { url: string, title: string },  // optional link to original recipe
-  steps:      Step[],   // ordered list, first to last
+  id:           string,   // URL-safe identifier, e.g. 'sauerteig'
+  name:         string,   // display name, e.g. 'Sauerteigbrot'
+  totalShort:   string,   // human duration hint, e.g. '~28 Std'
+  subtitle:     string,   // short tagline / attribution
+  source?:      { url: string, title: string },  // optional link to original recipe
+  idealFinish?: { hour: number, minute: number }, // optional target clock time-of-day
+                          // for defaultFinishTime() — chosen so this recipe's long
+                          // rises/cold-retards land overnight instead of the bake
+                          // landing at 3am; hand-picked per recipe, not guessed
+  steps:        Step[],   // ordered list, first to last
 }
 ```
 
@@ -109,6 +113,11 @@ Recipe object:
   subtitle   – one-line tagline (flavour + source if known)
   source     – optional { url, title } — add only when a real URL to the original recipe is known
   steps      – ordered array of Step objects
+
+  Do NOT add an idealFinish field — leave it out. It depends on simulating the
+  actual step timing against a night window, which this conversion can't do
+  reliably; it should be added by hand afterwards, verified against the
+  recipe's real step durations.
 
 Step object (required fields):
   title  – short label for the timeline

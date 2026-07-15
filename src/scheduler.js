@@ -25,6 +25,9 @@ export const KINDS = {
 // ---------------------------------------------------------------------------
 // Recipe data model.
 //   recipe.source       optional { url, title } — shown as a link icon in SetupCard
+//   recipe.idealFinish  optional { hour, minute } — local clock time-of-day that
+//                       defaultFinishTime() targets, so long rises/cold-retards
+//                       land overnight instead of the bake landing at 3am
 //   step.dur            default duration in MINUTES
 //   step.min/max/step   present => step is "flexible" (range adjustable in UI)
 //   step.kind           key into KINDS
@@ -38,6 +41,7 @@ export const RECIPES = [
     totalShort: '~28 Std',
     subtitle: 'Knusprige Kruste, aromatische Krume · Marcel Paa',
     source: { url: 'https://www.marcelpaa.com/rezepte/sauerteigbrot/', title: 'Marcel Paa – Sauerteig Brot' },
+    idealFinish: { hour: 11, minute: 0 },
     steps: [
       { title: 'Vorteig ansetzen', dur: 15, kind: 'prep', desc: 'Sauerteig, handwarmes Wasser und Weissmehl verkneten, zur Kugel formen und im Gefäss markieren.', ingredients: [
         { amount: 30,  unit: 'g', name: 'Sauerteig' },
@@ -64,6 +68,7 @@ export const RECIPES = [
     totalShort: "~3 Std",
     subtitle: "Knuspriges Knäckebrot aus Anstellgut – Marcel Paa",
     source: { url: 'https://www.marcelpaa.com/rezepte/knaeckebrot-aus-sauerteig/', title: 'Marcel Paa - Sauerteig Cracker' },
+    idealFinish: { hour: 18, minute: 0 },
     steps: [
       {
         title: "Teig mischen",
@@ -110,6 +115,7 @@ export const RECIPES = [
     totalShort: '~15 Std',
     subtitle: 'Würzig-malziges Sauerteigbrot mit Guinness – von Marcel Paa',
     source: { url: 'https://www.marcelpaa.com/rezepte/guinness-brot/', title: 'Marcel Paa - Guinness Brot' },
+    idealFinish: { hour: 12, minute: 30 },
     steps: [
       {
         title: 'Teig kneten',
@@ -187,6 +193,7 @@ export const RECIPES = [
     totalShort: '~14 Std',
     subtitle: 'Hartweizenmehl-Sauerteigbrot mit langer Kaltgare – von Oliver',
     source: { url: 'https://cookin.eu/pane-di-altamura/', title: 'cookin.eu - Pane di Altamura' },
+    idealFinish: { hour: 9, minute: 30 },
     steps: [
       {
         title: 'Autolyse',
@@ -259,6 +266,7 @@ export const RECIPES = [
     totalShort: '~20 Std',
     subtitle: 'Knusprige, rustikale Roggenmischbrötchen mit Sauerteig – von Marcel Paa',
     source: { url: 'https://www.marcelpaa.com/rezepte/madre-roggen-mischbroetchen/', title: 'Marcel Paa – Madre Roggen Mischbrötchen' },
+    idealFinish: { hour: 7, minute: 30 },
     steps: [
       {
         title: 'Kneten',
@@ -312,6 +320,7 @@ export const RECIPES = [
     totalShort: '~13 Std',
     subtitle: 'Knusprige Joghurt-Brötchen mit Lievito Madre, der ideale Start in den Tag – von Marcel Paa',
     source: { url: 'https://www.marcelpaa.com/rezepte/lievito-madre-joghurt-broetchen/', title: 'Marcel Paa – Lievito Madre Joghurt Brötchen' },
+    idealFinish: { hour: 9, minute: 0 },
     steps: [
       {
         title: 'Kneten',
@@ -366,6 +375,7 @@ export const RECIPES = [
     totalShort: '~13 Std',
     subtitle: 'Rustikale Lievito-Madre-Brötchen aus Roggen- und Weizenmehl, ganz ohne Hefe – von Marcel Paa',
     source: { url: 'https://www.marcelpaa.com/rezepte/lievito-madre-broetchen-2/', title: 'Marcel Paa – Lievito Madre Brötchen' },
+    idealFinish: { hour: 10, minute: 0 },
     steps: [
       {
         title: 'Kneten',
@@ -420,6 +430,7 @@ export const RECIPES = [
     totalShort: '~34 Std',
     subtitle: 'Rustikales Roggenbrot mit langer Kühlschrankgare – von Marcel Paa',
     source: { url: 'https://www.marcelpaa.com/rezepte/walliser-roggenbrot-mit-kuehlschrankgare/', title: 'Marcel Paa – Walliser Roggenbrot mit Kühlschrankgare' },
+    idealFinish: { hour: 18, minute: 30 },
     steps: [
       {
         title: 'Hauptteig anmischen',
@@ -484,6 +495,7 @@ export const RECIPES = [
     totalShort: '~3 Std',
     subtitle: 'Fluffiges Fladenbrot mit Knoblauchbutter – von Marcel Paa',
     source: { url: 'https://www.marcelpaa.com/rezepte/naan-indisches-fladenbrot/', title: 'Marcel Paa – Naan Indisches Fladenbrot' },
+    idealFinish: { hour: 18, minute: 30 },
     steps: [
       { title: 'Teig kneten', dur: 25, kind: 'prep', desc: 'Alle Zutaten in die Küchenmaschine geben, 3–4 Min. auf niedriger Stufe mischen, dann rund 20 Min. auf mittlerer Stufe zu einem glatten, elastischen Teig kneten.', ingredients: [
         { amount: 125, unit: 'g', name: 'Wasser' },
@@ -514,6 +526,7 @@ export const RECIPES = [
       url: 'https://www.marcelpaa.com/rezepte/vollkornbrot-mit-sonnenblumenkernen/',
       title: 'Sonnenblumenkern Vollkornbrot – Marcel Paa'
     },
+    idealFinish: { hour: 11, minute: 0 },
     steps: [
       {
         title: 'Sauerteig-Vorteig ansetzen',
@@ -614,6 +627,7 @@ export const RECIPES = [
       url: 'https://www.marcelpaa.com/rezepte/pizza-teig/',
       title: 'Pizzateig mit 48 Stunden Reifung – Marcel Paa'
     },
+    idealFinish: { hour: 19, minute: 0 },
     steps: [
       {
         title: 'Teig kneten',
@@ -698,6 +712,7 @@ export const RECIPES = [
       url: 'https://www.marcelpaa.com/rezepte/alltags-roggenmischbrot-80-20/',
       title: 'Alltags-Roggenmischbrot 80/20 – Marcel Paa'
     },
+    idealFinish: { hour: 8, minute: 0 },
     steps: [
       {
         title: 'Teig mischen',
@@ -752,6 +767,7 @@ export const RECIPES = [
       url: 'https://www.marcelpaa.com/rezepte/dinkel-roggen-vollkornbrot/',
       title: 'Dinkel-Roggen Vollkornbrot – Marcel Paa'
     },
+    idealFinish: { hour: 13, minute: 0 },
     steps: [
       {
         title: 'Sauerteig-Vorteig ansetzen',
@@ -885,11 +901,31 @@ export function computeSchedule(recipe, finishAt, overrides = {}) {
 }
 
 /**
- * Suggest a sensible default finish time for a freshly-selected recipe:
- * now + total duration + ~1h slack, rounded up to the next whole hour.
+ * Suggest a sensible default finish time for a freshly-selected recipe.
+ *
+ * If the recipe declares `idealFinish` ({ hour, minute }), returns the
+ * earliest date at that clock time that still leaves enough lead time (total
+ * default duration + a small prep buffer) between `now` and the finish,
+ * rolling forward day-by-day as needed for long recipes. Otherwise falls
+ * back to the legacy heuristic: now + total duration + ~1h slack, rounded up
+ * to the next whole hour.
  */
 export function defaultFinishTime(recipe, now = new Date()) {
   const total = recipe.steps.reduce((a, s) => a + s.dur, 0);
+
+  if (recipe.idealFinish) {
+    const { hour, minute } = recipe.idealFinish;
+    const bufferMin = 20; // walk into the kitchen and start
+    const earliestAllowed = new Date(now.getTime() + (total + bufferMin) * 60000);
+    const candidate = new Date(now);
+    candidate.setHours(hour, minute, 0, 0);
+    while (candidate.getTime() < earliestAllowed.getTime()) {
+      candidate.setDate(candidate.getDate() + 1);
+    }
+    return candidate;
+  }
+
+  // Fallback for a recipe without a configured ideal finish time.
   const t = new Date(now.getTime() + total * 60000 + 75 * 60000);
   t.setMinutes(0, 0, 0);
   t.setHours(t.getHours() + 1);

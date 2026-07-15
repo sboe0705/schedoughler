@@ -15,8 +15,8 @@ import {
 const FINISH = new Date('2025-01-15T10:00:00')
 
 describe('RECIPES', () => {
-  it('exports 9 recipes', () => {
-    expect(RECIPES).toHaveLength(9)
+  it('exports 13 recipes', () => {
+    expect(RECIPES).toHaveLength(13)
   })
 
   it('every recipe has required fields', () => {
@@ -25,6 +25,16 @@ describe('RECIPES', () => {
       expect(r.name).toBeTruthy()
       expect(Array.isArray(r.steps)).toBe(true)
       expect(r.steps.length).toBeGreaterThan(0)
+    }
+  })
+
+  it('every recipe has a valid idealFinish', () => {
+    for (const r of RECIPES) {
+      expect(r.idealFinish).toBeTruthy()
+      expect(r.idealFinish.hour).toBeGreaterThanOrEqual(0)
+      expect(r.idealFinish.hour).toBeLessThanOrEqual(23)
+      expect(r.idealFinish.minute).toBeGreaterThanOrEqual(0)
+      expect(r.idealFinish.minute).toBeLessThanOrEqual(59)
     }
   })
 
@@ -109,18 +119,47 @@ describe('computeSchedule', () => {
 })
 
 describe('defaultFinishTime', () => {
-  it('returns a date after now + total duration', () => {
-    const now = new Date()
-    const recipe = RECIPES[0]
-    const total = recipe.steps.reduce((a, s) => a + s.dur, 0)
+  it('targets the recipe idealFinish hour/minute when far enough in the future', () => {
+    const recipe = RECIPES[0] // sauerteig, idealFinish 11:00
+    const now = new Date(2026, 6, 15, 6, 0, 0, 0) // Wed 06:00, plenty of lead time
     const result = defaultFinishTime(recipe, now)
-    expect(result.getTime()).toBeGreaterThan(now.getTime() + total * 60000)
+    expect(result.getHours()).toBe(recipe.idealFinish.hour)
+    expect(result.getMinutes()).toBe(recipe.idealFinish.minute)
   })
 
-  it('is rounded to a whole hour', () => {
-    const result = defaultFinishTime(RECIPES[0], FINISH)
+  it('leaves enough lead time for the full recipe plus buffer', () => {
+    const recipe = RECIPES[0]
+    const now = new Date()
+    const total = recipe.steps.reduce((a, s) => a + s.dur, 0)
+    const result = defaultFinishTime(recipe, now)
+    expect(result.getTime()).toBeGreaterThanOrEqual(now.getTime() + total * 60000)
+  })
+
+  it('rolls forward a day when today\'s slot has already passed', () => {
+    const recipe = RECIPES.find(r => r.id === 'guinness-brot') // ~18h, idealFinish 12:30
+    const now = new Date(2026, 6, 15, 13, 0, 0, 0) // Wed 13:00, just past today's 12:30 slot
+    const result = defaultFinishTime(recipe, now)
+    expect(result.getDate()).toBe(now.getDate() + 1)
+    expect(result.getHours()).toBe(12)
+    expect(result.getMinutes()).toBe(30)
+  })
+
+  it('rolls forward multiple days for a very long recipe', () => {
+    const recipe = RECIPES.find(r => r.id === 'walliser-roggenbrot') // ~34h, idealFinish 18:30
+    const now = new Date(2026, 6, 15, 8, 0, 0, 0) // Wed 08:00 — even tomorrow's slot is a few minutes short
+    const result = defaultFinishTime(recipe, now)
+    expect(result.getDate()).toBe(now.getDate() + 2)
+    expect(result.getHours()).toBe(18)
+    expect(result.getMinutes()).toBe(30)
+  })
+
+  it('falls back to now + total duration + slack, rounded to a whole hour, when idealFinish is absent', () => {
+    const recipe = { ...RECIPES[0], idealFinish: undefined }
+    const total = recipe.steps.reduce((a, s) => a + s.dur, 0)
+    const result = defaultFinishTime(recipe, FINISH)
     expect(result.getMinutes()).toBe(0)
     expect(result.getSeconds()).toBe(0)
+    expect(result.getTime()).toBeGreaterThan(FINISH.getTime() + total * 60000)
   })
 })
 

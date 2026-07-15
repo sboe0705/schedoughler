@@ -61,7 +61,7 @@ CLAUDE.md             # This file — Claude Code context for this repository
 
 ## Recipe Data Model
 
-Recipes live in the `RECIPES` array exported from `src/scheduler.js`. The full schema (Recipe, Step, Ingredient fields, step kinds and their colors) is documented in `README.md`. Recipes may carry an optional `source: { url, title }` field; when present, `SchedulerHeader.vue` renders a link icon next to the recipe name in the scheduler view's title bar.
+Recipes live in the `RECIPES` array exported from `src/scheduler.js`. The full schema (Recipe, Step, Ingredient fields, step kinds and their colors) is documented in `README.md`. Recipes may carry an optional `source: { url, title }` field; when present, `SchedulerHeader.vue` renders a link icon next to the recipe name in the scheduler view's title bar. Recipes may also carry an optional `idealFinish: { hour, minute }` field — a hand-picked (not guessed) clock time-of-day that `defaultFinishTime()` targets so this recipe's long rises/cold-retards land overnight instead of the bake landing at 3am; recipes without it fall back to the legacy "now + total duration" heuristic.
 
 ## Search
 
