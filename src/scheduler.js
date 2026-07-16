@@ -38,7 +38,7 @@ export const RECIPES = [
   {
     id: 'alltags-roggenmischbrot-80-20',
     name: 'Alltags-Roggenmischbrot 80/20',
-    totalShort: '~9 Std',
+    totalShort: '~29 Std',
     subtitle: 'Schnelles No-Knead-Sauerteigbrot für den Alltag – Marcel Paa',
     source: {
       url: 'https://www.marcelpaa.com/rezepte/alltags-roggenmischbrot-80-20/',
@@ -61,14 +61,23 @@ export const RECIPES = [
         ]
       },
       {
-        title: 'Stockgare',
-        dur: 480,
-        min: 360,
-        max: 600,
+        title: 'Anspringen lassen',
+        dur: 210,
+        min: 180,
+        max: 240,
         step: 30,
         kind: 'rise',
+        desc: 'Teig zugedeckt bei Raumtemperatur 3–4 Std. anspringen lassen, bis er sichtbar aktiv geworden ist.'
+      },
+      {
+        title: 'Kalt lagern',
+        dur: 1260,
+        min: 720,
+        max: 1440,
+        step: 60,
+        kind: 'cold',
         sleep: true,
-        desc: 'Teig zugedeckt bei Raumtemperatur gehen lassen (alternativ 3–4 Std. anspringen lassen und bis zu 24 Std. kalt lagern).'
+        desc: 'Teig zugedeckt bis zu 24 Std. im Kühlschrank kalt lagern.'
       },
       {
         title: 'Formen',
@@ -78,7 +87,10 @@ export const RECIPES = [
       },
       {
         title: 'Kurze Stückgare',
-        dur: 3,
+        dur: 60,
+        min: 30,
+        max: 60,
+        step: 15,
         kind: 'rise',
         desc: 'Teigling stehen lassen, bis sich erste Risse auf der Oberfläche bilden.'
       },
