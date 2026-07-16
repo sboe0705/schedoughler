@@ -63,7 +63,7 @@ describe('RECIPES', () => {
 })
 
 describe('computeSchedule', () => {
-  const recipe = RECIPES[0] // Sauerteigbrot
+  const recipe = RECIPES.find(r => r.id === 'sauerteig') // Sauerteigbrot
 
   it('finish time matches the requested finish', () => {
     const result = computeSchedule(recipe, FINISH)
@@ -120,7 +120,7 @@ describe('computeSchedule', () => {
 
 describe('defaultFinishTime', () => {
   it('targets the recipe idealFinish hour/minute when far enough in the future', () => {
-    const recipe = RECIPES[0] // sauerteig, idealFinish 11:00
+    const recipe = RECIPES.find(r => r.id === 'sauerteig') // sauerteig, idealFinish 11:00
     const now = new Date(2026, 6, 15, 6, 0, 0, 0) // Wed 06:00, plenty of lead time
     const result = defaultFinishTime(recipe, now)
     expect(result.getHours()).toBe(recipe.idealFinish.hour)
@@ -128,7 +128,7 @@ describe('defaultFinishTime', () => {
   })
 
   it('leaves enough lead time for the full recipe plus buffer', () => {
-    const recipe = RECIPES[0]
+    const recipe = RECIPES.find(r => r.id === 'sauerteig')
     const now = new Date()
     const total = recipe.steps.reduce((a, s) => a + s.dur, 0)
     const result = defaultFinishTime(recipe, now)
@@ -154,7 +154,7 @@ describe('defaultFinishTime', () => {
   })
 
   it('falls back to now + total duration + slack, rounded to a whole hour, when idealFinish is absent', () => {
-    const recipe = { ...RECIPES[0], idealFinish: undefined }
+    const recipe = { ...RECIPES.find(r => r.id === 'sauerteig'), idealFinish: undefined }
     const total = recipe.steps.reduce((a, s) => a + s.dur, 0)
     const result = defaultFinishTime(recipe, FINISH)
     expect(result.getMinutes()).toBe(0)
@@ -164,7 +164,7 @@ describe('defaultFinishTime', () => {
 })
 
 describe('nudgeDuration', () => {
-  const recipe = RECIPES[0]
+  const recipe = RECIPES.find(r => r.id === 'sauerteig')
   const stepIndex = 1 // flexible step
 
   it('increases duration by step amount when dir=+1', () => {
@@ -205,8 +205,8 @@ describe('nudgeDuration', () => {
 })
 
 describe('effectiveDuration', () => {
-  const flexible = RECIPES[0].steps[1] // has min/max
-  const fixed = RECIPES[0].steps[0]    // no min/max
+  const flexible = RECIPES.find(r => r.id === 'sauerteig').steps[1] // has min/max
+  const fixed = RECIPES.find(r => r.id === 'sauerteig').steps[0]    // no min/max
 
   it('returns step.dur for fixed steps regardless of override', () => {
     expect(effectiveDuration(fixed, 999)).toBe(fixed.dur)
@@ -245,22 +245,22 @@ describe('durationLabel', () => {
 
 describe('rangeLabel', () => {
   it('returns empty string for fixed steps', () => {
-    expect(rangeLabel(RECIPES[0].steps[0])).toBe('')
+    expect(rangeLabel(RECIPES.find(r => r.id === 'sauerteig').steps[0])).toBe('')
   })
 
   it('formats hour ranges', () => {
-    const step = RECIPES[0].steps[1] // 480–840 min = 8–14 Std
+    const step = RECIPES.find(r => r.id === 'sauerteig').steps[1] // 480–840 min = 8–14 Std
     expect(rangeLabel(step)).toBe('8 Std–14 Std')
   })
 
   it('formats minute ranges', () => {
-    const step = RECIPES[2].steps[6] // Guinness Brot Stückgare: 40–50 min
+    const step = RECIPES.find(r => r.id === 'guinness-brot').steps[6] // Guinness Brot Stückgare: 40–50 min
     expect(rangeLabel(step)).toBe('40–50 Min')
   })
 })
 
 describe('currentStepIndex', () => {
-  const recipe = RECIPES[0] // Sauerteigbrot
+  const recipe = RECIPES.find(r => r.id === 'sauerteig') // Sauerteigbrot
   const { steps } = computeSchedule(recipe, FINISH)
 
   it('returns 0 when now is before the first step starts', () => {
@@ -289,7 +289,7 @@ describe('currentStepIndex', () => {
 })
 
 describe('matchesQuery', () => {
-  const recipe = RECIPES[0] // Sauerteigbrot - wie vom Bäcker
+  const recipe = RECIPES.find(r => r.id === 'sauerteig') // Sauerteigbrot - wie vom Bäcker
 
   it('matches everything for an empty query', () => {
     expect(matchesQuery(recipe, '')).toBe(true)
