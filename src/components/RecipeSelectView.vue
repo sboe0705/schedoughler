@@ -35,6 +35,7 @@
           :recipe="entry.recipe"
           :saved="true"
           :saved-label="entry.savedLabel"
+          :next-step-label="entry.nextStepLabel"
           :starred="!!props.starredRecipes[entry.recipe.id]"
           @select="$emit('select-recipe', entry.recipe.id)"
           @toggle-save="$emit('toggle-save', entry.recipe)"
@@ -77,8 +78,8 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { matchesQuery } from '../scheduler.js'
-import { formatWeekdayTime } from '../utils.js'
+import { matchesQuery, computeSchedule, nextStepTime } from '../scheduler.js'
+import { formatWeekdayTime, formatTime } from '../utils.js'
 import RecipeRow from './RecipeRow.vue'
 
 const props = defineProps({
@@ -98,7 +99,15 @@ function clearQuery() {
 const filteredSaved = computed(() =>
   props.recipes
     .filter(r => props.savedBakes[r.id] && matchesQuery(r, query.value))
-    .map(r => ({ recipe: r, savedLabel: formatWeekdayTime(new Date(props.savedBakes[r.id].target)) }))
+    .map(r => {
+      const entry = props.savedBakes[r.id]
+      const schedule = computeSchedule(r, new Date(entry.target), entry.overrides)
+      return {
+        recipe: r,
+        savedLabel: formatWeekdayTime(new Date(entry.target)),
+        nextStepLabel: formatTime(nextStepTime(schedule.steps)),
+      }
+    })
     .sort((a, b) => props.savedBakes[a.recipe.id].target - props.savedBakes[b.recipe.id].target)
 )
 

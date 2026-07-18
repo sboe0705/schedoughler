@@ -10,6 +10,7 @@ import {
   rangeLabel,
   matchesQuery,
   currentStepIndex,
+  nextStepTime,
 } from './scheduler.js'
 
 const FINISH = new Date('2025-01-15T10:00:00')
@@ -285,6 +286,29 @@ describe('currentStepIndex', () => {
 
   it('defaults to the current time when now is omitted', () => {
     expect(() => currentStepIndex(steps)).not.toThrow()
+  })
+})
+
+describe('nextStepTime', () => {
+  const recipe = RECIPES.find(r => r.id === 'sauerteig') // Sauerteigbrot
+  const { steps } = computeSchedule(recipe, FINISH)
+
+  it('returns the first step\'s start when the bake has not started yet', () => {
+    const before = new Date(steps[0].start.getTime() - 60000)
+    expect(nextStepTime(steps, before)).toEqual(steps[0].start)
+  })
+
+  it('returns the end of the in-progress step, i.e. the following step\'s start', () => {
+    const midStep = 2
+    const inside = new Date((steps[midStep].start.getTime() + steps[midStep].end.getTime()) / 2)
+    expect(nextStepTime(steps, inside)).toEqual(steps[midStep].end)
+    expect(nextStepTime(steps, inside)).toEqual(steps[midStep + 1].start)
+  })
+
+  it('returns the finish time while the last step is in progress', () => {
+    const lastStep = steps.length - 1
+    const inside = new Date((steps[lastStep].start.getTime() + steps[lastStep].end.getTime()) / 2)
+    expect(nextStepTime(steps, inside)).toEqual(steps[lastStep].end)
   })
 })
 

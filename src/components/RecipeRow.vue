@@ -4,7 +4,7 @@
       <div class="row-name">{{ recipe.name }}</div>
       <div v-if="saved" class="row-meta">
         <span class="finish-pill">Fertig {{ savedLabel }}</span>
-        <span class="row-total">{{ recipe.totalShort }}<span v-if="idealFinishLabel" class="row-ideal"> · ideal {{ idealFinishLabel }}</span></span>
+        <span v-if="nextStepLabel" class="row-total">nächster Schritt {{ nextStepLabel }}</span>
       </div>
       <template v-else>
         <div class="row-subtitle">{{ recipe.subtitle }}</div>
@@ -49,6 +49,7 @@ const props = defineProps({
   recipe: Object,
   saved: { type: Boolean, default: false },
   savedLabel: { type: String, default: '' },
+  nextStepLabel: { type: String, default: '' },
   starred: { type: Boolean, default: false },
 })
 defineEmits(['select', 'toggle-save', 'toggle-star'])

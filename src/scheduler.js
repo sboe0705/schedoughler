@@ -964,6 +964,18 @@ export function currentStepIndex(steps, now = new Date()) {
   return idx === -1 ? steps.length - 1 : idx;
 }
 
+/**
+ * When the next actionable moment in the bake happens: the start of the
+ * upcoming step if it hasn't begun yet, or the end of the in-progress step
+ * (= the following step's start, or the finish time for the last step)
+ * otherwise.
+ */
+export function nextStepTime(steps, now = new Date()) {
+  const t = now instanceof Date ? now.getTime() : now;
+  const step = steps[currentStepIndex(steps, t)];
+  return step.start.getTime() > t ? step.start : step.end;
+}
+
 /** Human range label, e.g. "8–14 Std" or "20–60 Min". */
 export function rangeLabel(step) {
   if (step.min == null) return '';
