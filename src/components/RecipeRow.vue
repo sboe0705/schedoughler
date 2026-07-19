@@ -3,7 +3,12 @@
     <div class="row-main">
       <div class="row-name">{{ recipe.name }}</div>
       <div v-if="saved" class="row-meta">
-        <span class="finish-pill">Fertig {{ savedLabel }}</span>
+        <span class="finish-pill">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 12l5 5L20 6"/>
+          </svg>
+          {{ savedLabel }}
+        </span>
         <span v-if="nextStepLabel" class="row-total">nächster Schritt {{ nextStepLabel }}</span>
       </div>
       <template v-else>
@@ -129,6 +134,7 @@ const idealFinishLabel = computed(() => {
 .finish-pill {
   display: inline-flex;
   align-items: center;
+  gap: 4px;
   background: var(--color-bake);
   color: var(--color-card);
   font-size: 10.5px;
