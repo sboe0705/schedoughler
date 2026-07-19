@@ -79,7 +79,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { matchesQuery, computeSchedule, nextStepTime } from '../scheduler.js'
-import { formatWeekdayTime, formatTime } from '../utils.js'
+import { formatWeekdayTime } from '../utils.js'
 import RecipeRow from './RecipeRow.vue'
 
 const props = defineProps({
@@ -105,7 +105,7 @@ const filteredSaved = computed(() =>
       return {
         recipe: r,
         savedLabel: formatWeekdayTime(new Date(entry.target)),
-        nextStepLabel: formatTime(nextStepTime(schedule.steps)),
+        nextStepLabel: formatWeekdayTime(nextStepTime(schedule.steps)),
       }
     })
     .sort((a, b) => props.savedBakes[a.recipe.id].target - props.savedBakes[b.recipe.id].target)
