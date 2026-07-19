@@ -18,7 +18,7 @@
       </div>
       <template v-else>
         <div class="row-subtitle">{{ recipe.subtitle }}</div>
-        <div class="row-total">{{ recipe.totalShort }}<span v-if="idealFinishLabel" class="row-ideal"> · ideal {{ idealFinishLabel }}</span></div>
+        <div class="row-total">{{ recipe.totalShort }}<span v-if="idealFinishLabel" class="row-ideal"> · <span class="ideal-star" :title="`Empfohlene Fertigstellungszeit: ${idealFinishLabel}`"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.27 5.82 21 7 14.14l-5-4.87 6.91-1.01L12 2z"/></svg></span> {{ idealFinishLabel }}</span></div>
       </template>
     </div>
 
@@ -140,6 +140,11 @@ const idealFinishLabel = computed(() => {
 .row-ideal {
   color: var(--color-muted);
   font-weight: 500;
+}
+
+.ideal-star {
+  display: inline-flex;
+  vertical-align: -1px;
 }
 
 .finish-pill {
