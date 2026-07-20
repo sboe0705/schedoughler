@@ -9,7 +9,7 @@ export function formatDayLabel(date) {
 }
 
 export function formatWeekdayTime(date) {
-  return DAYS[date.getDay()] + ' · ' + formatTime(date);
+  return DAYS[date.getDay()] + ', ' + formatTime(date);
 }
 
 export function formatDateInput(date) {
