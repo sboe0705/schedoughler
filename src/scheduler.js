@@ -861,6 +861,161 @@ export const RECIPES = [
       },
     ],
   },
+    {
+    id: 'weizen-krusties',
+    name: 'Weizen Krusties',
+    totalShort: '~16 Std',
+    subtitle: 'Wattige Krume, zartsplitternde Kruste — nach Marcel Paa',
+    source: {
+      url: 'https://www.marcelpaa.com/rezepte/weizen-krusties/',
+      title: 'Weizen Krusties — Marcel Paa'
+    },
+    steps: [
+      {
+        title: 'Vorteig ansetzen',
+        dur: 10,
+        kind: 'prep',
+        desc: 'Sauerteig im Wasser aufschlämmen, Mehl zugeben und zu einem Teig mischen.',
+        ingredients: [
+          { amount: 100, unit: 'g', name: 'Wasser', note: 'ca. 30 °C' },
+          { amount: 15, unit: 'g', name: 'Sauerteig' },
+          { amount: 130, unit: 'g', name: 'Weissmehl', note: 'Weizenmehl Type 550' }
+        ]
+      },
+      {
+        title: 'Vorteig-Gare',
+        dur: 720,
+        kind: 'rise',
+        sleep: true,
+        desc: 'Den Vorteig zugedeckt bei Raumtemperatur 12 Std. gären lassen.'
+      },
+      {
+        title: 'Hauptteig kneten',
+        dur: 18,
+        kind: 'prep',
+        desc: 'Alle Zutaten 2–3 Min. mischen, dann ca. 15 Min. bei mittlerer Geschwindigkeit kneten.',
+        ingredients: [
+          { name: 'Vorteig' },
+          { amount: 170, unit: 'g', name: 'Wasser' },
+          { amount: 50, unit: 'g', name: 'Vollmilch' },
+          { amount: 300, unit: 'g', name: 'Weissmehl', note: 'Weizenmehl Type 550' },
+          { amount: 70, unit: 'g', name: 'Weizen Vollkornmehl' },
+          { amount: 5, unit: 'g', name: 'Backmalz, aktiv', note: 'alternativ: Honig' },
+          { amount: 10, unit: 'g', name: 'Salz' },
+          { amount: 7, unit: 'g', name: 'Frischhefe' }
+        ]
+      },
+      {
+        title: 'Stockgare mit Dehnen & Falten',
+        dur: 105,
+        min: 90,
+        max: 120,
+        step: 15,
+        kind: 'rise',
+        desc: 'Teig abgedeckt bei Raumtemperatur gären lassen und zwischendurch von allen vier Seiten dehnen und falten.'
+      },
+      {
+        title: 'Formen',
+        dur: 20,
+        kind: 'prep',
+        desc: 'Stücke zu 80–100 g abstechen, mit Roggenmehl bestauben, mittig halbieren, aufeinanderlegen, länglich rollen und mit Verschluss nach unten ins Bäckerleinen setzen.'
+      },
+      {
+        title: 'Stückgare',
+        dur: 50,
+        kind: 'rise',
+        desc: 'Die Teiglinge zugedeckt 50 Min. bei Raumtemperatur ruhen lassen.'
+      },
+      {
+        title: 'Backen',
+        dur: 23,
+        kind: 'bake',
+        desc: 'Ofen auf 250 °C Ober-/Unterhitze vorheizen, Teiglinge mit Verschluss nach oben aufs gefettete Blech setzen, bedampfen, auf 230 °C reduzieren und ca. 20–25 Min. backen.'
+      }
+    ]
+  },
+    {
+    id: 'weizen-spitz-broetchen',
+    name: 'Weizen Spitz Brötchen',
+    totalShort: '~14,5 Std',
+    subtitle: 'Saftige Krume, knusprige Kruste, Poolish-getrieben — nach Marcel Paa',
+    source: {
+      url: 'https://www.marcelpaa.com/rezepte/weizen-spitz-broetchen/',
+      title: 'Weizen Spitz Brötchen — Marcel Paa'
+    },
+    steps: [
+      {
+        title: 'Poolish ansetzen',
+        dur: 5,
+        kind: 'prep',
+        desc: 'Alle Zutaten in einem hohen Gefäss gut vermischen.',
+        ingredients: [
+          { amount: 200, unit: 'g', name: 'Wasser', note: 'warm' },
+          { amount: 200, unit: 'g', name: 'Weissmehl', note: 'Weizenmehl Type 550' },
+          { amount: 40, unit: 'g', name: 'Sauerteig', note: 'alternativ 2 g Frischhefe' }
+        ]
+      },
+      {
+        title: 'Poolish-Gare',
+        dur: 720,
+        min: 720,
+        max: 1440,
+        step: 30,
+        kind: 'rise',
+        sleep: true,
+        desc: 'Den Poolish zugedeckt bei Raumtemperatur 12–24 Std. gären lassen.'
+      },
+      {
+        title: 'Hauptteig kneten',
+        dur: 13,
+        kind: 'prep',
+        desc: 'Zuerst das Wasser, dann die restlichen Zutaten 2–3 Min. mischen und anschliessend ca. 10 Min. bei mittlerer Geschwindigkeit bis zur Fensterprobe kneten.',
+        ingredients: [
+          { name: 'Vorteig' },
+          { amount: 230, unit: 'g', name: 'Wasser', note: 'kalt' },
+          { amount: 10, unit: 'g', name: 'Frischhefe' },
+          { amount: 8, unit: 'g', name: 'Salz' },
+          { amount: 430, unit: 'g', name: 'Weissmehl', note: 'Weizenmehl Type 550' }
+        ]
+      },
+      {
+        title: 'Stockgare',
+        dur: 40,
+        kind: 'rise',
+        desc: 'Teig locker zur Kugel formen, mit Gärfolie zudecken und 40 Min. bei Raumtemperatur gehen lassen.'
+      },
+      {
+        title: 'Rundwirken & Entspannen',
+        dur: 15,
+        kind: 'prep',
+        desc: 'Stücke zu 100 g abwiegen, auf unbemehlter Fläche straff rundwirken und mit dem Verschluss nach unten ca. 5 Min. entspannen lassen.'
+      },
+      {
+        title: 'Langformen',
+        dur: 10,
+        kind: 'prep',
+        desc: 'Teiglinge leicht bemehlen und mit mehr Druck auf den kurzen Seiten zu spitzen Länglingen formen, dann auf ein mit Backpapier belegtes Blech legen.'
+      },
+      {
+        title: 'Stückgare',
+        dur: 30,
+        kind: 'rise',
+        desc: 'Zugedeckt 30 Min. ruhen lassen und die Abdeckung nach 20 Min. entfernen, damit sich eine leichte Haut bildet.'
+      },
+      {
+        title: 'Einschneiden',
+        dur: 5,
+        kind: 'prep',
+        desc: 'Teiglinge mit Mehl bestauben und in einem Zug längs schräg im 45-Grad-Winkel 3–4 mm tief einschneiden.'
+      },
+      {
+        title: 'Backen',
+        dur: 27,
+        kind: 'bake',
+        desc: 'Ofen mit einem leeren Blech in der unteren Hälfte auf 230 °C Ober-/Unterhitze vorheizen, Brötchen in die zweitunterste Schiene schieben, 1–2 dl Wasser aufs heisse Blech giessen, nach 20 Min. das Wasserblech entfernen und weitere 5–10 Min. knusprig ausbacken.'
+      }
+    ]
+  },
 ];
 
 // ---------------------------------------------------------------------------
