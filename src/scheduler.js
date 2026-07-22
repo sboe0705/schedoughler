@@ -870,6 +870,7 @@ export const RECIPES = [
       url: 'https://www.marcelpaa.com/rezepte/weizen-krusties/',
       title: 'Weizen Krusties — Marcel Paa'
     },
+    idealFinish: { hour: 18, minute: 30 },
     steps: [
       {
         title: 'Vorteig ansetzen',
@@ -943,6 +944,7 @@ export const RECIPES = [
       url: 'https://www.marcelpaa.com/rezepte/weizen-spitz-broetchen/',
       title: 'Weizen Spitz Brötchen — Marcel Paa'
     },
+    idealFinish: { hour: 18, minute: 30 },
     steps: [
       {
         title: 'Poolish ansetzen',
