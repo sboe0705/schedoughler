@@ -870,7 +870,7 @@ export const RECIPES = [
       url: 'https://www.marcelpaa.com/rezepte/weizen-krusties/',
       title: 'Weizen Krusties — Marcel Paa'
     },
-    idealFinish: { hour: 18, minute: 30 },
+    idealFinish: { hour: 9, minute: 0 },
     steps: [
       {
         title: 'Vorteig ansetzen',
@@ -944,7 +944,7 @@ export const RECIPES = [
       url: 'https://www.marcelpaa.com/rezepte/weizen-spitz-broetchen/',
       title: 'Weizen Spitz Brötchen — Marcel Paa'
     },
-    idealFinish: { hour: 18, minute: 30 },
+    idealFinish: { hour: 8, minute: 0 },
     steps: [
       {
         title: 'Poolish ansetzen',
@@ -959,7 +959,7 @@ export const RECIPES = [
       },
       {
         title: 'Poolish-Gare',
-        dur: 720,
+        dur: 1440,
         min: 720,
         max: 1440,
         step: 30,
