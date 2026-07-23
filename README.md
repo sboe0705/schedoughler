@@ -179,6 +179,15 @@ Ingredient object:
 
 Paste the full recipe text (or describe a handwritten card) in place of the placeholder at the bottom, then wrap the output in the `RECIPES` array.
 
+#### After conversion
+
+The prompt deliberately produces a bare recipe object without an `idealFinish`. Finish the import with these steps:
+
+1. **Insert it into the `RECIPES` array in alphabetical order** by recipe `name`. The array is kept sorted — do not just append it at the end.
+2. **Pick and verify an `idealFinish`.** Add an `idealFinish: { hour, minute }` clock time, then run `./check-critical-times.sh` to simulate the schedule. Tune the finish time — and, only where a step's `min`/`max` range genuinely allows it, the default `dur` of flexible proofs/retards — until the script reports no critical step-starts, or the unavoidable minimum it can no longer improve on. A finish around 18:00 is a good default target for long overnight doughs.
+3. **Run the tests** with `npm test`. Adding a recipe changes the recipe count, so bump the count assertion in `src/scheduler.test.js` to match.
+4. **Commit to `main` and push** once the tests pass and the build is green.
+
 ---
 
 ## Maintaining CLAUDE.md
