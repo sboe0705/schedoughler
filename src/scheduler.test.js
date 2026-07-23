@@ -17,7 +17,7 @@ const FINISH = new Date('2025-01-15T10:00:00')
 
 describe('RECIPES', () => {
   it('exports 16 recipes', () => {
-    expect(RECIPES).toHaveLength(15)
+    expect(RECIPES).toHaveLength(16)
   })
 
   it('every recipe has required fields', () => {
@@ -121,7 +121,7 @@ describe('computeSchedule', () => {
 
 describe('defaultFinishTime', () => {
   it('targets the recipe idealFinish hour/minute when far enough in the future', () => {
-    const recipe = RECIPES.find(r => r.id === 'sauerteig') // sauerteig, idealFinish 11:00
+    const recipe = RECIPES.find(r => r.id === 'sauerteig') // sauerteig, idealFinish 09:45
     const now = new Date(2026, 6, 15, 6, 0, 0, 0) // Wed 06:00, plenty of lead time
     const result = defaultFinishTime(recipe, now)
     expect(result.getHours()).toBe(recipe.idealFinish.hour)
@@ -137,21 +137,21 @@ describe('defaultFinishTime', () => {
   })
 
   it('rolls forward a day when today\'s slot has already passed', () => {
-    const recipe = RECIPES.find(r => r.id === 'guinness-brot') // ~18h, idealFinish 12:30
-    const now = new Date(2026, 6, 15, 13, 0, 0, 0) // Wed 13:00, just past today's 12:30 slot
+    const recipe = RECIPES.find(r => r.id === 'guinness-brot') // ~18h, idealFinish 10:30
+    const now = new Date(2026, 6, 15, 13, 0, 0, 0) // Wed 13:00, just past today's 10:30 slot
     const result = defaultFinishTime(recipe, now)
     expect(result.getDate()).toBe(now.getDate() + 1)
-    expect(result.getHours()).toBe(12)
+    expect(result.getHours()).toBe(10)
     expect(result.getMinutes()).toBe(30)
   })
 
   it('rolls forward multiple days for a very long recipe', () => {
-    const recipe = RECIPES.find(r => r.id === 'walliser-roggenbrot') // ~34h, idealFinish 18:30
+    const recipe = RECIPES.find(r => r.id === 'walliser-roggenbrot') // ~34h, idealFinish 20:00
     const now = new Date(2026, 6, 15, 8, 0, 0, 0) // Wed 08:00 — even tomorrow's slot is a few minutes short
     const result = defaultFinishTime(recipe, now)
     expect(result.getDate()).toBe(now.getDate() + 2)
-    expect(result.getHours()).toBe(18)
-    expect(result.getMinutes()).toBe(30)
+    expect(result.getHours()).toBe(20)
+    expect(result.getMinutes()).toBe(0)
   })
 
   it('falls back to now + total duration + slack, rounded to a whole hour, when idealFinish is absent', () => {
