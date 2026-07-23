@@ -591,6 +591,108 @@ export const RECIPES = [
     ],
   },
   {
+    id: 'pide',
+    name: 'Pide – türkisches Fladenbrot',
+    totalShort: '~22 Std',
+    subtitle: 'Fluffiges Fladenbrot mit Sesam und Schwarzkümmel – Marcel Paa',
+    source: {
+      url: 'https://www.marcelpaa.com/rezepte/pide/',
+      title: 'Pide – türkisches Fladenbrot – Marcel Paa'
+    },
+    idealFinish: { hour: 18, minute: 0 },
+    steps: [
+      {
+        title: 'Autolyse mischen',
+        dur: 3,
+        kind: 'prep',
+        desc: 'Wasser, Milch und Mehl in der Küchenmaschine 2–3 Min. zu einem groben Teig vermischen.',
+        ingredients: [
+          { amount: 750, unit: 'g', name: 'Wasser' },
+          { amount: 50, unit: 'g', name: 'Vollmilch' },
+          { amount: 1000, unit: 'g', name: 'Weissmehl', note: 'Weizenmehl Type 550' }
+        ]
+      },
+      {
+        title: 'Autolyse',
+        dur: 45,
+        min: 30,
+        max: 60,
+        step: 15,
+        kind: 'rise',
+        desc: 'Teig zugedeckt 30–60 Min. ruhen lassen, damit das Mehl vollständig quellen kann.'
+      },
+      {
+        title: 'Hauptteig kneten',
+        dur: 18,
+        kind: 'prep',
+        desc: 'Salz und Hefe zur Autolyse geben und 15–20 Min. bis zur Fensterprobe kneten, dann in eine geölte Schüssel geben.',
+        ingredients: [
+          { amount: 18, unit: 'g', name: 'Salz' },
+          { amount: 10, unit: 'g', name: 'Frischhefe' }
+        ]
+      },
+      {
+        title: 'Stockgare & Dehnen und Falten',
+        dur: 60,
+        kind: 'rise',
+        desc: 'Teig zugedeckt 60 Min. bei Raumtemperatur gehen lassen und anschliessend rundum kräftig dehnen und falten.'
+      },
+      {
+        title: 'Kalt lagern',
+        dur: 960,
+        min: 720,
+        max: 1080,
+        step: 60,
+        kind: 'cold',
+        sleep: true,
+        desc: 'Teig zugedeckt 14–18 Std. im Kühlschrank kalt lagern.'
+      },
+      {
+        title: 'Akklimatisieren',
+        dur: 120,
+        kind: 'rise',
+        desc: 'Teig aus dem Kühlschrank nehmen, nochmals rundum dehnen und falten und zugedeckt 2 Std. bei Raumtemperatur akklimatisieren lassen.'
+      },
+      {
+        title: 'Portionieren & Formen',
+        dur: 15,
+        kind: 'prep',
+        desc: 'Teig in 4 gleich grosse Stücke teilen, auf der Arbeitsfläche zu glatten, leicht abgeflachten Kugeln schleifen und auf ein bemehltes Tuch setzen.'
+      },
+      {
+        title: 'Erste Stückgare',
+        dur: 40,
+        kind: 'rise',
+        desc: 'Teiglinge zugedeckt 40 Min. bei Raumtemperatur gehen lassen.'
+      },
+      {
+        title: 'Belegen',
+        dur: 10,
+        kind: 'prep',
+        desc: 'Mit den Fingern 2 cm vom Rand entfernt eine Vertiefung eindrücken, grosszügig mit der verquirlten Eistreiche bestreichen, das typische Rautenmuster eindrücken und mit Sesam und Schwarzkümmel bestreuen.',
+        ingredients: [
+          { amount: 2, name: 'Eigelb' },
+          { amount: 1, name: 'Ei' },
+          { amount: 20, unit: 'g', name: 'Olivenöl' },
+          { name: 'Sesam' },
+          { name: 'Schwarzkümmel' }
+        ]
+      },
+      {
+        title: 'Zweite Stückgare',
+        dur: 40,
+        kind: 'rise',
+        desc: 'Belegte Teiglinge nochmals 40 Min. bei Raumtemperatur gehen lassen.'
+      },
+      {
+        title: 'Backen',
+        dur: 23,
+        kind: 'bake',
+        desc: 'Ofen auf 220 °C vorheizen, Pide einschieben, kräftig bedampfen und bei 210 °C 20–25 Min. goldbraun ausbacken.'
+      }
+    ]
+  },
+  {
     id: 'pizzateig-48h',
     name: 'Pizzateig mit 48 Std. Reifung',
     totalShort: '~50 Std',
