@@ -194,6 +194,60 @@ export const RECIPES = [
     ]
   },
   {
+    id: 'express-semmel',
+    name: 'Express-Semmel',
+    totalShort: '~2 Std',
+    subtitle: 'Knusprige Semmeln in rund 2 Stunden – Marcel Paa',
+    source: { url: 'https://www.marcelpaa.com/rezepte/express-semmel/', title: 'Marcel Paa - Express Semmel' },
+    idealFinish: { hour: 18, minute: 0 },
+    steps: [
+      {
+        title: 'Teig kneten',
+        dur: 18,
+        kind: 'prep',
+        desc: 'Alle Zutaten mit dem Wasser beginnend in die Küchenmaschine geben, 2–3 Minuten langsam ankneten, dann 12–13 Minuten schneller kneten bis zur Fensterprobe und zur Kugel formen.',
+        ingredients: [
+          { amount: 430, unit: 'g', name: 'Weissmehl', note: 'Weizenmehl Type 550' },
+          { amount: 260, unit: 'g', name: 'Wasser', note: 'handwarm' },
+          { amount: 8, unit: 'g', name: 'Salz' },
+          { amount: 4, unit: 'g', name: 'Backmalz', note: 'aktiv, alternativ Honig' },
+          { amount: 15, unit: 'g', name: 'Frischhefe' },
+          { amount: 60, unit: 'g', name: 'Sauerteig', note: 'alternativ total 20 g Frischhefe' }
+        ]
+      },
+      {
+        title: 'Stockgare',
+        dur: 30,
+        min: 30,
+        max: 60,
+        step: 15,
+        kind: 'rise',
+        desc: 'Den Teig zugedeckt mit Gärfolie 30 Minuten bei Raumtemperatur ruhen lassen.'
+      },
+      {
+        title: 'Formen',
+        dur: 15,
+        kind: 'prep',
+        desc: 'Teig auf die bemehlte Fläche stürzen, in 10 gleiche Stücke (80–85 g) teilen, rund schleifen, leicht länglich rollen und auf ein gefettetes Blech setzen.'
+      },
+      {
+        title: 'Stückgare',
+        dur: 30,
+        min: 30,
+        max: 60,
+        step: 15,
+        kind: 'rise',
+        desc: 'Semmeln zugedeckt 30 Minuten bei Raumtemperatur gehen lassen, die letzten 5 Minuten offen, damit die Oberfläche leicht verhautet.'
+      },
+      {
+        title: 'Backen',
+        dur: 18,
+        kind: 'bake',
+        desc: 'Ofen mit feuerfester Schüssel (Lavasteine) auf 220 °C Ober-/Unterhitze vorheizen, Semmeln längs im 45°-Winkel einschneiden, 10 Minuten mit Dampf (1–2 dl Wasser) bei 220 °C backen, dann Schüssel entfernen und bei 190 °C weitere 5–10 Minuten knusprig ausbacken.'
+      }
+    ]
+  },
+  {
     id: 'guinness-brot',
     name: 'Guinness Brot',
     totalShort: '~15 Std',
