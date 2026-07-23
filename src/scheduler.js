@@ -111,7 +111,7 @@ export const RECIPES = [
       url: 'https://www.marcelpaa.com/rezepte/dinkel-roggen-vollkornbrot/',
       title: 'Dinkel-Roggen Vollkornbrot – Marcel Paa'
     },
-    idealFinish: { hour: 13, minute: 0 },
+    idealFinish: { hour: 10, minute: 15 },
     steps: [
       {
         title: 'Sauerteig-Vorteig ansetzen',
@@ -253,7 +253,7 @@ export const RECIPES = [
     totalShort: '~15 Std',
     subtitle: 'Würzig-malziges Sauerteigbrot mit Guinness – Marcel Paa',
     source: { url: 'https://www.marcelpaa.com/rezepte/guinness-brot/', title: 'Marcel Paa - Guinness Brot' },
-    idealFinish: { hour: 12, minute: 30 },
+    idealFinish: { hour: 10, minute: 30 },
     steps: [
       {
         title: 'Teig kneten',
@@ -331,7 +331,7 @@ export const RECIPES = [
     totalShort: '~13 Std',
     subtitle: 'Rustikale Lievito-Madre-Brötchen aus Roggen- und Weizenmehl, ganz ohne Hefe – Marcel Paa',
     source: { url: 'https://www.marcelpaa.com/rezepte/lievito-madre-broetchen-2/', title: 'Marcel Paa – Lievito Madre Brötchen' },
-    idealFinish: { hour: 10, minute: 0 },
+    idealFinish: { hour: 9, minute: 15 },
     steps: [
       {
         title: 'Kneten',
@@ -441,7 +441,7 @@ export const RECIPES = [
     totalShort: '~20 Std',
     subtitle: 'Knusprige, rustikale Roggenmischbrötchen mit Sauerteig – Marcel Paa',
     source: { url: 'https://www.marcelpaa.com/rezepte/madre-roggen-mischbroetchen/', title: 'Marcel Paa – Madre Roggen Mischbrötchen' },
-    idealFinish: { hour: 7, minute: 30 },
+    idealFinish: { hour: 7, minute: 15 },
     steps: [
       {
         title: 'Kneten',
@@ -473,7 +473,7 @@ export const RECIPES = [
       },
       {
         title: 'Kalte Gare im Kühlschrank',
-        dur: 1080,
+        dur: 1440,
         min: 720,
         max: 1440,
         step: 60,
@@ -495,7 +495,7 @@ export const RECIPES = [
     totalShort: '~3 Std',
     subtitle: 'Fluffiges Fladenbrot mit Knoblauchbutter – Marcel Paa',
     source: { url: 'https://www.marcelpaa.com/rezepte/naan-indisches-fladenbrot/', title: 'Marcel Paa – Naan Indisches Fladenbrot' },
-    idealFinish: { hour: 18, minute: 30 },
+    idealFinish: { hour: 18, minute: 15 },
     steps: [
       { title: 'Teig kneten', dur: 25, kind: 'prep', desc: 'Alle Zutaten in die Küchenmaschine geben, 3–4 Min. auf niedriger Stufe mischen, dann rund 20 Min. auf mittlerer Stufe zu einem glatten, elastischen Teig kneten.', ingredients: [
         { amount: 125, unit: 'g', name: 'Wasser' },
@@ -681,7 +681,7 @@ export const RECIPES = [
     totalShort: '~3 Std',
     subtitle: 'Knuspriges Knäckebrot aus Anstellgut – Marcel Paa',
     source: { url: 'https://www.marcelpaa.com/rezepte/knaeckebrot-aus-sauerteig/', title: 'Marcel Paa - Sauerteig Cracker' },
-    idealFinish: { hour: 18, minute: 0 },
+    idealFinish: { hour: 20, minute: 0 },
     steps: [
       {
         title: 'Teig mischen',
@@ -728,7 +728,7 @@ export const RECIPES = [
     totalShort: '~28 Std',
     subtitle: 'Knusprige Kruste, aromatische Krume · Marcel Paa',
     source: { url: 'https://www.marcelpaa.com/rezepte/sauerteigbrot/', title: 'Marcel Paa – Sauerteig Brot' },
-    idealFinish: { hour: 11, minute: 0 },
+    idealFinish: { hour: 9, minute: 45 },
     steps: [
       { title: 'Vorteig ansetzen', dur: 15, kind: 'prep', desc: 'Sauerteig, handwarmes Wasser und Weissmehl verkneten, zur Kugel formen und im Gefäss markieren.', ingredients: [
         { amount: 30,  unit: 'g', name: 'Sauerteig' },
@@ -758,7 +758,7 @@ export const RECIPES = [
       url: 'https://www.marcelpaa.com/rezepte/vollkornbrot-mit-sonnenblumenkernen/',
       title: 'Sonnenblumenkern Vollkornbrot – Marcel Paa'
     },
-    idealFinish: { hour: 11, minute: 0 },
+    idealFinish: { hour: 9, minute: 30 },
     steps: [
       {
         title: 'Sauerteig-Vorteig ansetzen',
@@ -856,7 +856,7 @@ export const RECIPES = [
     totalShort: '~34 Std',
     subtitle: 'Rustikales Roggenbrot mit langer Kühlschrankgare – Marcel Paa',
     source: { url: 'https://www.marcelpaa.com/rezepte/walliser-roggenbrot-mit-kuehlschrankgare/', title: 'Marcel Paa – Walliser Roggenbrot mit Kühlschrankgare' },
-    idealFinish: { hour: 18, minute: 30 },
+    idealFinish: { hour: 20, minute: 0 },
     steps: [
       {
         title: 'Hauptteig anmischen',
@@ -884,7 +884,7 @@ export const RECIPES = [
       },
       {
         title: 'Kühlschrankgare',
-        dur: 1620,
+        dur: 1800,
         min: 1440,
         max: 1800,
         step: 60,
@@ -900,7 +900,7 @@ export const RECIPES = [
       },
       {
         title: 'Stückgare',
-        dur: 120,
+        dur: 180,
         min: 60,
         max: 180,
         step: 30,
