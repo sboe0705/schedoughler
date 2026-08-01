@@ -105,88 +105,27 @@ Copy an existing entry in the `RECIPES` array in `src/scheduler.js` and edit the
 
 ### 2. AI-assisted conversion
 
-If you have a recipe from a website, book, or handwritten card, paste it into an AI assistant together with the prompt below. The output is ready to paste straight into the `RECIPES` array.
+If you have a recipe from a website, book, or handwritten card, hand it to Claude Code in this repository and invoke the **`add-recipe` skill** (`/add-recipe`, or just ask for the recipe to be added). The skill is the single source of truth for the conversion and lives in [`.claude/skills/add-recipe/SKILL.md`](.claude/skills/add-recipe/SKILL.md).
 
-#### Conversion prompt
+It covers the whole import, not just the conversion:
 
-```
-You are converting a bread recipe into a JavaScript data object for a scheduling app.
+1. **Convert** the raw recipe into a recipe object following the schema and rules above (German UI text, one step per phase, no separate preheat step, `min`/`max`/`step` only on genuinely flexible steps and never on `bake`).
+2. **Insert** it into the `RECIPES` array in `src/scheduler.js`, in alphabetical order by `name` — the array is kept sorted.
+3. **Pick and verify an `idealFinish`** — delegated to the separate [`tune-ideal-finish` skill](.claude/skills/tune-ideal-finish/SKILL.md), see below.
+4. **Test and build** — `npm test` (bump the recipe-count assertion in `src/scheduler.test.js`) and `./build.sh`, then commit to `main`.
 
-## Target schema
+Keep the skill file in sync with this document whenever the data model changes.
 
-Recipe object:
-  id         – short kebab-case string, derived from the recipe name
-  name       – human display name
-  totalShort – rough total time as a string, e.g. '~28 Std' or '~3,5 Std'
-  subtitle   – one-line tagline (flavour + source if known)
-  source     – optional { url, title } — add only when a real URL to the original recipe is known
-  steps      – ordered array of Step objects
+## Tuning `idealFinish`
 
-  Do NOT add an idealFinish field — leave it out. It depends on simulating the
-  actual step timing against a night window, which this conversion can't do
-  reliably; it should be added by hand afterwards, verified against the
-  recipe's real step durations.
+`idealFinish` cannot be guessed from a recipe's text — it has to be simulated against the baker's day. `./check-critical-times.sh` anchors each recipe's finish at its `idealFinish`, walks the schedule backwards like the app does, and warns when a step *starts* inside a critical window (asleep `22:00–05:00`, away `09:00–16:00`, configurable via `CRITICAL_PERIODS` in the script). For a warned recipe it also scans the whole 24-hour clock and suggests a better finish time.
 
-Step object (required fields):
-  title  – short label for the timeline
-  dur    – default duration in whole minutes
-  kind   – exactly one of: 'prep' | 'rise' | 'cold' | 'bake'
-  desc   – one sentence describing what the baker does
-
-Step object (optional fields):
-  min, max, step  – add when the duration is genuinely flexible (e.g. proof times):
-                    min/max are the acceptable range in minutes,
-                    step is the nudge increment (usually 15 or 30).
-                    NEVER add these to a 'bake' step — oven time is fixed,
-                    not something a baker nudges mid-schedule.
-  sleep: true     – add when the step spans overnight
-  ingredients     – array of Ingredient objects (see below), only on steps
-                    where new ingredients are introduced
-
-Ingredient object:
-  amount  – number (omit for references like 'Vorteig')
-  unit    – string such as 'g' or 'ml' (omit when not applicable)
-  name    – ingredient name
-  note    – optional parenthetical, e.g. 'handwarm' or 'Weizenmehl Type 550'
-
-## Kind guide
-- 'prep'  active hands-on work: mixing, kneading, shaping, scoring
-- 'rise'  room-temperature fermentation or proofing
-- 'cold'  cold retard in the fridge
-- 'bake'  time in the oven — always fixed duration, never min/max/step
-
-## Rules
-1. One step per distinct phase — do not merge kneading and bulk ferment into one step.
-2. Add min/max/step only to steps with a real flexibility window (proof times, retards).
-   Fixed steps like kneading or baking get only 'dur'. 'bake' steps in particular
-   must NEVER carry min/max/step, even if a source recipe gives a time range —
-   collapse the range into a single representative 'dur' instead.
-3. Baking temperature and vessel info belong in 'desc', not a separate step.
-4. Never give the oven preheat its own step. Fold it into the 'desc' of the
-   'bake' step it precedes (temperature, vessel, e.g. "Ofen mit Gusseisentopf auf
-   230 °C vorheizen, dann ..."), and do not add its time to the step's 'dur' —
-   preheating happens in parallel with earlier steps, so it should not add to
-   the total schedule length.
-5. Assign ingredients to the step where they are first introduced.
-   A 'Vorteig' used in a later step appears as { name: 'Vorteig' } (no amount/unit).
-6. Output only valid JavaScript — a single object literal, no imports or exports.
-   Do not add any explanation outside the code block.
-
-## Recipe to convert
-
-[PASTE THE RECIPE HERE]
+```bash
+./check-critical-times.sh          # every recipe, full step listing
+./check-critical-times.sh -w       # only recipes with warnings
 ```
 
-Paste the full recipe text (or describe a handwritten card) in place of the placeholder at the bottom, then wrap the output in the `RECIPES` array.
-
-#### After conversion
-
-The prompt deliberately produces a bare recipe object without an `idealFinish`. Finish the import with these steps:
-
-1. **Insert it into the `RECIPES` array in alphabetical order** by recipe `name`. The array is kept sorted — do not just append it at the end.
-2. **Pick and verify an `idealFinish`.** Add an `idealFinish: { hour, minute }` clock time, then run `./check-critical-times.sh` to simulate the schedule. Tune the finish time — and, only where a step's `min`/`max` range genuinely allows it, the default `dur` of flexible proofs/retards — until the script reports no critical step-starts, or the unavoidable minimum it can no longer improve on. A finish around 18:00 is a good default target for long overnight doughs.
-3. **Run the tests** with `npm test`. Adding a recipe changes the recipe count, so bump the count assertion in `src/scheduler.test.js` to match.
-4. **Commit to `main` and push** once the tests pass and the build is green.
+The tuning loop — try the suggested finish time, then adjust the default `dur` of flexible proofs *within their own `min`/`max` range* only — is captured in the [`tune-ideal-finish` skill](.claude/skills/tune-ideal-finish/SKILL.md). Invoke it via Claude Code (`/tune-ideal-finish`) for a new recipe, after changing step durations, or to re-optimize existing recipes.
 
 ---
 
