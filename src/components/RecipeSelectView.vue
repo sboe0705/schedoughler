@@ -77,7 +77,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
 import { matchesQuery, computeSchedule, nextStepTime } from '../scheduler.js'
 import { formatWeekdayTime } from '../utils.js'
 import RecipeRow from './RecipeRow.vue'
@@ -86,10 +86,14 @@ const props = defineProps({
   recipes: Array,
   savedBakes: { type: Object, default: () => ({}) },
   starredRecipes: { type: Object, default: () => ({}) },
+  searchQuery: { type: String, default: '' },
 })
-defineEmits(['select-recipe', 'toggle-save', 'toggle-star'])
+const emit = defineEmits(['select-recipe', 'toggle-save', 'toggle-star', 'update:searchQuery'])
 
-const query = ref('')
+const query = computed({
+  get: () => props.searchQuery,
+  set: value => emit('update:searchQuery', value),
+})
 const hasQuery = computed(() => query.value.trim().length > 0)
 
 function clearQuery() {

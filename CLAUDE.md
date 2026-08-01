@@ -51,7 +51,7 @@ CLAUDE.md             # This file — Claude Code context for this repository
 
 **Vue components** use `<script setup>` with the Composition API. Props are declared with `defineProps`, events with `defineEmits`. Two-way binding follows the `modelValue` / `update:modelValue` convention.
 
-**State** lives in `App.vue` as Vue `ref`s (`view`, `recipeId`, `finishAt`, `overrides`, `savedBakes`, `starredRecipes`). `view` (`'select' | 'plan'`) toggles between the two views and is not persisted — every fresh page load opens on the recipe selection view. A `watch` persists `recipeId`/`finishAt`/`overrides` to `localStorage`; `savedBakes` is persisted separately under `schedoughler.saved.v1` and `starredRecipes` under `schedoughler.starred.v1`, both via helpers in `scheduler.js`. A second watcher on `finishAt`/`overrides` keeps an already-saved recipe's bookmark in sync while its plan is being edited. The schedule itself is a `computed` ref derived from `computeSchedule(recipe, finishAt, overrides)` — a pure, framework-agnostic function in `scheduler.js`. `RecipeSelectView.vue` owns its own local `query` ref (search text) — it is UI-only and not lifted to `App.vue` or persisted. Data flows down via props; events flow up via `$emit`.
+**State** lives in `App.vue` as Vue `ref`s (`view`, `recipeId`, `finishAt`, `overrides`, `savedBakes`, `starredRecipes`, `searchQuery`). `view` (`'select' | 'plan'`) toggles between the two views and is not persisted — every fresh page load opens on the recipe selection view. A `watch` persists `recipeId`/`finishAt`/`overrides` to `localStorage`; `savedBakes` is persisted separately under `schedoughler.saved.v1` and `starredRecipes` under `schedoughler.starred.v1`, both via helpers in `scheduler.js`. A second watcher on `finishAt`/`overrides` keeps an already-saved recipe's bookmark in sync while its plan is being edited. The schedule itself is a `computed` ref derived from `computeSchedule(recipe, finishAt, overrides)` — a pure, framework-agnostic function in `scheduler.js`. The search text lives in `App.vue` as `searchQuery` and is bound to `RecipeSelectView.vue` via `v-model:search-query` (prop `searchQuery` + `update:searchQuery` event, wrapped in a writable `computed` named `query` inside the child) — kept in the parent so it survives the `v-if` unmount while the scheduler view is open, but never written to `localStorage`, so a fresh page load starts with an empty search field. Data flows down via props; events flow up via `$emit`.
 
 **Styling** uses scoped CSS inside each SFC — no preprocessor, no utility framework. Fonts are Bitter (headings) and Hanken Grotesk (body), loaded from Google Fonts in `index.html`.
 
@@ -65,7 +65,7 @@ Recipes live in the `RECIPES` array exported from `src/scheduler.js`. The full s
 
 ## Search
 
-`RecipeSelectView.vue` filters both list sections live against a local `query` ref using `matchesQuery(recipe, query)` from `scheduler.js` — case-insensitive, whitespace-split, every word must occur in the recipe's name or subtitle. An empty query matches everything.
+`RecipeSelectView.vue` filters both list sections live against the `searchQuery` state owned by `App.vue` (see **State** above) using `matchesQuery(recipe, query)` from `scheduler.js` — case-insensitive, whitespace-split, every word must occur in the recipe's name or subtitle. An empty query matches everything.
 
 ## Saved Bakes
 

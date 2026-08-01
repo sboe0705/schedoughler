@@ -5,6 +5,7 @@
       :recipes="RECIPES"
       :saved-bakes="savedBakes"
       :starred-recipes="starredRecipes"
+      v-model:search-query="searchQuery"
       @select-recipe="onSelectRecipe"
       @toggle-save="onToggleSave"
       @toggle-star="onToggleStar"
@@ -76,6 +77,9 @@ function pruneAndPersist(saved) {
 const savedBakes = ref(pruneAndPersist(loadSavedBakes(localStorage)))
 const starredRecipes = ref(loadStarredRecipes(localStorage))
 const autoScrollToNow = ref(false)
+// Search text lives here (not in RecipeSelectView) so it survives the v-if
+// unmount while the scheduler view is open. Not persisted across page loads.
+const searchQuery = ref('')
 
 const schedule = computed(() => computeSchedule(recipe.value, finishAt.value, overrides.value))
 
