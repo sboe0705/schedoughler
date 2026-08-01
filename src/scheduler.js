@@ -248,6 +248,92 @@ export const RECIPES = [
     ]
   },
   {
+    id: 'fruechtebrot',
+    name: 'Früchtebrot',
+    totalShort: '~16 Std',
+    subtitle: 'Saftiges Kastenbrot mit Trockenfrüchten und Nüssen – Marcel Paa',
+    source: {
+      url: 'https://www.marcelpaa.com/rezepte/fruechtebrot_2/',
+      title: 'Früchtebrot – Marcel Paa'
+    },
+    idealFinish: { hour: 9, minute: 0 },
+    steps: [
+      {
+        title: 'Vorteig mit Sauerteig ansetzen',
+        dur: 5,
+        kind: 'prep',
+        desc: 'Sauerteig im handwarmen Wasser aufschlämmen, bis er sich aufgelöst hat, dann das Mehl untermischen und zudecken.',
+        ingredients: [
+          { amount: 120, unit: 'g', name: 'Wasser', note: 'handwarm' },
+          { amount: 20, unit: 'g', name: 'Sauerteig', note: 'alternativ 1 g Frischhefe' },
+          { amount: 120, unit: 'g', name: 'Ruchmehl', note: 'Weizenmehl Type 1050' }
+        ]
+      },
+      {
+        title: 'Vorteig mit Hefe ansetzen',
+        dur: 10,
+        kind: 'prep',
+        desc: 'Mehl, Hefe, Öl, Honig, Apfelsaft und Wasser in einer grossen Schüssel gut verkneten und zudecken.',
+        ingredients: [
+          { amount: 200, unit: 'g', name: 'Ruchmehl', note: 'Weizenmehl Type 1050' },
+          { amount: 180, unit: 'g', name: 'Weizen Vollkornmehl' },
+          { amount: 1, unit: 'g', name: 'Frischhefe' },
+          { amount: 25, unit: 'g', name: 'Olivenöl' },
+          { amount: 15, unit: 'g', name: 'Honig' },
+          { amount: 100, unit: 'g', name: 'Apfelsaft' },
+          { amount: 150, unit: 'g', name: 'Wasser' }
+        ]
+      },
+      {
+        title: 'Vorteige reifen lassen',
+        dur: 750,
+        min: 660,
+        max: 840,
+        step: 30,
+        kind: 'rise',
+        sleep: true,
+        desc: 'Beide Vorteige zugedeckt bei Raumtemperatur gären lassen – der Sauerteig-Vorteig 12 Std., der Hefe-Vorteig 8–12 Std.'
+      },
+      {
+        title: 'Nüsse rösten',
+        dur: 30,
+        kind: 'prep',
+        desc: 'Nüsse auf einem Blech 10–15 Min. bei 180 °C O/U rösten (oder in der Bratpfanne), gut auskühlen lassen und im Mörser grob aufbrechen.',
+        ingredients: [
+          { amount: 100, unit: 'g', name: 'Nüsse', note: 'Haselnüsse, Mandeln, Pinien nach Wahl' }
+        ]
+      },
+      {
+        title: 'Hauptteig kneten & einformen',
+        dur: 20,
+        kind: 'prep',
+        desc: 'Beide Vorteige mit den gerösteten Nüssen, dem Salz und den grob geschnittenen Trockenfrüchten gut durchkneten, in eine gut gefettete Kastenform (30 × 10 × 9 cm) legen und etwas flach drücken.',
+        ingredients: [
+          { name: 'Vorteig mit Sauerteig' },
+          { name: 'Vorteig mit Hefe' },
+          { amount: 12, unit: 'g', name: 'Salz' },
+          { amount: 400, unit: 'g', name: 'Trockenfrüchte', note: 'Aprikosen, Feigen, Datteln, Rosinen nach Wahl' },
+          { name: 'Geröstete Nüsse' }
+        ]
+      },
+      {
+        title: 'Stückgare',
+        dur: 105,
+        min: 90,
+        max: 120,
+        step: 15,
+        kind: 'rise',
+        desc: 'Form mit Teigtuch oder Frischhaltefolie zudecken und bei Raumtemperatur stehen lassen.'
+      },
+      {
+        title: 'Backen',
+        dur: 63,
+        kind: 'bake',
+        desc: 'Ofen mit feuerfester Schüssel in der unteren Hälfte auf 250 °C O/U vorheizen, Kastenform einschieben, bedampfen und auf 210 °C reduzieren; nach ca. 40 Min. das Brot ausformen und ohne Form noch 20–25 Min. fertig backen.'
+      }
+    ]
+  },
+  {
     id: 'guinness-brot',
     name: 'Guinness Brot',
     totalShort: '~15 Std',
@@ -949,6 +1035,90 @@ export const RECIPES = [
         dur: 45,
         kind: 'bake',
         desc: 'Ofen mit feuerfester Schüssel auf 250 °C O/U vorheizen, einschieben, mit 1–2 dl Wasser bedampfen und auf 230 °C reduzieren; nach 20 Min. Schüssel entfernen, Brote ausformen und 20–25 Min. knusprig ausbacken.'
+      }
+    ]
+  },
+  {
+    id: 'vollkorn-fruechtebroetchen',
+    name: 'Vollkorn Früchtebrötchen',
+    totalShort: '~16 Std',
+    subtitle: 'Knetfreie Vollkornbrötchen mit Nüssen, Früchten und Übernachtgare – Marcel Paa',
+    source: {
+      url: 'https://www.marcelpaa.com/rezepte/vollkorn-fruchtebroetchen-mit-uebernachtgare/',
+      title: 'Vollkorn Früchtebrötchen mit Übernachtgare – Marcel Paa'
+    },
+    idealFinish: { hour: 8, minute: 15 },
+    steps: [
+      {
+        title: 'Teig mischen',
+        dur: 15,
+        kind: 'prep',
+        desc: 'Wasser, Salz, Hefe und Honig in einer Schüssel gut durchmischen, Nüsse und Trockenfrüchte fein schneiden und mit den Mehlen zum Wassergemisch geben; alles gut durchmischen und zudecken.',
+        ingredients: [
+          { amount: 450, unit: 'g', name: 'Wasser', note: '35 °C warm' },
+          { amount: 12, unit: 'g', name: 'Salz' },
+          { amount: 1, unit: 'g', name: 'Frischhefe' },
+          { amount: 20, unit: 'g', name: 'Honig' },
+          { amount: 450, unit: 'g', name: 'Weizen Vollkornmehl', note: 'fein' },
+          { amount: 50, unit: 'g', name: 'Roggenmehl dunkel', note: 'Roggenmehl Type 1150' },
+          { amount: 50, unit: 'g', name: 'Nussmischung' },
+          { amount: 120, unit: 'g', name: 'Trockenfrüchte' }
+        ]
+      },
+      {
+        title: 'Anfangsgare mit Dehnen & Falten',
+        dur: 90,
+        kind: 'rise',
+        desc: 'Teig 90 Min. bei Raumtemperatur gären lassen und ihn in dieser Zeit dreimal dehnen und falten.'
+      },
+      {
+        title: 'Übernachtgare',
+        dur: 690,
+        min: 510,
+        max: 750,
+        step: 30,
+        kind: 'rise',
+        sleep: true,
+        desc: 'Teig zugedeckt bei Raumtemperatur weiterreifen lassen – Stockgare total 12–16 Std.'
+      },
+      {
+        title: 'Dehnen & Falten',
+        dur: 5,
+        kind: 'prep',
+        desc: 'Etwa 2 Std. vor der Weiterverarbeitung den Teig nochmals dehnen und falten.'
+      },
+      {
+        title: 'Reifen bis zum Formen',
+        dur: 85,
+        min: 85,
+        max: 145,
+        step: 15,
+        kind: 'rise',
+        desc: 'Teig zugedeckt bei Raumtemperatur stehen lassen, bis er sichtbar aufgegangen und luftig ist.'
+      },
+      {
+        title: 'Formen',
+        dur: 15,
+        kind: 'prep',
+        desc: 'Teig auf die bemehlte Arbeitsfläche geben, leicht rechteckig ziehen, mit Wasser bepinseln, mit Flocken bestreuen und leicht andrücken; mit der Teigkarte 12 gleichmässig grosse Quadrate abstechen und auf ein mit Backpapier belegtes Blech absetzen.',
+        ingredients: [
+          { name: 'Flockenmischung', note: 'Hafer-, Hirse- und Dinkelflocken' }
+        ]
+      },
+      {
+        title: 'Stückgare',
+        dur: 30,
+        min: 30,
+        max: 45,
+        step: 15,
+        kind: 'rise',
+        desc: 'Teiglinge mit dem Teigtuch zudecken und bei Raumtemperatur ruhen lassen.'
+      },
+      {
+        title: 'Backen',
+        dur: 28,
+        kind: 'bake',
+        desc: 'Ofen auf 250 °C O/U vorheizen, Blech in die mittlere Schiene schieben, bedampfen und auf 230 °C reduzieren; nach 10–15 Min. die Ofentür kurz öffnen, damit der Dampf entweicht, und weitere 10–15 Min. fertig backen.'
       }
     ]
   },
