@@ -864,6 +864,83 @@ export const RECIPES = [
     ]
   },
   {
+    id: 'roggen-vollkornbroetchen',
+    name: 'Roggen Vollkornbrötchen',
+    totalShort: '~17 Std',
+    subtitle: 'Kräftige Roggenbrötchen mit Quellstück über Nacht – Marcel Paa',
+    source: {
+      url: 'https://www.marcelpaa.com/rezepte/roggen-vollkornbroetchen/',
+      title: 'Marcel Paa – Roggen Vollkorn Brötchen'
+    },
+    idealFinish: { hour: 9, minute: 15 },
+    steps: [
+      {
+        title: 'Quellstück ansetzen',
+        dur: 10,
+        kind: 'prep',
+        desc: 'Roggen Vollkornmehl, Wasser und Sauerteig zu einem Vorteig vermischen und mit Gärfolie abdecken.',
+        ingredients: [
+          { amount: 120, unit: 'g', name: 'Roggen Vollkornmehl' },
+          { amount: 160, unit: 'g', name: 'Wasser' },
+          { amount: 25,  unit: 'g', name: 'Sauerteig' }
+        ]
+      },
+      {
+        title: 'Quellstück über Nacht',
+        dur: 900,
+        min: 900,
+        max: 1080,
+        step: 30,
+        kind: 'rise',
+        sleep: true,
+        desc: 'Quellstück zugedeckt bei Raumtemperatur mindestens 15 Std. quellen und reifen lassen.'
+      },
+      {
+        title: 'Hauptteig kneten',
+        dur: 10,
+        kind: 'prep',
+        desc: 'Alle Zutaten in die Küchenmaschine geben und auf niedriger Stufe 3 Min. kneten, den Teig vom Schüsselrand in die Mitte schaben und weitere 5 Min. kneten.',
+        ingredients: [
+          {                          name: 'Quellstück' },
+          { amount: 350, unit: 'g',  name: 'Roggen Vollkornmehl' },
+          { amount: 250, unit: 'g',  name: 'Wasser', note: 'kalt' },
+          { amount: 15,  unit: 'g',  name: 'Frischhefe' },
+          { amount: 12,  unit: 'g',  name: 'Salz' }
+        ]
+      },
+      {
+        title: 'Stockgare',
+        dur: 60,
+        min: 45,
+        max: 90,
+        step: 15,
+        kind: 'rise',
+        desc: 'Teig mit Mehl bestäuben, mit einem Küchentuch abdecken und bei Raumtemperatur gehen lassen.'
+      },
+      {
+        title: 'Formen',
+        dur: 10,
+        kind: 'prep',
+        desc: 'Teig in 10 gleich grosse Stücke portionieren, zu Kugeln formen, flach drücken und grosszügig mit Mehl bestäuben.'
+      },
+      {
+        title: 'Stückgare',
+        dur: 15,
+        min: 15,
+        max: 30,
+        step: 15,
+        kind: 'rise',
+        desc: 'Teiglinge ruhen lassen, bis die Mehlschicht sichtbar aufgerissen ist.'
+      },
+      {
+        title: 'Backen',
+        dur: 25,
+        kind: 'bake',
+        desc: 'Backstein auf der untersten Rille mit dem Ofen auf 215 °C O/U vorheizen, Teiglinge abschieben und eine Schüssel Wasser in den Ofen stellen; nach 15 Min. das Wasser entfernen und weitere 10 Min. fertig backen, danach auf einem Gitter auskühlen lassen.'
+      }
+    ]
+  },
+  {
     id: 'sauerteig-cracker',
     name: 'Sauerteig Cracker',
     totalShort: '~3 Std',
@@ -1119,6 +1196,102 @@ export const RECIPES = [
         dur: 28,
         kind: 'bake',
         desc: 'Ofen auf 250 °C O/U vorheizen, Blech in die mittlere Schiene schieben, bedampfen und auf 230 °C reduzieren; nach 10–15 Min. die Ofentür kurz öffnen, damit der Dampf entweicht, und weitere 10–15 Min. fertig backen.'
+      }
+    ]
+  },
+  {
+    id: 'vollkornbroetchen-uebernachtgare',
+    name: 'Vollkornbrötchen mit Übernachtgare',
+    totalShort: '~16 Std',
+    subtitle: 'Saftige Weizenvollkornbrötchen mit Kochstück und Samenkruste – Marcel Paa',
+    source: {
+      url: 'https://www.marcelpaa.com/rezepte/vollkornbrotchen-mit-ubernachtgare/',
+      title: 'Marcel Paa – Vollkornbrötchen mit Übernachtgare'
+    },
+    idealFinish: { hour: 9, minute: 0 },
+    steps: [
+      {
+        title: 'Kochstück kochen',
+        dur: 10,
+        kind: 'prep',
+        desc: 'Mehl und Wasser in einem Kochtopf unter ständigem Rühren aufkochen, in eine Schüssel umfüllen und mit Folie direkt auf dem Kochstück abdecken.',
+        ingredients: [
+          { amount: 180, unit: 'g', name: 'Wasser', note: 'handwarm' },
+          { amount: 50,  unit: 'g', name: 'Weizen Vollkornmehl', note: 'fein' }
+        ]
+      },
+      {
+        title: 'Kochstück auskühlen',
+        dur: 90,
+        min: 60,
+        max: 120,
+        step: 15,
+        kind: 'cold',
+        desc: 'Kochstück abgedeckt im Kühlschrank auskühlen lassen.'
+      },
+      {
+        title: 'Hauptteig kneten',
+        dur: 10,
+        kind: 'prep',
+        desc: 'Alle Zutaten in die Küchenmaschine geben und 8–10 Min. kneten, danach den Teig in eine gefettete Schüssel legen und zudecken.',
+        ingredients: [
+          {                          name: 'Kochstück' },
+          { amount: 450, unit: 'g',  name: 'Weizen Vollkornmehl', note: 'fein' },
+          { amount: 280, unit: 'g',  name: 'Wasser' },
+          { amount: 35,  unit: 'g',  name: 'Sauerteig', note: 'optional, 30–40 g' },
+          { amount: 20,  unit: 'g',  name: 'Olivenöl' },
+          { amount: 5,   unit: 'g',  name: 'Frischhefe', note: '7 g, falls ohne Sauerteig' },
+          { amount: 10,  unit: 'g',  name: 'Salz' },
+          { amount: 10,  unit: 'g',  name: 'Honig', note: 'oder Zuckerrübensirup' }
+        ]
+      },
+      {
+        title: 'Stockgare',
+        dur: 30,
+        kind: 'rise',
+        desc: 'Teig zugedeckt bei Raumtemperatur gären lassen.'
+      },
+      {
+        title: 'Dehnen & Falten',
+        dur: 5,
+        kind: 'prep',
+        desc: 'Teig von vier Seiten dehnen und wieder zur Mitte falten.'
+      },
+      {
+        title: 'Stockgare fortsetzen',
+        dur: 30,
+        min: 30,
+        max: 45,
+        step: 15,
+        kind: 'rise',
+        desc: 'Teig zugedeckt nochmals bei Raumtemperatur ruhen lassen.'
+      },
+      {
+        title: 'Formen & Wenden',
+        dur: 20,
+        kind: 'prep',
+        desc: 'Teig in Portionen von 80–100 g abstechen, zu gleichmässigen Kugeln formen, mit Wasser besprühen, in der Samenmischung wenden und mit einem Tuch in eine Muffinform legen.',
+        ingredients: [
+          { name: 'Mohnsamen' },
+          { name: 'Sesamsamen' },
+          { name: 'Leinsamen' }
+        ]
+      },
+      {
+        title: 'Übernachtgare im Kühlschrank',
+        dur: 720,
+        min: 600,
+        max: 840,
+        step: 30,
+        kind: 'cold',
+        sleep: true,
+        desc: 'Teiglinge zugedeckt rund 12 Std. im Kühlschrank gären lassen.'
+      },
+      {
+        title: 'Backen',
+        dur: 25,
+        kind: 'bake',
+        desc: 'Ofen auf 230 °C O/U vorheizen, Teiglinge mit dem Verschluss nach unten auf ein Backblech legen und 10–15 Min. mit Dampf backen; danach die Ofentür kurz öffnen, auf 220 °C senken und weitere 10–15 Min. fertig backen.'
       }
     ]
   },
