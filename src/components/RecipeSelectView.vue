@@ -1,7 +1,17 @@
 <template>
   <div class="select-view">
     <header class="header">
-      <div class="app-icon">S</div>
+      <div class="app-icon">
+        <svg width="30" height="30" viewBox="0 0 24 24" aria-hidden="true">
+          <g transform="rotate(46 12 12)">
+            <ellipse cx="12" cy="12" rx="10.3" ry="7.7" fill="#FBF5EA"/>
+            <path d="M10.5 18.32A8.45 6.31 0 0 1 4.68 15.16" fill="none" stroke="#D9A961" stroke-width="1.7" stroke-linecap="round"/>
+          </g>
+          <path d="M12 12L8.9 6.63" fill="none" stroke="#5a3820" stroke-width="1.9" stroke-linecap="round"/>
+          <path d="M12 12L15.38 12.91" fill="none" stroke="#5a3820" stroke-width="2.4" stroke-linecap="round"/>
+          <circle cx="12" cy="12" r="1" fill="#5a3820"/>
+        </svg>
+      </div>
       <div class="wordmark-group">
         <span class="wordmark">Schedoughler</span>
         <span class="sub-label">BROT NACH PLAN</span>
@@ -152,10 +162,6 @@ const noResults = computed(() =>
   height: 34px;
   border-radius: 11px;
   background: var(--color-brown);
-  color: #fff;
-  font-family: var(--font-serif);
-  font-size: 19px;
-  font-weight: 800;
   display: flex;
   align-items: center;
   justify-content: center;

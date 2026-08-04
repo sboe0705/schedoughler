@@ -39,7 +39,12 @@ src/
     ├── StepRow.vue         # Individual step card with timeline rail
     └── NudgeControls.vue   # ± buttons for flexible step durations
 
-index.html            # HTML entry point; loads Google Fonts; lang="de"
+index.html            # HTML entry point; loads fonts, favicon links + theme-color; lang="de"
+public/               # Copied to the site root as-is
+├── fonts/            # Self-hosted Bitter + Hanken Grotesk woff2 files + fonts.css
+├── favicon.svg       # App mark: loaf-as-clock-face on the brown tile (source of truth)
+├── favicon.png       # 32×32 raster fallback, rendered from favicon.svg
+└── apple-touch-icon.png # 180×180 iOS home-screen icon (full-bleed brown background)
 vite.config.js        # Vite config — Vue plugin + dynamic base path for GitHub Pages
 .github/workflows/ci.yml  # CI: test → build → deploy to GitHub Pages
 design/               # Reference materials and design prototypes (not deployed)
