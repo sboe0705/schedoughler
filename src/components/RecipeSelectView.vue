@@ -215,6 +215,13 @@ const noResults = computed(() =>
   color: var(--color-ink-soft);
 }
 
+/* iOS Safari zooms the page when a focused input is smaller than 16px */
+@media (pointer: coarse) {
+  .search-input {
+    font-size: 16px;
+  }
+}
+
 .clear-btn {
   flex-shrink: 0;
   width: 22px;

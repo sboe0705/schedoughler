@@ -118,6 +118,14 @@ function onTimeChange(e) {
   min-width: 0;
 }
 
+/* iOS Safari zooms the page when a focused input is smaller than 16px */
+@media (pointer: coarse) {
+  .date-input,
+  .time-input {
+    font-size: 16px;
+  }
+}
+
 .date-input:focus,
 .time-input:focus {
   border-color: var(--color-brown);
