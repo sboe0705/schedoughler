@@ -1116,6 +1116,191 @@ export const RECIPES = [
     ]
   },
   {
+    id: 'urdinkel-kartoffelbrot',
+    name: 'UrDinkel Kartoffelbrot',
+    totalShort: '~25 Std',
+    subtitle: 'Saftiges Kartoffelbrot mit Buttermilch und kalten Vorteigen – Marcel Paa',
+    source: {
+      url: 'https://www.marcelpaa.com/rezepte/urdinkel-kartoffelbrot/',
+      title: 'UrDinkel Kartoffelbrot – Marcel Paa'
+    },
+    idealFinish: { hour: 19, minute: 45 },
+    steps: [
+      {
+        title: 'Vorteig ansetzen',
+        dur: 5,
+        kind: 'prep',
+        desc: 'Sauerteig im kalten Wasser aufschlämmen, Mehl dazugeben und gut verrühren.',
+        ingredients: [
+          { amount: 100, unit: 'g', name: 'Wasser', note: 'kalt' },
+          { amount: 5, unit: 'g', name: 'Sauerteig', note: 'alternativ 0,5 g Frischhefe' },
+          { amount: 100, unit: 'g', name: 'UrDinkel Vollkornmehl' }
+        ]
+      },
+      {
+        title: 'Brühstück ansetzen',
+        dur: 5,
+        kind: 'prep',
+        desc: 'Wasser aufkochen, über das Mehl giessen und klumpenfrei mischen.',
+        ingredients: [
+          { amount: 120, unit: 'g', name: 'Wasser', note: 'kochend' },
+          { amount: 100, unit: 'g', name: 'UrDinkel Vollkornmehl' }
+        ]
+      },
+      {
+        title: 'Vorteige anspringen lassen',
+        dur: 60,
+        kind: 'rise',
+        desc: 'Vorteig und Brühstück zugedeckt 1 Std. bei Raumtemperatur stehen lassen.'
+      },
+      {
+        title: 'Vorteige kalt reifen lassen',
+        dur: 1200,
+        min: 720,
+        max: 1440,
+        step: 60,
+        kind: 'cold',
+        sleep: true,
+        desc: 'Vorteig und Brühstück zugedeckt 12–24 Std. im Kühlschrank reifen bzw. auskühlen lassen.'
+      },
+      {
+        title: 'Kartoffeln kochen',
+        dur: 30,
+        kind: 'prep',
+        desc: 'Kartoffeln in Wasser weich kochen, abgiessen, etwas abkühlen lassen und mit der Gabel fein zerdrücken.',
+        ingredients: [
+          { amount: 2, name: 'Kartoffeln', note: 'gross, ergibt ca. 150 g weichgekocht' }
+        ]
+      },
+      {
+        title: 'Hauptteig kneten',
+        dur: 15,
+        kind: 'prep',
+        desc: 'Alle Zutaten 2–3 Min. auf niedriger Stufe mischen, dann ca. 10 Min. bei mittlerer Geschwindigkeit kneten, bis der Teig die Fensterprobe besteht.',
+        ingredients: [
+          { name: 'Vorteig' },
+          { name: 'Brühstück' },
+          { amount: 150, unit: 'g', name: 'Kartoffeln', note: 'weichgekocht, zerdrückt' },
+          { amount: 115, unit: 'g', name: 'Buttermilch' },
+          { amount: 270, unit: 'g', name: 'UrDinkelmehl hell', note: 'Type 630' },
+          { amount: 10, unit: 'g', name: 'Frischhefe' },
+          { amount: 12, unit: 'g', name: 'Salz' }
+        ]
+      },
+      {
+        title: 'Stockgare',
+        dur: 105,
+        min: 90,
+        max: 120,
+        step: 15,
+        kind: 'rise',
+        desc: 'Teig zugedeckt bei Raumtemperatur gären lassen.'
+      },
+      {
+        title: 'Formen',
+        dur: 15,
+        kind: 'prep',
+        desc: 'Teig halbieren, beide Hälften rund schleifen, leicht flach drücken, die Enden einschlagen, straff länglich aufrollen und auf ein geöltes Blech legen.'
+      },
+      {
+        title: 'Stückgare',
+        dur: 15,
+        min: 10,
+        max: 20,
+        step: 5,
+        kind: 'rise',
+        desc: 'Teiglinge zugedeckt bei Raumtemperatur kurz entspannen lassen.'
+      },
+      {
+        title: 'Backen',
+        dur: 45,
+        kind: 'bake',
+        desc: 'Ofen auf 230 °C Umluft vorheizen, Teiglinge der Länge nach im 45°-Winkel einschneiden, einschieben und 20 Min. mit Dampf backen; danach Dampf ablassen und bei 210 °C O/U weitere 20–25 Min. knusprig ausbacken, auf einem Gitter auskühlen lassen.'
+      }
+    ]
+  },
+  {
+    id: 'urdinkel-sauerteig-brot',
+    name: 'UrDinkel Sauerteig Brot',
+    totalShort: '~14 Std',
+    subtitle: 'Kräftiges Ruchmehlbrot mit Sauerteig und Brühstück – Marcel Paa',
+    source: {
+      url: 'https://www.marcelpaa.com/rezepte/urdinkel-sauerteig-brot/',
+      title: 'UrDinkel Sauerteig Brot – Marcel Paa'
+    },
+    idealFinish: { hour: 20, minute: 30 },
+    steps: [
+      {
+        title: 'Sauerteig-Vorteig ansetzen',
+        dur: 5,
+        kind: 'prep',
+        desc: 'Sauerteig im warmen Wasser aufschlämmen, Mehl dazugeben und gut verkneten.',
+        ingredients: [
+          { amount: 100, unit: 'g', name: 'Wasser', note: 'ca. 30 °C warm' },
+          { amount: 40, unit: 'g', name: 'Sauerteig' },
+          { amount: 100, unit: 'g', name: 'UrDinkel Ruchmehl', note: 'Type 1050' }
+        ]
+      },
+      {
+        title: 'Brühstück ansetzen',
+        dur: 5,
+        kind: 'prep',
+        desc: 'Wasser aufkochen, direkt über das Mehl giessen, klumpenfrei mischen und zugedeckt in den Kühlschrank stellen.',
+        ingredients: [
+          { amount: 100, unit: 'g', name: 'UrDinkel Vollkornmehl' },
+          { amount: 150, unit: 'g', name: 'Wasser', note: 'kochend' }
+        ]
+      },
+      {
+        title: 'Vorteige reifen lassen',
+        dur: 600,
+        min: 480,
+        max: 720,
+        step: 30,
+        kind: 'rise',
+        sleep: true,
+        desc: 'Vorteig zugedeckt 8–12 Std. bei Raumtemperatur gären lassen, das Brühstück in derselben Zeit im Kühlschrank auskühlen lassen.'
+      },
+      {
+        title: 'Hauptteig kneten',
+        dur: 20,
+        kind: 'prep',
+        desc: 'Alle Zutaten mit dem Wasser beginnend 3–4 Min. mischen, dann 10–15 Min. bei mittlerer Geschwindigkeit kneten, bis der Teig die Fensterprobe besteht.',
+        ingredients: [
+          { name: 'Sauerteig-Vorteig' },
+          { name: 'Brühstück' },
+          { amount: 380, unit: 'g', name: 'UrDinkel Ruchmehl', note: 'Type 1050' },
+          { amount: 230, unit: 'g', name: 'Wasser', note: '210–250 g, ca. 30 °C warm' },
+          { amount: 13, unit: 'g', name: 'Salz' }
+        ]
+      },
+      {
+        title: 'Stockgare',
+        dur: 150,
+        min: 120,
+        max: 240,
+        step: 30,
+        kind: 'rise',
+        desc: 'Teig im leicht gefetteten Becken zugedeckt bei Raumtemperatur gären lassen und dabei 2–3× dehnen und falten.'
+      },
+      {
+        title: 'Formen',
+        dur: 10,
+        kind: 'prep',
+        desc: 'Teig auf die bemehlte Arbeitsfläche stürzen, von oben und unten zur Mitte falten, dann die linke und die rechte Seite darüber schlagen, mit Mehl bestäuben und die UrDinkel-Oblate mit etwas Wasser aufkleben.',
+        ingredients: [
+          { name: 'UrDinkel-Oblate', note: 'optional' }
+        ]
+      },
+      {
+        title: 'Backen',
+        dur: 55,
+        kind: 'bake',
+        desc: 'Ofen mit Backstein bzw. Gusseisentopf auf 250 °C O/U vorheizen, Teigling mit dem Verschluss nach oben einschiessen, mit 1–2 dl Wasser bedampfen; nach 40 Min. Dampf ablassen, auf 210 °C reduzieren und 10–15 Min. knusprig ausbacken, auf einem Gitter auskühlen lassen.'
+      }
+    ]
+  },
+  {
     id: 'vollkorn-fruechtebroetchen',
     name: 'Vollkorn Früchtebrötchen',
     totalShort: '~16 Std',
