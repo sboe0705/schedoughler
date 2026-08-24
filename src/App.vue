@@ -41,7 +41,7 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import {
-  RECIPES, computeSchedule, defaultFinishTime, nudgeDuration,
+  RECIPES, computeSchedule, defaultFinishTime, planForRecipe, nudgeDuration,
   loadSavedBakes, persistSavedBakes, toggleSavedBake, pruneSavedBakes,
   loadStarredRecipes, persistStarredRecipes, toggleStarredRecipe,
 } from './scheduler.js'
@@ -83,17 +83,6 @@ const searchQuery = ref('')
 
 const schedule = computed(() => computeSchedule(recipe.value, finishAt.value, overrides.value))
 
-watch(recipeId, () => {
-  const entry = savedBakes.value[recipeId.value]
-  if (entry) {
-    finishAt.value = new Date(entry.target)
-    overrides.value = { ...entry.overrides }
-  } else {
-    overrides.value = {}
-    finishAt.value = defaultFinishTime(recipe.value)
-  }
-})
-
 watch([recipeId, finishAt, overrides], ([id, fa]) => {
   localStorage.setItem('recipeId', id)
   localStorage.setItem('finishAt', fa.toISOString())
@@ -118,6 +107,13 @@ function onNudge(stepIndex, dir) {
 function onSelectRecipe(id) {
   autoScrollToNow.value = !!savedBakes.value[id]
   recipeId.value = id
+  // Reset on every selection, not only when the id changes: reopening the
+  // recipe that is already active must still start from its saved bake, or —
+  // when it is unsaved — from a fresh plan at its ideal finish time, instead of
+  // inheriting a stale plan from an earlier visit or a previous page load.
+  const plan = planForRecipe(savedBakes.value, recipe.value)
+  finishAt.value = plan.finishAt
+  overrides.value = plan.overrides
   view.value = 'plan'
   window.history.pushState({ schedoughlerView: 'plan' }, '')
 }

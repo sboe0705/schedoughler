@@ -4,6 +4,7 @@ import {
   KINDS,
   computeSchedule,
   defaultFinishTime,
+  planForRecipe,
   nudgeDuration,
   effectiveDuration,
   durationLabel,
@@ -161,6 +162,41 @@ describe('defaultFinishTime', () => {
     expect(result.getMinutes()).toBe(0)
     expect(result.getSeconds()).toBe(0)
     expect(result.getTime()).toBeGreaterThan(FINISH.getTime() + total * 60000)
+  })
+})
+
+describe('planForRecipe', () => {
+  const recipe = RECIPES.find(r => r.id === 'sauerteig') // idealFinish 09:45
+  const now = new Date(2026, 6, 15, 6, 0, 0, 0)
+
+  it('restores the saved bake of a saved recipe', () => {
+    const target = new Date(2026, 6, 20, 18, 0, 0, 0).getTime()
+    const saved = { [recipe.id]: { target, overrides: { 1: 90 } } }
+    const plan = planForRecipe(saved, recipe, now)
+    expect(plan.finishAt.getTime()).toBe(target)
+    expect(plan.overrides).toEqual({ 1: 90 })
+  })
+
+  it('copies the saved overrides instead of sharing the stored object', () => {
+    const saved = { [recipe.id]: { target: now.getTime(), overrides: { 1: 90 } } }
+    const plan = planForRecipe(saved, recipe, now)
+    plan.overrides[1] = 120
+    expect(saved[recipe.id].overrides).toEqual({ 1: 90 })
+  })
+
+  it('resets an unsaved recipe to its ideal finish time with no overrides', () => {
+    const plan = planForRecipe({}, recipe, now)
+    expect(plan.finishAt.getHours()).toBe(recipe.idealFinish.hour)
+    expect(plan.finishAt.getMinutes()).toBe(recipe.idealFinish.minute)
+    expect(plan.overrides).toEqual({})
+  })
+
+  it('resets an unsaved recipe even while other recipes are saved', () => {
+    const other = RECIPES.find(r => r.id !== recipe.id)
+    const saved = { [other.id]: { target: now.getTime(), overrides: { 0: 30 } } }
+    const plan = planForRecipe(saved, recipe, now)
+    expect(plan.finishAt.getTime()).toBe(defaultFinishTime(recipe, now).getTime())
+    expect(plan.overrides).toEqual({})
   })
 })
 

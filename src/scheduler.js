@@ -2196,6 +2196,18 @@ export function defaultFinishTime(recipe, now = new Date()) {
   return t;
 }
 
+/**
+ * The plan a recipe should open with: its saved bake if there is one, otherwise
+ * a fresh plan targeting the recipe's ideal finish time with no step overrides.
+ */
+export function planForRecipe(savedBakes, recipe, now = new Date()) {
+  const entry = savedBakes[recipe.id];
+  if (entry) {
+    return { finishAt: new Date(entry.target), overrides: { ...entry.overrides } };
+  }
+  return { finishAt: defaultFinishTime(recipe, now), overrides: {} };
+}
+
 /** Adjust a flexible step's override by ±step, clamped. dir=+1 longer, -1 shorter. */
 export function nudgeDuration(recipe, overrides, stepIndex, dir) {
   const s = recipe.steps[stepIndex];
