@@ -1838,13 +1838,18 @@ export function durationLabel(minutes) {
 
 /**
  * Recipe search (selection view). Case-insensitive; the query is split on
- * whitespace and EVERY word must occur somewhere in the recipe's name or
- * subtitle. Empty query matches everything.
+ * whitespace and EVERY word must occur somewhere in the recipe's name,
+ * subtitle or ingredient names (across all steps). Empty query matches
+ * everything.
  */
 export function matchesQuery(recipe, query) {
   const q = (query || '').trim().toLowerCase();
   if (!q) return true;
-  const hay = [recipe.name, recipe.subtitle].filter(Boolean).join(' ').toLowerCase();
+  const ingredientNames = (recipe.steps || [])
+    .flatMap(s => s.ingredients || [])
+    .map(i => i.name);
+  const hay = [recipe.name, recipe.subtitle, ...ingredientNames]
+    .filter(Boolean).join(' ').toLowerCase();
   return q.split(/\s+/).filter(Boolean).every(w => hay.includes(w));
 }
 

@@ -339,8 +339,20 @@ describe('matchesQuery', () => {
     expect(matchesQuery(recipe, 'Sauerteigbrot Kruste')).toBe(true)
   })
 
+  it('matches on a word that only appears in an ingredient name', () => {
+    expect(matchesQuery(recipe, 'Roggenmehl')).toBe(true)
+  })
+
+  it('matches ingredient names case-insensitively, combined with other words', () => {
+    expect(matchesQuery(recipe, 'roggenmehl Kruste')).toBe(true)
+  })
+
   it('does not match text that only appears in a step title/description', () => {
     expect(matchesQuery(recipe, 'Gusseisentopf')).toBe(false)
+  })
+
+  it('does not match text that only appears in an ingredient note', () => {
+    expect(matchesQuery(recipe, 'handwarm')).toBe(false)
   })
 
   it('returns false when nothing matches', () => {
