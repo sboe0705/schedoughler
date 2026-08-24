@@ -264,13 +264,13 @@ export const RECIPES = [
   {
     id: 'dinkelvollkornbrot-mit-buttermilch',
     name: 'Dinkelvollkornbrot mit Buttermilch',
-    totalShort: '~27 Std',
+    totalShort: '~26 Std',
     subtitle: 'Saftig-nussiges Kastenbrot ohne Kneten, aus dem Kühlschrank direkt in den kalten Ofen – Plötzblog',
     source: {
       url: 'https://www.ploetzblog.de/rezepte/dinkelvollkornbrot-mit-buttermilch/id=6239c3d42889cc0a79026433',
       title: 'Dinkelvollkornbrot mit Buttermilch – Plötzblog'
     },
-    idealFinish: { hour: 10, minute: 30 },
+    idealFinish: { hour: 10, minute: 10 },
     steps: [
       {
         title: 'Quellstück A ansetzen',
@@ -298,7 +298,7 @@ export const RECIPES = [
       },
       {
         title: 'Quellstücke quellen lassen',
-        dur: 720,
+        dur: 660,
         min: 600,
         max: 840,
         step: 30,
