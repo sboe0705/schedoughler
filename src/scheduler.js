@@ -50,7 +50,22 @@ export const RECIPES = [
         title: 'Teig mischen',
         dur: 15,
         kind: 'prep',
-        desc: 'Alle Zutaten für den Hauptteig in eine grosse Schüssel geben, die Karotte samt Schale fein raspeln und dazugeben, dann alles von Hand gründlich zu einem gleichmässigen Teig vermischen.'
+        desc: 'Alle Zutaten für den Hauptteig in eine grosse Schüssel geben, die Karotte samt Schale fein raspeln und dazugeben, dann alles von Hand gründlich zu einem gleichmässigen Teig vermischen.',
+        ingredients: [
+          { amount: 250, unit: 'g', name: 'Wasser' },
+          { amount: 180, unit: 'g', name: 'Ruchmehl', note: 'Weizenmehl Type 1050' },
+          { amount: 70, unit: 'g', name: 'Roggenmehl dunkel', note: 'Type 1150 oder 1350' },
+          { amount: 50, unit: 'g', name: 'Kürbiskerne' },
+          { amount: 30, unit: 'g', name: 'Sesamsamen' },
+          { amount: 10, unit: 'g', name: 'Leinsamen', note: 'geschrotet' },
+          { amount: 30, unit: 'g', name: 'Hirseflocken' },
+          { amount: 30, unit: 'g', name: 'Haferflocken' },
+          { amount: 25, unit: 'g', name: 'Altbrot', note: 'Paniermehl oder Brotbrösel; ohne Altbrot die Wassermenge um ca. 50 g reduzieren' },
+          { amount: 10, unit: 'g', name: 'Sauerteig', note: 'optional' },
+          { amount: 7, unit: 'g', name: 'Frischhefe' },
+          { amount: 7, unit: 'g', name: 'Salz' },
+          { amount: 75, unit: 'g', name: 'Karotten', note: 'gerieben' }
+        ]
       },
       {
         title: 'Stockgare',
@@ -65,7 +80,11 @@ export const RECIPES = [
         title: 'In die Form geben',
         dur: 5,
         kind: 'prep',
-        desc: 'Teig mit nassen Händen direkt in die gefettete Kastenform geben, die Oberfläche gut andrücken und glattstreichen.'
+        desc: 'Teig mit nassen Händen direkt in die gefettete Kastenform (ca. 18×9×7 cm) geben, die Oberfläche gut andrücken, glattstreichen und mit gehackten Kürbiskernen und Hirseflocken bestreuen.',
+        ingredients: [
+          { name: 'Kürbiskerne', note: 'gehackt, zum Bestreuen' },
+          { name: 'Hirseflocken', note: 'zum Bestreuen' }
+        ]
       },
       {
         title: 'Stückgare',
