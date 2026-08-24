@@ -36,6 +36,55 @@ export const KINDS = {
 // ---------------------------------------------------------------------------
 export const RECIPES = [
   {
+    id: '4-stunden-saatenbrot-mit-karotten',
+    name: '4 Stunden Saatenbrot mit Karotten',
+    totalShort: '~4 Std',
+    subtitle: 'Saftiges Kastenbrot mit Saaten, Haferflocken und Sauerteig, ohne Kneten – Marcel Paa',
+    source: {
+      url: 'https://www.marcelpaa.com/rezepte/4-stunden-saatenbrot-mit-karotten/',
+      title: '4 Stunden Saatenbrot mit Karotten – Marcel Paa'
+    },
+    idealFinish: { hour: 19, minute: 45 },
+    steps: [
+      {
+        title: 'Teig mischen',
+        dur: 15,
+        kind: 'prep',
+        desc: 'Alle Zutaten für den Hauptteig in eine grosse Schüssel geben, die Karotte samt Schale fein raspeln und dazugeben, dann alles von Hand gründlich zu einem gleichmässigen Teig vermischen.'
+      },
+      {
+        title: 'Stockgare',
+        dur: 105,
+        min: 90,
+        max: 120,
+        step: 15,
+        kind: 'rise',
+        desc: 'Teig zugedeckt bei Raumtemperatur gehen lassen, bis er sichtbar an Volumen gewinnt; nach 30 und nach 60 Min. mit nassen Händen durchmischen bzw. dehnen und falten.'
+      },
+      {
+        title: 'In die Form geben',
+        dur: 5,
+        kind: 'prep',
+        desc: 'Teig mit nassen Händen direkt in die gefettete Kastenform geben, die Oberfläche gut andrücken und glattstreichen.'
+      },
+      {
+        title: 'Stückgare',
+        dur: 45,
+        min: 40,
+        max: 50,
+        step: 5,
+        kind: 'rise',
+        desc: 'Teig zugedeckt nochmals bei Raumtemperatur gehen lassen.'
+      },
+      {
+        title: 'Backen',
+        dur: 50,
+        kind: 'bake',
+        desc: 'Ofen auf 250 °C O/U vorheizen, einschieben, kräftig bedampfen und auf 210 °C reduzieren; nach 20 Min. Dampf ablassen und weitere 30 Min. backen — für eine knusprigere Kruste das Brot nach ca. 40 Min. aus der Form nehmen und 10–15 Min. direkt auf dem Rost ausbacken.'
+      }
+    ]
+  },
+  {
     id: 'alltags-roggenmischbrot-80-20',
     name: 'Alltags-Roggenmischbrot 80/20',
     totalShort: '~29 Std',
