@@ -1907,8 +1907,9 @@ export function durationLabel(minutes) {
 /**
  * Recipe search (selection view). Case-insensitive; the query is split on
  * whitespace and EVERY word must occur somewhere in the recipe's name,
- * subtitle or ingredient names (across all steps). Empty query matches
- * everything.
+ * subtitle or ingredient names (across all steps). A word prefixed with "!"
+ * excludes instead: the recipe matches only if the term does NOT occur. A
+ * bare "!" (still being typed) is ignored. Empty query matches everything.
  */
 export function matchesQuery(recipe, query) {
   const q = (query || '').trim().toLowerCase();
@@ -1918,7 +1919,13 @@ export function matchesQuery(recipe, query) {
     .map(i => i.name);
   const hay = [recipe.name, recipe.subtitle, ...ingredientNames]
     .filter(Boolean).join(' ').toLowerCase();
-  return q.split(/\s+/).filter(Boolean).every(w => hay.includes(w));
+  return q.split(/\s+/).filter(Boolean).every(w => {
+    if (w.startsWith('!')) {
+      const term = w.slice(1);
+      return !term || !hay.includes(term);
+    }
+    return hay.includes(w);
+  });
 }
 
 // ---------------------------------------------------------------------------

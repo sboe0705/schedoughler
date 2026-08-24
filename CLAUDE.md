@@ -70,7 +70,7 @@ Recipes live in the `RECIPES` array exported from `src/scheduler.js`. The full s
 
 ## Search
 
-`RecipeSelectView.vue` filters both list sections live against the `searchQuery` state owned by `App.vue` (see **State** above) using `matchesQuery(recipe, query)` from `scheduler.js` — case-insensitive, whitespace-split, every word must occur in the recipe's name, subtitle or ingredient names (collected across all steps; ingredient notes are not searched). An empty query matches everything.
+`RecipeSelectView.vue` filters both list sections live against the `searchQuery` state owned by `App.vue` (see **State** above) using `matchesQuery(recipe, query)` from `scheduler.js` — case-insensitive, whitespace-split, every word must occur in the recipe's name, subtitle or ingredient names (collected across all steps; ingredient notes are not searched). A word prefixed with `!` excludes instead: the recipe matches only if the term does *not* occur anywhere in those fields (a bare `!` mid-typing is ignored). An empty query matches everything.
 
 ## Saved Bakes
 

@@ -358,4 +358,27 @@ describe('matchesQuery', () => {
   it('returns false when nothing matches', () => {
     expect(matchesQuery(recipe, 'zzzznotfound')).toBe(false)
   })
+
+  it('excludes recipes containing a "!"-prefixed term', () => {
+    expect(matchesQuery(recipe, '!Roggenmehl')).toBe(false)
+  })
+
+  it('matches recipes NOT containing a "!"-prefixed term', () => {
+    expect(matchesQuery(recipe, '!zzzznotfound')).toBe(true)
+  })
+
+  it('exclusion is case-insensitive', () => {
+    expect(matchesQuery(recipe, '!ROGGENMEHL')).toBe(false)
+  })
+
+  it('combines positive and negative terms (AND semantics)', () => {
+    expect(matchesQuery(recipe, 'Kruste !zzzznotfound')).toBe(true)
+    expect(matchesQuery(recipe, 'Kruste !Roggenmehl')).toBe(false)
+    expect(matchesQuery(recipe, 'zzzznotfound !Roggenmehl')).toBe(false)
+  })
+
+  it('ignores a bare "!" while the user is still typing', () => {
+    expect(matchesQuery(recipe, '!')).toBe(true)
+    expect(matchesQuery(recipe, 'Kruste !')).toBe(true)
+  })
 })
