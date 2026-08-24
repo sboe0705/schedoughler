@@ -270,7 +270,7 @@ export const RECIPES = [
       url: 'https://www.ploetzblog.de/rezepte/dinkelvollkornbrot-mit-buttermilch/id=6239c3d42889cc0a79026433',
       title: 'Dinkelvollkornbrot mit Buttermilch – Plötzblog'
     },
-    idealFinish: { hour: 10, minute: 10 },
+    idealFinish: { hour: 8, minute: 0 },
     steps: [
       {
         title: 'Quellstück A ansetzen',
@@ -1166,7 +1166,7 @@ export const RECIPES = [
       url: 'https://www.ploetzblog.de/rezepte/ruchbrot/id=62387c592889cc0a7902635f',
       title: 'Ruchbrot – Plötzblog'
     },
-    idealFinish: { hour: 21, minute: 0 },
+    idealFinish: { hour: 8, minute: 0 },
     steps: [
       {
         title: 'Vorteig ansetzen',
