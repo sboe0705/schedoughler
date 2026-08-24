@@ -262,6 +262,98 @@ export const RECIPES = [
     ]
   },
   {
+    id: 'dinkelvollkornbrot-mit-buttermilch',
+    name: 'Dinkelvollkornbrot mit Buttermilch',
+    totalShort: '~27 Std',
+    subtitle: 'Saftig-nussiges Kastenbrot ohne Kneten, aus dem Kühlschrank direkt in den kalten Ofen – Plötzblog',
+    source: {
+      url: 'https://www.ploetzblog.de/rezepte/dinkelvollkornbrot-mit-buttermilch/id=6239c3d42889cc0a79026433',
+      title: 'Dinkelvollkornbrot mit Buttermilch – Plötzblog'
+    },
+    idealFinish: { hour: 10, minute: 30 },
+    steps: [
+      {
+        title: 'Quellstück A ansetzen',
+        dur: 5,
+        kind: 'prep',
+        desc: 'Saaten und Flocken mit der Buttermilch übergießen und mit einem Löffel vermischen.',
+        ingredients: [
+          { amount: 155, unit: 'g', name: 'Buttermilch' },
+          { amount: 39, unit: 'g', name: 'Leinsaat', note: 'geschrotet' },
+          { amount: 39, unit: 'g', name: 'Sonnenblumenkerne' },
+          { amount: 32, unit: 'g', name: 'Roggenflocken', note: 'alternativ Haferflocken' },
+          { amount: 19, unit: 'g', name: 'Sesam' }
+        ]
+      },
+      {
+        title: 'Quellstück B ansetzen',
+        dur: 5,
+        kind: 'prep',
+        desc: 'Salz, Mehl und Buttermilch mischen, bis sich die Zutaten zu einem Teig verbunden haben.',
+        ingredients: [
+          { amount: 12, unit: 'g', name: 'Salz' },
+          { amount: 309, unit: 'g', name: 'Dinkelvollkornmehl' },
+          { amount: 309, unit: 'g', name: 'Buttermilch' }
+        ]
+      },
+      {
+        title: 'Quellstücke quellen lassen',
+        dur: 720,
+        min: 600,
+        max: 840,
+        step: 30,
+        kind: 'cold',
+        sleep: true,
+        desc: 'Beide Quellstücke zugedeckt 10–14 Std. bei 5 °C im Kühlschrank quellen lassen.'
+      },
+      {
+        title: 'Hauptteig mischen',
+        dur: 10,
+        kind: 'prep',
+        desc: 'Die Zutaten in der genannten Reihenfolge in die Schüssel wiegen und ohne Kneten mischen, bis sich alles zu einem Teig verbunden hat.',
+        ingredients: [
+          { amount: 10, unit: 'g', name: 'Vollrohrzucker' },
+          { name: 'Quellstück A' },
+          { name: 'Quellstück B' },
+          { amount: 116, unit: 'g', name: 'Buttermilch' },
+          { amount: 303, unit: 'g', name: 'Dinkelvollkornmehl' },
+          { amount: 6.4, unit: 'g', name: 'Frischhefe' }
+        ]
+      },
+      {
+        title: 'Stockgare',
+        dur: 60,
+        kind: 'rise',
+        desc: 'Teig zugedeckt 1 Std. bei ca. 24 °C reifen lassen, dabei nach 20 und 40 Min. dehnen und falten.'
+      },
+      {
+        title: 'Formen',
+        dur: 10,
+        kind: 'prep',
+        desc: 'Teigling langwirken, mit Wasser abstreichen, in Sonnenblumenkernen wälzen und mit Schluss nach unten in eine mit Backpapier ausgelegte Kastenform (ca. 23 × 11 × 10 cm) setzen.',
+        ingredients: [
+          { name: 'Sonnenblumenkerne', note: 'zum Wälzen' }
+        ]
+      },
+      {
+        title: 'Kalte Stückgare',
+        dur: 720,
+        min: 600,
+        max: 840,
+        step: 30,
+        kind: 'cold',
+        sleep: true,
+        desc: 'Teigling in der Form zugedeckt ca. 12 Std. bei 5 °C im Kühlschrank auf das doppelte Volumen reifen lassen.'
+      },
+      {
+        title: 'Backen',
+        dur: 100,
+        kind: 'bake',
+        desc: 'Teigling erneut mit Wasser abstreichen und die Kastenform in den nicht vorgeheizten Ofen auf den Rost (ohne Backstein) stellen; Ofen auf 180 °C einstellen und 90 Min. backen, dann das Brot aus der Form nehmen und weitere 10 Min. ohne Form ausbacken (zu dunkle Kruste mit Alufolie abdecken).'
+      }
+    ]
+  },
+  {
     id: 'express-semmel',
     name: 'Express-Semmel',
     totalShort: '~2 Std',
@@ -478,6 +570,63 @@ export const RECIPES = [
         ],
       },
     ],
+  },
+  {
+    id: 'italienisches-landbrot',
+    name: 'Italienisches Landbrot',
+    totalShort: '~20 Std',
+    subtitle: 'Saftiges Weizenbrot mit dunkler Kruste und langer Stockgare – Plötzblog',
+    source: {
+      url: 'https://www.ploetzblog.de/rezepte/italienisches-landbrot/id=64903fd502496c3cafdd74b4',
+      title: 'Italienisches Landbrot – Plötzblog'
+    },
+    idealFinish: { hour: 18, minute: 0 },
+    steps: [
+      {
+        title: 'Hauptteig kneten',
+        dur: 20,
+        kind: 'prep',
+        desc: 'Alle Zutaten außer Wasser B in der genannten Reihenfolge in die Schüssel wiegen, vermischen und kneten, bis sich eine dünne Teighaut ausziehen lässt (Fenstertest); dann Wasser B zugeben und erneut bis zum Fenstertest kneten (Teigtemperatur ca. 22 °C).',
+        ingredients: [
+          { amount: 19, unit: 'g', name: 'Salz' },
+          { amount: 650, unit: 'g', name: 'Wasser', note: 'Wasser A' },
+          { amount: 9.3, unit: 'g', name: 'Olivenöl' },
+          { amount: 603, unit: 'g', name: 'Weizenmehl', note: 'Type 550' },
+          { amount: 278, unit: 'g', name: 'Weizenvollkornmehl' },
+          { amount: 46, unit: 'g', name: 'Roggenvollkornmehl' },
+          { amount: 0.56, unit: 'g', name: 'Frischhefe' },
+          { amount: 93, unit: 'g', name: 'Wasser', note: 'Wasser B, erst nach dem ersten Fenstertest zugeben' }
+        ]
+      },
+      {
+        title: 'Stockgare',
+        dur: 1080,
+        min: 960,
+        max: 1080,
+        step: 30,
+        kind: 'rise',
+        sleep: true,
+        desc: 'Teig zugedeckt 16–18 Std. bei 20 °C reifen lassen, dabei nach 30 Min. und nach 8–12 Std. dehnen und falten.'
+      },
+      {
+        title: 'Formen',
+        dur: 10,
+        kind: 'prep',
+        desc: 'Teigling locker rund einschlagen und mit Schluss nach unten in den leicht bemehlten Gärkorb legen.'
+      },
+      {
+        title: 'Stückgare',
+        dur: 30,
+        kind: 'rise',
+        desc: 'Teigling im Gärkorb zugedeckt 30 Min. bei 20 °C reifen lassen.'
+      },
+      {
+        title: 'Backen',
+        dur: 75,
+        kind: 'bake',
+        desc: 'Ofen mit Backstein auf 280 °C vorheizen; Teigling mit Schluss nach oben auf Backpapier einschieben, sofort kräftig bedampfen und auf 200 °C herunterdrehen; Dampf nach 20 Min. ablassen und insgesamt 70–75 Min. kräftig ausbacken.'
+      }
+    ]
   },
   {
     id: 'lievito-madre-broetchen',
@@ -1005,6 +1154,93 @@ export const RECIPES = [
         dur: 25,
         kind: 'bake',
         desc: 'Backstein auf der untersten Rille mit dem Ofen auf 215 °C O/U vorheizen, Teiglinge abschieben und eine Schüssel Wasser in den Ofen stellen; nach 15 Min. das Wasser entfernen und weitere 10 Min. fertig backen, danach auf einem Gitter auskühlen lassen.'
+      }
+    ]
+  },
+  {
+    id: 'ruchbrot',
+    name: 'Ruchbrot',
+    totalShort: '~37 Std',
+    subtitle: 'Süßlich-herbes, aromatisches Weizenbrot aus Ruchmehl mit langer kalter Gare – Plötzblog',
+    source: {
+      url: 'https://www.ploetzblog.de/rezepte/ruchbrot/id=62387c592889cc0a7902635f',
+      title: 'Ruchbrot – Plötzblog'
+    },
+    idealFinish: { hour: 21, minute: 0 },
+    steps: [
+      {
+        title: 'Vorteig ansetzen',
+        dur: 5,
+        kind: 'prep',
+        desc: 'Zutaten mischen, bis sich alles zu einem weichen Teig verbunden hat.',
+        ingredients: [
+          { amount: 119, unit: 'g', name: 'Wasser' },
+          { amount: 119, unit: 'g', name: 'Ruchmehl', note: 'Weizen' },
+          { amount: 0.12, unit: 'g', name: 'Frischhefe' }
+        ]
+      },
+      {
+        title: 'Vorteig reifen lassen',
+        dur: 720,
+        min: 660,
+        max: 780,
+        step: 30,
+        kind: 'rise',
+        sleep: true,
+        desc: 'Vorteig zugedeckt ca. 12 Std. bei 20 °C reifen lassen.'
+      },
+      {
+        title: 'Hauptteig kneten',
+        dur: 15,
+        kind: 'prep',
+        desc: 'Zutaten in der genannten Reihenfolge in die Schüssel wiegen, vermischen und kneten, bis sich eine dünne Teighaut ausziehen lässt (Fenstertest, Teigtemperatur ca. 26 °C).',
+        ingredients: [
+          { amount: 9.3, unit: 'g', name: 'Salz' },
+          { amount: 195, unit: 'g', name: 'Wasser' },
+          { amount: 306, unit: 'g', name: 'Ruchmehl', note: 'Weizen' },
+          { name: 'Vorteig' },
+          { amount: 2, unit: 'g', name: 'Frischhefe' }
+        ]
+      },
+      {
+        title: 'Stockgare',
+        dur: 60,
+        kind: 'rise',
+        desc: 'Teig 1 Std. bei 20 °C reifen lassen, dabei nach 20, 40 und 60 Min. dehnen und falten.'
+      },
+      {
+        title: 'Kalte Gare',
+        dur: 1320,
+        min: 1140,
+        max: 1440,
+        step: 60,
+        kind: 'cold',
+        sleep: true,
+        desc: 'Teig zugedeckt ca. 22 Std. bei 5 °C im Kühlschrank reifen lassen.'
+      },
+      {
+        title: 'Formen',
+        dur: 10,
+        kind: 'prep',
+        desc: 'Teigling locker länglich einschlagen und mit Schluss nach oben in den leicht bemehlten Gärkorb legen.'
+      },
+      {
+        title: 'Stückgare',
+        dur: 60,
+        kind: 'rise',
+        desc: 'Teigling im Gärkorb zugedeckt 1 Std. bei 24 °C reifen lassen.'
+      },
+      {
+        title: 'Stürzen & Einschneiden',
+        dur: 5,
+        kind: 'prep',
+        desc: 'Teigling aus dem Gärkorb auf Backpapier stürzen (Schluss nach unten) und die Oberfläche dreimal schräg im 90°-Winkel einschneiden.'
+      },
+      {
+        title: 'Backen',
+        dur: 50,
+        kind: 'bake',
+        desc: 'Ofen mit Backstein auf 250 °C vorheizen, Teigling einschieben, sofort kräftig bedampfen und auf 220 °C herunterdrehen; Dampf nach 20 Min. ablassen und insgesamt 50 Min. ausbacken.'
       }
     ]
   },
@@ -1767,6 +2003,113 @@ export const RECIPES = [
         dur: 27,
         kind: 'bake',
         desc: 'Ofen mit einem leeren Blech in der unteren Hälfte auf 230 °C Ober-/Unterhitze vorheizen, Brötchen in die zweitunterste Schiene schieben, 1–2 dl Wasser aufs heisse Blech giessen, nach 20 Min. das Wasserblech entfernen und weitere 5–10 Min. knusprig ausbacken.'
+      }
+    ]
+  },
+  {
+    id: 'weizenmischbrot-mit-saaten-vollkorn',
+    name: 'Weizenmischbrot mit Saaten (Vollkornvariante)',
+    totalShort: '~26 Std',
+    subtitle: 'Saftiges Weizen-Roggen-Vollkornbrot mit Saatenbrühstück, zwei Vorteigen und Übernachtgare – Plötzblog',
+    source: {
+      url: 'https://www.ploetzblog.de/rezepte/weizenmischbrot-mit-saaten-vollkornvariante/id=61dbf0267f54ed2e4f58eacf',
+      title: 'Weizenmischbrot mit Saaten (Vollkornvariante) – Plötzblog'
+    },
+    idealFinish: { hour: 21, minute: 0 },
+    steps: [
+      {
+        title: 'Vorteig A ansetzen',
+        dur: 5,
+        kind: 'prep',
+        desc: 'Zutaten mischen, bis sich alles zu einem weichen Teig verbunden hat (Teigtemperatur ca. 20 °C).',
+        ingredients: [
+          { amount: 127, unit: 'g', name: 'Wasser' },
+          { amount: 102, unit: 'g', name: 'Roggenvollkornmehl' },
+          { amount: 0.1, unit: 'g', name: 'Frischhefe' }
+        ]
+      },
+      {
+        title: 'Vorteig B ansetzen',
+        dur: 5,
+        kind: 'prep',
+        desc: 'Zutaten mischen, bis sich alles zu einem festen Teig verbunden hat (Teigtemperatur ca. 17 °C).',
+        ingredients: [
+          { amount: 25, unit: 'g', name: 'Wasser' },
+          { amount: 51, unit: 'g', name: 'Weizenvollkornmehl' },
+          { amount: 0.1, unit: 'g', name: 'Frischhefe' }
+        ]
+      },
+      {
+        title: 'Brühstück ansetzen',
+        dur: 5,
+        kind: 'prep',
+        desc: 'Saaten mit dem kochenden Wasser übergießen, mit einem Löffel vermischen und eine Frischhaltefolie direkt auf die Oberfläche drücken.',
+        ingredients: [
+          { amount: 46, unit: 'g', name: 'Leinsaat', note: 'geschrotet' },
+          { amount: 46, unit: 'g', name: 'Sonnenblumenkerne' },
+          { amount: 10, unit: 'g', name: 'Sesam' },
+          { amount: 97, unit: 'g', name: 'Wasser', note: 'kochend' }
+        ]
+      },
+      {
+        title: 'Vorteige reifen lassen',
+        dur: 720,
+        min: 660,
+        max: 780,
+        step: 30,
+        kind: 'rise',
+        sleep: true,
+        desc: 'Vorteige und Brühstück zugedeckt ca. 12 Std. bei 20 °C reifen bzw. quellen lassen.'
+      },
+      {
+        title: 'Hauptteig kneten',
+        dur: 15,
+        kind: 'prep',
+        desc: 'Alle Zutaten außer dem Brühstück in der genannten Reihenfolge in die Schüssel wiegen, vermischen und kneten, bis der Teig glatt und geschmeidig aussieht; dann das Brühstück einarbeiten (Teigtemperatur ca. 25 °C).',
+        ingredients: [
+          { amount: 10, unit: 'g', name: 'Salz' },
+          { amount: 214, unit: 'g', name: 'Wasser' },
+          { amount: 15, unit: 'g', name: 'Balsamico' },
+          { amount: 356, unit: 'g', name: 'Weizenvollkornmehl' },
+          { name: 'Vorteig A' },
+          { name: 'Vorteig B' },
+          { amount: 1.3, unit: 'g', name: 'Frischhefe' },
+          { name: 'Brühstück' }
+        ]
+      },
+      {
+        title: 'Stockgare',
+        dur: 60,
+        kind: 'rise',
+        desc: 'Teig zugedeckt 1 Std. bei 20 °C reifen lassen, danach einmal dehnen und falten.'
+      },
+      {
+        title: 'Kalte Gare',
+        dur: 600,
+        min: 480,
+        max: 720,
+        step: 30,
+        kind: 'cold',
+        sleep: true,
+        desc: 'Teig zugedeckt 8–12 Std. bei 5 °C im Kühlschrank reifen lassen.'
+      },
+      {
+        title: 'Formen',
+        dur: 10,
+        kind: 'prep',
+        desc: 'Teigling langwirken und mit Schluss nach unten in den leicht bemehlten Gärkorb legen.'
+      },
+      {
+        title: 'Stückgare',
+        dur: 90,
+        kind: 'rise',
+        desc: 'Teigling im Gärkorb zugedeckt 1,5 Std. bei 20 °C reifen lassen.'
+      },
+      {
+        title: 'Backen',
+        dur: 50,
+        kind: 'bake',
+        desc: 'Ofen mit Backstein auf 250 °C vorheizen; Teigling mit Schluss nach oben auf Backpapier einschieben, sofort kräftig bedampfen und auf 200 °C herunterdrehen; Dampf nach 20 Min. ablassen und insgesamt 50 Min. ausbacken.'
       }
     ]
   },

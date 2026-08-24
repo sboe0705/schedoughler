@@ -16,8 +16,8 @@ import {
 const FINISH = new Date('2025-01-15T10:00:00')
 
 describe('RECIPES', () => {
-  it('exports 24 recipes', () => {
-    expect(RECIPES).toHaveLength(24)
+  it('exports 28 recipes', () => {
+    expect(RECIPES).toHaveLength(28)
   })
 
   it('every recipe has required fields', () => {
