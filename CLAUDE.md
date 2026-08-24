@@ -82,6 +82,10 @@ Opening a *saved* recipe (tapping its row in the "Gespeicherte Backzeiten" secti
 
 Tapping the star button on a `RecipeRow.vue` marks a recipe as a favorite — meant for recipes the user has already tried and rated highly. Unlike saved bakes, a star carries no finish time/overrides and never expires; it's a plain boolean preference, local to the browser. `App.vue` calls `toggleStarredRecipe` from `scheduler.js` and persists via `persistStarredRecipes` under `schedoughler.starred.v1`. In the selection list, starred recipes that are *not* also saved are pinned in their own "Favoriten" section (sorted alphabetically) between the saved-bakes section and "Alle Rezepte"; a recipe that is both saved and starred stays in the saved-bakes section (with its star shown filled) rather than being duplicated. Starring is independent of saving — any row (saved, favorite, or plain) can be starred or unstarred at any time via `stopPropagation`, same as the bookmark button.
 
+## Git Workflow
+
+Commit changes directly to the `main` branch and push after a confirmation by the user, unless otherwise told.
+
 ## Important Constraints
 
 - **No TypeScript.** Keep all source files as plain `.js` / `.vue`.
