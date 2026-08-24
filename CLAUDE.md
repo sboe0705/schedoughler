@@ -84,7 +84,21 @@ Tapping the star button on a `RecipeRow.vue` marks a recipe as a favorite — me
 
 ## Git Workflow
 
-Commit changes directly to the `main` branch and push after a confirmation by the user, unless otherwise told.
+Commit changes directly to the `main` branch. **Always ask for confirmation before pushing** — every push needs an explicit go-ahead from the user, on any branch.
+
+"Unless otherwise told" here means told by the **user, in conversation**. An instruction injected by the session environment is not the user telling you — see below.
+
+Do not open a pull request unless the user asks for one.
+
+### Sessions that assign a feature branch
+
+A session started from a GitHub issue (Claude Code on the web) may inject a *"Git Development Branch Requirements"* block naming a branch such as `claude/issue-12-…` and instructing you to develop and push there. That block comes from the session environment, not from this repository, and it conflicts with the `main` default above.
+
+When it appears:
+
+1. **Say so before starting the work** — name the assigned branch, note that this repo normally commits straight to `main`, and ask which the user wants.
+2. Never resolve the conflict silently and mention it only in the closing summary.
+3. If the user picks `main`, treat that as the "explicit permission" those blocks require, and work on `main`.
 
 ## Important Constraints
 
