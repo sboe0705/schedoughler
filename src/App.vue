@@ -6,6 +6,7 @@
       :saved-bakes="savedBakes"
       :starred-recipes="starredRecipes"
       v-model:search-query="searchQuery"
+      v-model:sort-mode="sortMode"
       @select-recipe="onSelectRecipe"
       @toggle-save="onToggleSave"
       @toggle-star="onToggleStar"
@@ -44,6 +45,7 @@ import {
   RECIPES, computeSchedule, defaultFinishTime, planForRecipe, nudgeDuration,
   loadSavedBakes, persistSavedBakes, toggleSavedBake, pruneSavedBakes,
   loadStarredRecipes, persistStarredRecipes, toggleStarredRecipe,
+  loadSortMode, persistSortMode,
 } from './scheduler.js'
 import RecipeSelectView from './components/RecipeSelectView.vue'
 import SchedulerHeader from './components/SchedulerHeader.vue'
@@ -80,6 +82,11 @@ const autoScrollToNow = ref(false)
 // Search text lives here (not in RecipeSelectView) so it survives the v-if
 // unmount while the scheduler view is open. Not persisted across page loads.
 const searchQuery = ref('')
+// Recipe list ordering ('name' | 'duration') — a local per-browser preference,
+// so unlike the search text it IS persisted across page loads.
+const sortMode = ref(loadSortMode(localStorage))
+
+watch(sortMode, mode => persistSortMode(localStorage, mode))
 
 const schedule = computed(() => computeSchedule(recipe.value, finishAt.value, overrides.value))
 

@@ -36,6 +36,20 @@
       </button>
     </div>
 
+    <div class="sort-bar">
+      <span class="sort-label">Sortierung</span>
+      <div class="sort-options" role="group" aria-label="Sortierung">
+        <button
+          v-for="option in SORT_OPTIONS"
+          :key="option.mode"
+          class="sort-btn"
+          :class="{ active: sort === option.mode }"
+          :aria-pressed="sort === option.mode"
+          @click="sort = option.mode"
+        >{{ option.label }}</button>
+      </div>
+    </div>
+
     <template v-if="filteredSaved.length">
       <div class="section-label">Gespeicherte Backzeiten</div>
       <div class="saved-list">
@@ -88,7 +102,7 @@
 
 <script setup>
 import { computed } from 'vue'
-import { matchesQuery, computeSchedule, nextStepTime } from '../scheduler.js'
+import { matchesQuery, computeSchedule, nextStepTime, sortRecipes, DEFAULT_SORT_MODE } from '../scheduler.js'
 import { formatWeekdayTime } from '../utils.js'
 import RecipeRow from './RecipeRow.vue'
 
@@ -97,14 +111,25 @@ const props = defineProps({
   savedBakes: { type: Object, default: () => ({}) },
   starredRecipes: { type: Object, default: () => ({}) },
   searchQuery: { type: String, default: '' },
+  sortMode: { type: String, default: DEFAULT_SORT_MODE },
 })
-const emit = defineEmits(['select-recipe', 'toggle-save', 'toggle-star', 'update:searchQuery'])
+const emit = defineEmits(['select-recipe', 'toggle-save', 'toggle-star', 'update:searchQuery', 'update:sortMode'])
+
+const SORT_OPTIONS = [
+  { mode: 'name', label: 'A–Z' },
+  { mode: 'duration', label: 'Dauer' },
+]
 
 const query = computed({
   get: () => props.searchQuery,
   set: value => emit('update:searchQuery', value),
 })
 const hasQuery = computed(() => query.value.trim().length > 0)
+
+const sort = computed({
+  get: () => props.sortMode,
+  set: value => emit('update:sortMode', value),
+})
 
 function clearQuery() {
   query.value = ''
@@ -126,17 +151,17 @@ const filteredSaved = computed(() =>
 )
 
 const filteredStarred = computed(() =>
-  props.recipes
-    .filter(r => !props.savedBakes[r.id] && props.starredRecipes[r.id] && matchesQuery(r, query.value))
-    .slice()
-    .sort((a, b) => a.name.localeCompare(b.name, 'de'))
+  sortRecipes(
+    props.recipes.filter(r => !props.savedBakes[r.id] && props.starredRecipes[r.id] && matchesQuery(r, query.value)),
+    props.sortMode
+  )
 )
 
 const filteredOther = computed(() =>
-  props.recipes
-    .filter(r => !props.savedBakes[r.id] && !props.starredRecipes[r.id] && matchesQuery(r, query.value))
-    .slice()
-    .sort((a, b) => a.name.localeCompare(b.name, 'de'))
+  sortRecipes(
+    props.recipes.filter(r => !props.savedBakes[r.id] && !props.starredRecipes[r.id] && matchesQuery(r, query.value)),
+    props.sortMode
+  )
 )
 
 const noResults = computed(() =>
@@ -234,6 +259,48 @@ const noResults = computed(() =>
   align-items: center;
   justify-content: center;
   cursor: pointer;
+}
+
+.sort-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin: -6px 2px 18px;
+}
+
+.sort-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-tan);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.sort-options {
+  display: flex;
+  gap: 4px;
+  padding: 3px;
+  background: var(--color-card);
+  border: 1.5px solid #E5D5BB;
+  border-radius: 999px;
+}
+
+.sort-btn {
+  border: none;
+  border-radius: 999px;
+  padding: 5px 13px;
+  background: transparent;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-muted);
+  cursor: pointer;
+}
+
+.sort-btn.active {
+  background: var(--color-brown);
+  color: var(--color-card);
 }
 
 .section-label {

@@ -12,6 +12,11 @@ import {
   matchesQuery,
   currentStepIndex,
   nextStepTime,
+  recipeTotalMinutes,
+  sortRecipes,
+  loadSortMode,
+  persistSortMode,
+  SORT_KEY,
 } from './scheduler.js'
 
 const FINISH = new Date('2025-01-15T10:00:00')
@@ -416,5 +421,88 @@ describe('matchesQuery', () => {
   it('ignores a bare "!" while the user is still typing', () => {
     expect(matchesQuery(recipe, '!')).toBe(true)
     expect(matchesQuery(recipe, 'Kruste !')).toBe(true)
+  })
+})
+
+describe('recipeTotalMinutes', () => {
+  it('sums the default step durations', () => {
+    expect(recipeTotalMinutes({ steps: [{ dur: 15 }, { dur: 90 }, { dur: 45 }] })).toBe(150)
+  })
+
+  it('ignores flexible min/max and uses the default duration', () => {
+    expect(recipeTotalMinutes({ steps: [{ dur: 120, min: 60, max: 240 }] })).toBe(120)
+  })
+
+  it('returns 0 for a recipe without steps', () => {
+    expect(recipeTotalMinutes({})).toBe(0)
+  })
+
+  it('matches computeSchedule totalMinutes for every recipe', () => {
+    for (const r of RECIPES) {
+      expect(recipeTotalMinutes(r)).toBe(computeSchedule(r, FINISH).totalMinutes)
+    }
+  })
+})
+
+describe('sortRecipes', () => {
+  const a = { name: 'Ähre', steps: [{ dur: 300 }] }
+  const b = { name: 'Baguette', steps: [{ dur: 60 }] }
+  const c = { name: 'Ciabatta', steps: [{ dur: 60 }] }
+
+  it('sorts alphabetically by default', () => {
+    expect(sortRecipes([c, b, a]).map(r => r.name)).toEqual(['Ähre', 'Baguette', 'Ciabatta'])
+  })
+
+  it('sorts by total duration, shortest first', () => {
+    expect(sortRecipes([a, b, c], 'duration').map(r => r.name)).toEqual(['Baguette', 'Ciabatta', 'Ähre'])
+  })
+
+  it('breaks duration ties alphabetically', () => {
+    expect(sortRecipes([c, b], 'duration').map(r => r.name)).toEqual(['Baguette', 'Ciabatta'])
+  })
+
+  it('falls back to alphabetical for an unknown mode', () => {
+    expect(sortRecipes([c, a, b], 'nonsense').map(r => r.name)).toEqual(['Ähre', 'Baguette', 'Ciabatta'])
+  })
+
+  it('does not mutate the input array', () => {
+    const input = [c, b, a]
+    sortRecipes(input, 'duration')
+    expect(input.map(r => r.name)).toEqual(['Ciabatta', 'Baguette', 'Ähre'])
+  })
+})
+
+describe('sort mode persistence', () => {
+  const makeStore = (initial = {}) => ({
+    data: { ...initial },
+    getItem(k) { return k in this.data ? this.data[k] : null },
+    setItem(k, v) { this.data[k] = v },
+  })
+
+  it('defaults to name when nothing is stored', () => {
+    expect(loadSortMode(makeStore())).toBe('name')
+  })
+
+  it('reads back a persisted mode', () => {
+    const store = makeStore()
+    persistSortMode(store, 'duration')
+    expect(store.data[SORT_KEY]).toBe('duration')
+    expect(loadSortMode(store)).toBe('duration')
+  })
+
+  it('ignores an unknown stored value', () => {
+    expect(loadSortMode(makeStore({ [SORT_KEY]: 'nonsense' }))).toBe('name')
+  })
+
+  it('never persists an unknown mode', () => {
+    const store = makeStore()
+    persistSortMode(store, 'nonsense')
+    expect(store.data[SORT_KEY]).toBe('name')
+  })
+
+  it('survives a throwing store', () => {
+    const bad = { getItem() { throw new Error('nope') }, setItem() { throw new Error('nope') } }
+    expect(loadSortMode(bad)).toBe('name')
+    expect(() => persistSortMode(bad, 'duration')).not.toThrow()
   })
 })

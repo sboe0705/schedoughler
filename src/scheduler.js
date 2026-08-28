@@ -2369,3 +2369,51 @@ export function toggleStarredRecipe(starred, recipeId) {
   else next[recipeId] = true;
   return next;
 }
+
+// ---------------------------------------------------------------------------
+// Recipe list ordering
+// ---------------------------------------------------------------------------
+// The selection view's recipe sections ("Favoriten" and "Alle Rezepte") can be
+// ordered by name or by total duration. There is no ascending/descending
+// switch: each mode has exactly one sensible direction (A–Z, shortest first).
+// The saved-bakes section keeps its own ordering (by finish time).
+//
+// Persisted shape (plain string under SORT_KEY): 'name' | 'duration'
+
+export const SORT_KEY = 'schedoughler.sort.v1';
+export const SORT_MODES = ['name', 'duration'];
+export const DEFAULT_SORT_MODE = 'name';
+
+/** Sum of a recipe's default step durations, in minutes. */
+export function recipeTotalMinutes(recipe) {
+  return (recipe.steps || []).reduce((a, s) => a + s.dur, 0);
+}
+
+/**
+ * Order a list of recipes. Returns a NEW array (does not mutate the input).
+ * 'name'     — alphabetically (German collation)
+ * 'duration' — shortest total duration first, ties broken alphabetically
+ * Any unknown mode falls back to 'name'.
+ */
+export function sortRecipes(recipes, mode = DEFAULT_SORT_MODE) {
+  const byName = (a, b) => a.name.localeCompare(b.name, 'de');
+  if (mode === 'duration') {
+    return recipes.slice().sort(
+      (a, b) => recipeTotalMinutes(a) - recipeTotalMinutes(b) || byName(a, b)
+    );
+  }
+  return recipes.slice().sort(byName);
+}
+
+/** Read the stored sort mode from localStorage. Safe on missing/corrupt data. */
+export function loadSortMode(store) {
+  try {
+    const raw = store.getItem(SORT_KEY);
+    return SORT_MODES.includes(raw) ? raw : DEFAULT_SORT_MODE;
+  } catch (e) { return DEFAULT_SORT_MODE; }
+}
+
+/** Persist the sort mode to localStorage. */
+export function persistSortMode(store, mode) {
+  try { store.setItem(SORT_KEY, SORT_MODES.includes(mode) ? mode : DEFAULT_SORT_MODE); } catch (e) {}
+}
