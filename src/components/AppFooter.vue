@@ -3,14 +3,28 @@
     <span class="footer-version">v{{ commit }} · {{ commitDate }}</span>
     <span class="footer-sep">·</span>
     <button class="footer-link" @click="showImpressum = true">Impressum</button>
+    <template v-if="sync?.status === 'expired'">
+      <span class="footer-sep">·</span>
+      <button class="footer-link footer-sync" @click="sync.signIn()">Sync fortsetzen</button>
+    </template>
   </footer>
 
-  <ImpressumDialog :open="showImpressum" @close="showImpressum = false" />
+  <ImpressumDialog
+    :open="showImpressum"
+    :sync-enabled="!!sync?.enabled"
+    @close="showImpressum = false"
+  />
 </template>
 
 <script setup>
 import { ref } from 'vue'
 import ImpressumDialog from './ImpressumDialog.vue'
+
+// An expired Google token pauses the sync, and renewing it needs a tap for
+// Google's popup — "Sync fortsetzen" is that tap, visible from both views.
+defineProps({
+  sync: { type: Object, default: null },
+})
 
 const commit = __APP_COMMIT__
 const commitDate = __APP_COMMIT_DATE__
@@ -46,5 +60,9 @@ const showImpressum = ref(false)
 
 .footer-link:hover {
   color: var(--color-brown);
+}
+
+.footer-sync {
+  color: var(--color-bake);
 }
 </style>

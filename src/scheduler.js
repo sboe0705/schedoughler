@@ -2417,3 +2417,134 @@ export function loadSortMode(store) {
 export function persistSortMode(store, mode) {
   try { store.setItem(SORT_KEY, SORT_MODES.includes(mode) ? mode : DEFAULT_SORT_MODE); } catch (e) {}
 }
+
+// ---------------------------------------------------------------------------
+// Google Drive sync
+// ---------------------------------------------------------------------------
+// Optional: a user who signs in with Google gets their saved bakes and starred
+// recipes mirrored to a file in the hidden appDataFolder of their own Drive.
+// Only those two maps travel — the recipes live in the code, and the active
+// plan (recipeId / finishAt / overrides) and the sort mode stay per device.
+//
+// Everything here is pure; the Drive calls live in drive.js and the runtime
+// (Google Identity Services, triggers, status) in useSync.js.
+
+/**
+ * Deliberately *outside* the `schedoughler.` key namespace: the meta holds the
+ * access token, which must never travel along with the synced data.
+ */
+export const SYNC_KEY = 'schedoughler-sync';
+export const SYNC_FORMAT = 1;
+const SYNC_APP = 'schedoughler';
+/** Renew a little early, so a token does not expire between list and upload. */
+const TOKEN_MARGIN_MS = 60_000;
+
+/** Bookkeeping for a connected account, before its first sync. */
+export function emptySyncMeta(email) {
+  return {
+    email,
+    token: null,
+    tokenExpiresAt: null,
+    // Drive's `version` of the remote file as of the last sync; null until the
+    // first one — which is what makes the first connection merge, not guess.
+    baseVersion: null,
+    // Local edits since the last sync. Survives restarts, so offline edits are kept.
+    dirty: false,
+    // ISO timestamp of the latest local edit — the local side of a conflict.
+    lastEditAt: null,
+    lastSyncedAt: null,
+  };
+}
+
+/** The stored meta, or null when no account is connected or the entry is garbage. */
+export function readSyncMeta(store) {
+  try {
+    const parsed = JSON.parse(store.getItem(SYNC_KEY));
+    if (!isPlainObject(parsed) || typeof parsed.email !== 'string') return null;
+    return { ...emptySyncMeta(parsed.email), ...parsed };
+  } catch (e) { return null; }
+}
+
+export function writeSyncMeta(store, meta) {
+  try { store.setItem(SYNC_KEY, JSON.stringify(meta)); } catch (e) {}
+}
+
+export function clearSyncMeta(store) {
+  try { store.removeItem(SYNC_KEY); } catch (e) {}
+}
+
+export function tokenValid(meta, now = new Date()) {
+  if (!meta?.token || !meta.tokenExpiresAt) return false;
+  return Date.parse(meta.tokenExpiresAt) - TOKEN_MARGIN_MS > now.getTime();
+}
+
+/**
+ * What to do, given the local bookkeeping and the remote file ({ id, version }
+ * or null).
+ *
+ * - No remote file: this device seeds it.
+ * - Never synced, but a remote file exists: merge both sides. Stars and saved
+ *   bakes are keyed by recipe, so a union loses nothing.
+ * - Remote unchanged: upload if there are local edits.
+ * - Remote changed: download, unless there are local edits too — then it is a
+ *   conflict, settled by conflictWinner().
+ */
+export function decideSync(meta, remote) {
+  if (remote === null) return 'upload';
+  if (meta.baseVersion === null) return 'merge';
+  if (remote.version === meta.baseVersion) return meta.dirty ? 'upload' : 'idle';
+  return meta.dirty ? 'conflict' : 'download';
+}
+
+/**
+ * Newest wins. The remote side is dated by the payload's `exportedAt`, which
+ * the other device stamped when it uploaded — no earlier than its last edit.
+ * A tie goes to the remote file: it is already shared, the local edit is not.
+ */
+export function conflictWinner(lastEditAt, remoteExportedAt) {
+  if (lastEditAt === null) return 'remote';
+  return Date.parse(lastEditAt) > Date.parse(remoteExportedAt) ? 'local' : 'remote';
+}
+
+/** The file that goes to Drive: saved bakes and starred recipes, nothing else. */
+export function buildSyncPayload({ saved, starred }, now = new Date()) {
+  return { app: SYNC_APP, format: SYNC_FORMAT, exportedAt: now.toISOString(), saved, starred };
+}
+
+/** Validate a downloaded file before anything is written locally. */
+export function parseSyncPayload(text) {
+  let parsed;
+  try { parsed = JSON.parse(text); } catch (e) { return { ok: false, reason: 'invalid-json' }; }
+  if (!isPlainObject(parsed) || parsed.app !== SYNC_APP || parsed.format !== SYNC_FORMAT) {
+    return { ok: false, reason: 'not-a-sync-file' };
+  }
+  const { saved, starred, exportedAt } = parsed;
+  if (!isPlainObject(saved) || !isPlainObject(starred) || typeof exportedAt !== 'string') {
+    return { ok: false, reason: 'not-a-sync-file' };
+  }
+  const bakesValid = Object.values(saved).every(
+    b => isPlainObject(b) && Number.isFinite(b.target) && isPlainObject(b.overrides ?? {})
+  );
+  if (!bakesValid) return { ok: false, reason: 'not-a-sync-file' };
+  return { ok: true, payload: { app: SYNC_APP, format: SYNC_FORMAT, exportedAt, saved, starred } };
+}
+
+/**
+ * First connection of a device to an existing Drive file: the union of both
+ * sides. A recipe saved on both keeps the later finish time with its own
+ * overrides; expired bakes are pruned. Returns new maps.
+ */
+export function mergeSyncState(local, remote, now = Date.now()) {
+  const saved = { ...remote.saved };
+  for (const [id, bake] of Object.entries(local.saved)) {
+    if (!saved[id] || bake.target > saved[id].target) saved[id] = bake;
+  }
+  return {
+    saved: pruneSavedBakes(saved, now).saved,
+    starred: { ...remote.starred, ...local.starred },
+  };
+}
+
+function isPlainObject(value) {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}

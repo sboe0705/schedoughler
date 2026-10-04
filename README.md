@@ -97,6 +97,62 @@ Starred recipes are persisted to `localStorage` under the key `schedoughler.star
 
 ---
 
+## Sync through Google Drive
+
+Optional, and invisible unless the build has `VITE_GOOGLE_CLIENT_ID` (and never
+offered in the Tauri build, whose webview origin cannot be an OAuth origin). A
+user who signs in with Google — the "Anmelden" pill in the recipe list's header —
+gets **saved bakes and starred recipes** mirrored to `schedoughler.json` in the
+hidden `appDataFolder` of *their own* Drive. Nothing else travels: the recipes
+live in the code, and the open plan (`recipeId` / `finishAt` / `overrides`) and
+the sort mode stay per device. No backend; the narrow `drive.appdata` scope sees
+nothing else in the Drive.
+
+The moving parts: the pure helpers at the end of `src/scheduler.js` (meta,
+payload, decision table, merge — unit-tested), `src/drive.js` (the five REST
+calls, `fetch` injected) and `src/useSync.js` (Google Identity Services, triggers,
+reactive status). The UI is `SyncControl.vue` in the list header, a
+"Sync fortsetzen" link in the footer and a privacy section in the Impressum.
+
+- **The payload** is `{ app: 'schedoughler', format: 1, exportedAt, saved, starred }`,
+  validated by `parseSyncPayload()` before anything is written.
+- **Drive's `version` decides.** The meta remembers the version last synced
+  (`baseVersion`) and whether there were local edits since (`dirty`):
+
+  | remote | local edits | action |
+  |---|---|---|
+  | missing | – | upload |
+  | unchanged | no / yes | nothing / upload |
+  | changed | no | download |
+  | changed | yes | newest wins: `lastEditAt` against the payload's `exportedAt` |
+  | exists, never synced | – | merge both sides, then upload |
+
+  The merge (`mergeSyncState()`) is a union: stars from both, saved bakes from
+  both, the later finish time winning when both have the same recipe.
+- **A download needs no reload.** `App.vue` hands `useSync()` a getter and a
+  setter for the two refs; when the open recipe is a saved one, its plan follows
+  the downloaded bake.
+- **The meta lives under `schedoughler-sync`, outside `schedoughler.*`.** It
+  holds the access token, which must never be mixed with the data.
+- **Only taps are edits.** Toggling a bookmark or star and editing a saved plan
+  call `markDirty()`; pruning expired bakes does not — every device derives that
+  from the clock, and counting it would let a stale device win a conflict.
+- **Triggers:** start, `visibilitychange` to visible and `online` reconcile; an
+  edit uploads 3 s later, or at once when the app is hidden (`keepalive`).
+- **No refresh token.** The browser flow issues a ~1 h access token; once
+  expired the sync pauses until a tap renews it ("Fortsetzen" in the panel,
+  "Sync fortsetzen" in the footer) — browsers allow Google's popup only from a tap.
+- **Nobody else talks to Google.** The GIS script is injected on the first tap
+  on "Anmelden", or at start for an account that is already connected.
+
+Setting it up once: a Google Cloud project with the **Drive API** enabled, an
+external OAuth consent screen with the `drive.appdata` scope, and a *Web
+application* OAuth client whose authorised JavaScript origins are
+`http://localhost:5173` and `https://<user>.github.io` (Til Valhall's client can be
+reused — same origin, different file name). Put the client id into `.env.local`
+as `VITE_GOOGLE_CLIENT_ID=…` and into the repo variable `GOOGLE_CLIENT_ID`, which
+the CI build passes on. The id is public by design — a variable, not a secret.
+
 ## Adding a recipe
 
 ### 1. Manual authoring

@@ -16,6 +16,7 @@
         <span class="wordmark">Schedoughler</span>
         <span class="sub-label">BROT NACH PLAN</span>
       </div>
+      <SyncControl v-if="sync" :sync="sync" />
     </header>
 
     <div class="search-field">
@@ -105,6 +106,7 @@ import { computed } from 'vue'
 import { matchesQuery, computeSchedule, nextStepTime, sortRecipes, DEFAULT_SORT_MODE } from '../scheduler.js'
 import { formatWeekdayTime } from '../utils.js'
 import RecipeRow from './RecipeRow.vue'
+import SyncControl from './SyncControl.vue'
 
 const props = defineProps({
   recipes: Array,
@@ -112,6 +114,7 @@ const props = defineProps({
   starredRecipes: { type: Object, default: () => ({}) },
   searchQuery: { type: String, default: '' },
   sortMode: { type: String, default: DEFAULT_SORT_MODE },
+  sync: { type: Object, default: null },
 })
 const emit = defineEmits(['select-recipe', 'toggle-save', 'toggle-star', 'update:searchQuery', 'update:sortMode'])
 

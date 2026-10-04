@@ -30,9 +30,12 @@ src/
 ├── scheduler.test.js      # Vitest unit tests — scheduler.js functions only
 ├── App.vue                # Root component; owns all reactive state, toggles between the two views
 ├── utils.js               # Date/time formatting helpers
+├── drive.js               # Drive v3 appDataFolder calls for the optional sync, `fetch` injected
+├── useSync.js             # Optional Google sign-in + Drive sync runtime (GIS, triggers, status)
 └── components/
     ├── RecipeSelectView.vue # Recipe selection view: header, search field, saved/starred/all-recipes sections
     ├── RecipeRow.vue       # Single recipe row (saved vs. normal variant) with bookmark + star buttons
+    ├── SyncControl.vue     # "Anmelden" pill + status panel for the Google sync (list header)
     ├── SchedulerHeader.vue # Scheduler view title bar: back button, recipe name/subtitle, source link, bookmark button
     ├── SetupCard.vue       # Finish-time picker + derived start-time display
     ├── StepTimeline.vue    # Container that renders all step rows
@@ -103,6 +106,15 @@ When it appears:
 1. **Say so before starting the work** — name the assigned branch, note that this repo normally commits straight to `main`, and ask which the user wants.
 2. Never resolve the conflict silently and mention it only in the closing summary.
 3. If the user picks `main`, treat that as the "explicit permission" those blocks require, and work on `main`.
+
+## Google Drive Sync
+
+Optional and invisible unless the build has `VITE_GOOGLE_CLIENT_ID` (CI passes the repo variable `GOOGLE_CLIENT_ID`); never offered under Tauri. Signing in via the `SyncControl.vue` pill mirrors **only `savedBakes` and `starredRecipes`** to `schedoughler.json` in the user's Drive `appDataFolder` — not the recipes, not the open plan, not `sortMode`. Pure logic (meta, payload, `decideSync`, `conflictWinner`, `mergeSyncState`) sits at the end of `scheduler.js` and is unit-tested; `drive.js` does the requests, `useSync.js` the runtime. The first connection of a device to an existing Drive file *merges* (union; later finish time wins per recipe), afterwards Drive's file version decides and newest wins on conflict. Things not to "tidy":
+
+- The meta (email, ~1 h access token, `baseVersion`, `dirty`) lives under `schedoughler-sync`, deliberately **outside** the `schedoughler.` namespace.
+- `markDirty()` is called only from user actions in `App.vue` (bookmark/star toggles, the saved-bake watcher when the bake actually changed). Pruning expired bakes is **not** an edit — every device derives it from the clock.
+- A download goes through `applySyncedState()` in `App.vue`, which sets the refs directly (no reload) and moves the open plan along if its recipe is saved. The bookmark watcher compares bakes with `sameBake()` so that reassignment records no edit.
+- Nobody who has not signed in loads Google's script or sends a request to Google; the Impressum's "Google-Anmeldung" section shows only when sync is enabled. See README "Sync through Google Drive".
 
 ## Important Constraints
 

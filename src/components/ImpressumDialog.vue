@@ -28,7 +28,12 @@
         </p>
 
         <h3>Datenschutz</h3>
-        <p>
+        <p v-if="syncEnabled">
+          Ohne Anmeldung speichert diese Website selbst keine personenbezogenen
+          Daten, verwendet keine Cookies und bindet keine Tracker ein. Was sich
+          mit der optionalen Google-Anmeldung ändert, steht unten.
+        </p>
+        <p v-else>
           Diese Website speichert selbst keine personenbezogenen Daten,
           verwendet keine Cookies und bindet keine Tracker ein.
         </p>
@@ -40,6 +45,59 @@
             docs.github.com/.../github-privacy-statement
           </a>
         </p>
+
+        <template v-if="syncEnabled">
+          <h3>Google-Anmeldung</h3>
+          <p>
+            Die Synchronisation über Google ist freiwillig. Erst ein Tipp auf
+            „Anmelden“ lädt Google Identity Services; Rechtsgrundlage ist deine
+            Einwilligung (Art. 6 Abs. 1 lit. a DSGVO), die du jederzeit durch
+            Abmelden widerrufen kannst.
+          </p>
+          <p>
+            Bei der Anmeldung verarbeitet Google (Google Ireland Ltd., Dublin;
+            Muttergesellschaft Google LLC, USA) deine IP-Adresse und dein
+            Google-Konto und setzt dafür eigene Cookies. Eine Übermittlung in die
+            USA ist möglich; Google LLC ist nach dem EU-US Data Privacy Framework
+            zertifiziert.
+          </p>
+          <p>
+            Die App fordert nur zwei Dinge an: deine E-Mail-Adresse, um das
+            verbundene Konto anzuzeigen, und Zugriff auf ihren eigenen,
+            versteckten App-Ordner in deinem Google Drive
+            (<code>drive.appdata</code>). Dort liegt eine Datei mit deinen
+            gespeicherten Backzeiten und Favoriten – die Rezepte selbst und der
+            gerade geöffnete Plan bleiben auf dem Gerät. Andere Dateien deines
+            Drive sieht die App nicht. Die Daten fließen direkt zwischen deinem
+            Browser und Google – der Betreiber dieser Seite erhält sie nicht und
+            hat keinen Zugriff darauf.
+          </p>
+          <p>
+            Auf diesem Gerät legt die App dafür unter
+            <code>schedoughler-sync</code> deine E-Mail-Adresse und einen etwa
+            eine Stunde gültigen Zugriffsschlüssel ab. Abmelden löscht beides und
+            widerruft den Schlüssel; die Datei in Google Drive bleibt bestehen.
+            Den Zugriff kannst du außerdem jederzeit in deinem Google-Konto unter
+            „Sicherheit → Drittanbieter-Apps“ entziehen
+            (<a href="https://myaccount.google.com/connections" target="_blank" rel="noopener noreferrer">myaccount.google.com/connections</a>).
+            Die Datei selbst entfernst du in Google Drive unter „Einstellungen →
+            Apps verwalten → Versteckte App-Daten löschen“.
+          </p>
+          <p>
+            Die Nutzung und Übertragung von Informationen, die die App von
+            Google-APIs erhält, entspricht der
+            <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank" rel="noopener noreferrer">Google API Services User Data Policy</a>,
+            einschließlich der Anforderungen zur eingeschränkten Nutzung (Limited
+            Use). Die Daten dienen ausschließlich dem Abgleich zwischen deinen
+            Geräten; sie werden weder weitergegeben noch ausgewertet.
+          </p>
+          <p>
+            Details zur Verarbeitung durch Google:
+            <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">
+              policies.google.com/privacy
+            </a>
+          </p>
+        </template>
 
         <h3>Rezeptquellen</h3>
         <p>
@@ -57,6 +115,8 @@ import { ref, watch } from 'vue'
 
 const props = defineProps({
   open: { type: Boolean, default: false },
+  // Only a build with a Google client id offers sign-in — and owes its notice.
+  syncEnabled: { type: Boolean, default: false },
 })
 defineEmits(['close'])
 
@@ -159,6 +219,11 @@ function onBackdropClick(e) {
   font-weight: 700;
   color: var(--color-ink);
   margin-bottom: 6px;
+}
+
+.impressum-body code {
+  font-size: 12px;
+  color: var(--color-ink);
 }
 
 .impressum-body a {

@@ -5,6 +5,7 @@
       :recipes="RECIPES"
       :saved-bakes="savedBakes"
       :starred-recipes="starredRecipes"
+      :sync="sync"
       v-model:search-query="searchQuery"
       v-model:sort-mode="sortMode"
       @select-recipe="onSelectRecipe"
@@ -35,7 +36,7 @@
       />
     </template>
 
-    <AppFooter />
+    <AppFooter :sync="sync" />
   </div>
 </template>
 
@@ -47,6 +48,7 @@ import {
   loadStarredRecipes, persistStarredRecipes, toggleStarredRecipe,
   loadSortMode, persistSortMode,
 } from './scheduler.js'
+import { useSync } from './useSync.js'
 import RecipeSelectView from './components/RecipeSelectView.vue'
 import SchedulerHeader from './components/SchedulerHeader.vue'
 import SetupCard from './components/SetupCard.vue'
@@ -88,6 +90,36 @@ const sortMode = ref(loadSortMode(localStorage))
 
 watch(sortMode, mode => persistSortMode(localStorage, mode))
 
+// Optional Google Drive sync of savedBakes + starredRecipes — nothing else.
+// Inert (and invisible) unless the build has VITE_GOOGLE_CLIENT_ID.
+const sync = useSync({
+  getState: () => ({ saved: savedBakes.value, starred: starredRecipes.value }),
+  applyState: applySyncedState,
+})
+
+/**
+ * Take over saved bakes and stars from Drive (or a merge with it). If the
+ * recipe that is open is among the saved bakes, its plan follows, so the next
+ * nudge does not write the stale plan back. That reassignment re-runs the
+ * bookmark watcher below, which sees an unchanged bake and records no edit.
+ */
+function applySyncedState({ saved, starred }) {
+  savedBakes.value = pruneSavedBakes(saved).saved
+  persistSavedBakes(localStorage, savedBakes.value)
+  starredRecipes.value = starred
+  persistStarredRecipes(localStorage, starred)
+  const bake = savedBakes.value[recipeId.value]
+  if (bake) {
+    finishAt.value = new Date(bake.target)
+    overrides.value = { ...bake.overrides }
+  }
+}
+
+function sameBake(a, b) {
+  return !!a && !!b && a.target === b.target
+    && JSON.stringify(a.overrides ?? {}) === JSON.stringify(b.overrides ?? {})
+}
+
 const schedule = computed(() => computeSchedule(recipe.value, finishAt.value, overrides.value))
 
 watch([recipeId, finishAt, overrides], ([id, fa]) => {
@@ -98,13 +130,14 @@ watch([recipeId, finishAt, overrides], ([id, fa]) => {
 
 // Keep an already-saved bake's bookmark in sync while its plan is being edited.
 watch([finishAt, overrides], () => {
-  if (!savedBakes.value[recipeId.value]) return
-  const next = {
-    ...savedBakes.value,
-    [recipeId.value]: { target: finishAt.value.getTime(), overrides: { ...overrides.value } },
-  }
+  const current = savedBakes.value[recipeId.value]
+  if (!current) return
+  const bake = { target: finishAt.value.getTime(), overrides: { ...overrides.value } }
+  if (sameBake(current, bake)) return
+  const next = { ...savedBakes.value, [recipeId.value]: bake }
   savedBakes.value = next
   persistSavedBakes(localStorage, next)
+  sync.markDirty()
 }, { deep: true })
 
 function onNudge(stepIndex, dir) {
@@ -138,6 +171,7 @@ function onToggleStar(recipeId) {
   const next = toggleStarredRecipe(starredRecipes.value, recipeId)
   starredRecipes.value = next
   persistStarredRecipes(localStorage, next)
+  sync.markDirty()
 }
 
 function onToggleSave(r) {
@@ -148,6 +182,7 @@ function onToggleSave(r) {
   })
   savedBakes.value = next
   persistSavedBakes(localStorage, next)
+  sync.markDirty()
 }
 
 function isEditableTarget(el) {
@@ -170,6 +205,9 @@ onMounted(() => {
   }, 60_000)
   window.addEventListener('keydown', onKeydown)
   window.addEventListener('popstate', onPopState)
+  // After the initial prune on purpose: expiring bakes is derived from the
+  // clock on every device, not an edit to upload. A no-op unless signed in.
+  void sync.start()
 })
 onUnmounted(() => {
   clearInterval(pruneInterval)

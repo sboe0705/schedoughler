@@ -17,6 +17,17 @@ import {
   loadSortMode,
   persistSortMode,
   SORT_KEY,
+  SYNC_KEY,
+  emptySyncMeta,
+  readSyncMeta,
+  writeSyncMeta,
+  clearSyncMeta,
+  tokenValid,
+  decideSync,
+  conflictWinner,
+  buildSyncPayload,
+  parseSyncPayload,
+  mergeSyncState,
 } from './scheduler.js'
 
 const FINISH = new Date('2025-01-15T10:00:00')
@@ -504,5 +515,146 @@ describe('sort mode persistence', () => {
     const bad = { getItem() { throw new Error('nope') }, setItem() { throw new Error('nope') } }
     expect(loadSortMode(bad)).toBe('name')
     expect(() => persistSortMode(bad, 'duration')).not.toThrow()
+  })
+})
+
+describe('sync meta storage', () => {
+  const makeStore = (initial = {}) => ({
+    data: { ...initial },
+    getItem(k) { return k in this.data ? this.data[k] : null },
+    setItem(k, v) { this.data[k] = v },
+    removeItem(k) { delete this.data[k] },
+  })
+
+  it('is null when no account is connected', () => {
+    expect(readSyncMeta(makeStore())).toBeNull()
+  })
+
+  it('round-trips and clears', () => {
+    const store = makeStore()
+    const meta = { ...emptySyncMeta('a@b.de'), token: 't', dirty: true }
+    writeSyncMeta(store, meta)
+    expect(readSyncMeta(store)).toEqual(meta)
+    clearSyncMeta(store)
+    expect(store.data[SYNC_KEY]).toBeUndefined()
+  })
+
+  it('fills missing fields and rejects garbage', () => {
+    expect(readSyncMeta(makeStore({ [SYNC_KEY]: '{"email":"a@b.de"}' }))).toEqual(emptySyncMeta('a@b.de'))
+    expect(readSyncMeta(makeStore({ [SYNC_KEY]: '{oops' }))).toBeNull()
+    expect(readSyncMeta(makeStore({ [SYNC_KEY]: '{"token":"t"}' }))).toBeNull()
+    expect(readSyncMeta(makeStore({ [SYNC_KEY]: '[]' }))).toBeNull()
+  })
+
+  it('lives outside the schedoughler. namespace', () => {
+    expect(SYNC_KEY.startsWith('schedoughler.')).toBe(false)
+  })
+})
+
+describe('tokenValid', () => {
+  const now = new Date('2026-10-04T10:00:00Z')
+  const meta = expiresAt => ({ ...emptySyncMeta('a@b.de'), token: 't', tokenExpiresAt: expiresAt })
+
+  it('needs a token with an expiry', () => {
+    expect(tokenValid(emptySyncMeta('a@b.de'), now)).toBe(false)
+  })
+
+  it('renews a minute early', () => {
+    expect(tokenValid(meta('2026-10-04T10:02:00Z'), now)).toBe(true)
+    expect(tokenValid(meta('2026-10-04T10:00:30Z'), now)).toBe(false)
+  })
+})
+
+describe('decideSync', () => {
+  const meta = (baseVersion, dirty) => ({ ...emptySyncMeta('a@b.de'), baseVersion, dirty })
+  const remote = version => ({ id: 'f', version })
+
+  it('seeds a missing remote file', () => {
+    expect(decideSync(meta(null, false), null)).toBe('upload')
+    expect(decideSync(meta('3', false), null)).toBe('upload')
+  })
+
+  it('merges on the first connection to an existing file', () => {
+    expect(decideSync(meta(null, true), remote('3'))).toBe('merge')
+  })
+
+  it('uploads local edits against an unchanged remote', () => {
+    expect(decideSync(meta('3', false), remote('3'))).toBe('idle')
+    expect(decideSync(meta('3', true), remote('3'))).toBe('upload')
+  })
+
+  it('downloads a changed remote, or flags a conflict', () => {
+    expect(decideSync(meta('3', false), remote('5'))).toBe('download')
+    expect(decideSync(meta('3', true), remote('5'))).toBe('conflict')
+  })
+})
+
+describe('conflictWinner', () => {
+  it('lets the newer side win, a tie going to remote', () => {
+    expect(conflictWinner('2026-10-04T10:00:01Z', '2026-10-04T10:00:00Z')).toBe('local')
+    expect(conflictWinner('2026-10-04T10:00:00Z', '2026-10-04T10:00:00Z')).toBe('remote')
+    expect(conflictWinner('2026-10-04T09:00:00Z', '2026-10-04T10:00:00Z')).toBe('remote')
+    expect(conflictWinner(null, '2026-10-04T10:00:00Z')).toBe('remote')
+  })
+})
+
+describe('sync payload', () => {
+  const state = {
+    saved: { a: { target: 1_000, overrides: { 2: 30 } } },
+    starred: { b: true },
+  }
+
+  it('carries only saved bakes and stars', () => {
+    const payload = buildSyncPayload(state, new Date('2026-10-04T10:00:00Z'))
+    expect(Object.keys(payload).sort()).toEqual(['app', 'exportedAt', 'format', 'saved', 'starred'])
+    expect(parseSyncPayload(JSON.stringify(payload))).toEqual({ ok: true, payload })
+  })
+
+  it('refuses anything else', () => {
+    const good = buildSyncPayload(state)
+    expect(parseSyncPayload('{oops')).toEqual({ ok: false, reason: 'invalid-json' })
+    for (const bad of [
+      [],
+      { ...good, app: 'til-valhall' },
+      { ...good, format: 2 },
+      { ...good, saved: [] },
+      { ...good, starred: null },
+      { ...good, exportedAt: undefined },
+      { ...good, saved: { a: { target: 'soon' } } },
+    ]) {
+      expect(parseSyncPayload(JSON.stringify(bad)).ok).toBe(false)
+    }
+  })
+})
+
+describe('mergeSyncState', () => {
+  const now = Date.parse('2026-10-04T10:00:00Z')
+  const hour = 60 * 60 * 1000
+
+  it('unites both sides, the later finish time winning per recipe', () => {
+    const local = {
+      saved: { a: { target: now + 2 * hour, overrides: { 1: 10 } }, b: { target: now + hour, overrides: {} } },
+      starred: { x: true },
+    }
+    const remote = {
+      saved: { a: { target: now + hour, overrides: {} }, c: { target: now + 3 * hour, overrides: { 0: 5 } } },
+      starred: { y: true },
+    }
+    expect(mergeSyncState(local, remote, now)).toEqual({
+      saved: {
+        a: { target: now + 2 * hour, overrides: { 1: 10 } },
+        b: { target: now + hour, overrides: {} },
+        c: { target: now + 3 * hour, overrides: { 0: 5 } },
+      },
+      starred: { x: true, y: true },
+    })
+  })
+
+  it('prunes expired bakes and leaves its inputs alone', () => {
+    const local = { saved: { old: { target: now - 3 * hour, overrides: {} } }, starred: {} }
+    const remote = { saved: {}, starred: {} }
+    const merged = mergeSyncState(local, remote, now)
+    expect(merged.saved).toEqual({})
+    expect(local.saved.old).toBeDefined()
   })
 })

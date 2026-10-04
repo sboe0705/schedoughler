@@ -28,6 +28,10 @@ jobs:
       - run: npm test
 
       - run: npm run build
+        env:
+          # OAuth client of the optional Drive sync – a public value, so a repo
+          # variable rather than a secret. Unset, the build ships without sync.
+          VITE_GOOGLE_CLIENT_ID: ${{ vars.GOOGLE_CLIENT_ID }}
 
       - uses: actions/upload-pages-artifact@v3
         if: github.ref == 'refs/heads/main'
