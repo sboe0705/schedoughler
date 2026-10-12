@@ -140,7 +140,7 @@ reactive status). The UI is `SyncControl.vue` in the list header, a
 - **Triggers:** start, `visibilitychange` to visible and `online` reconcile; an
   edit uploads 3 s later, or at once when the app is hidden (`keepalive`).
 - **No refresh token.** The browser flow issues a ~1 h access token; once
-  expired the sync pauses until a tap renews it ("Fortsetzen" in the panel,
+  expired the sync pauses until a tap renews it (a tap on the "Sync" pill,
   "Sync fortsetzen" in the footer) — browsers allow Google's popup only from a tap.
 - **Nobody else talks to Google.** The GIS script is injected on the first tap
   on "Anmelden", or at start for an account that is already connected.

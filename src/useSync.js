@@ -267,7 +267,7 @@ export function useSync({ getState, applyState }) {
     if (!enabled) return
     watch()
     if (!state.meta) return
-    // Already consented — load GIS now so "Fortsetzen" opens its popup instantly.
+    // Already consented — load GIS now so renewing via the pill opens its popup instantly.
     void loadGis().catch(() => undefined)
     await sync()
   }

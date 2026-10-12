@@ -17,8 +17,11 @@
       class="sync-pill"
       :class="{ alert: needsAttention }"
       :aria-expanded="open"
-      :title="`Angemeldet als ${sync.email}`"
-      @click="open = !open"
+      :aria-disabled="sync.status === 'connecting'"
+      :title="sync.status === 'expired'
+        ? 'Anmeldung abgelaufen – tippen zum Fortsetzen'
+        : `Angemeldet als ${sync.email}`"
+      @click="onPillClick"
     >
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M17.5 19H7a5 5 0 1 1 .9-9.9A6 6 0 0 1 19 11a4 4 0 0 1-1.5 8z"/>
@@ -33,10 +36,6 @@
       <p v-if="statusLine" class="sync-note">{{ statusLine }}</p>
       <p class="sync-note">Abgeglichen werden gespeicherte Backzeiten und Favoriten.</p>
       <div class="sync-actions">
-        <template v-if="sync.status === 'expired'">
-          <button class="sync-action" @click="sync.signIn()">Fortsetzen</button>
-          <span class="sync-dot">·</span>
-        </template>
         <button class="sync-action" @click="onSignOut">Abmelden</button>
       </div>
     </div>
@@ -88,6 +87,16 @@ const statusLine = computed(() => {
         : ''
   }
 })
+
+// An expired sign-in is renewed right from the pill — Google's popup needs
+// this tap, and there is nothing else in the panel worth stopping for.
+function onPillClick() {
+  if (props.sync.status === 'connecting') return
+  if (props.sync.status === 'expired') {
+    open.value = false
+    props.sync.signIn()
+  } else open.value = !open.value
+}
 
 function onSignOut() {
   props.sync.signOut()
@@ -172,10 +181,6 @@ function onSignOut() {
   color: var(--color-brown);
   text-decoration: underline;
   cursor: pointer;
-}
-
-.sync-dot {
-  color: var(--color-faint);
 }
 
 .sync-error {
