@@ -91,6 +91,6 @@ The recipe is not finished until that skill reports either a clean run or the un
 
 - [`tune-ideal-finish`](../tune-ideal-finish/SKILL.md) — phase 4 in full; also usable on its own for existing recipes.
 - [README.md](README.md) — the data model documented for humans.
-- [CLAUDE.md](CLAUDE.md) — project conventions.
+- [AGENTS.md](AGENTS.md) — project conventions.
 
 Keep this skill and those documents in sync when the schema changes.

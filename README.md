@@ -185,18 +185,18 @@ The tuning loop — try the suggested finish time, then adjust the default `dur`
 
 ---
 
-## Maintaining CLAUDE.md
+## Maintaining AGENTS.md
 
-`CLAUDE.md` lives in the project root and gives Claude Code the context it needs to work effectively in this repository: tech stack, commands, project structure, coding conventions, and constraints.
+`AGENTS.md` lives in the project root and gives coding agents the context it needs to work effectively in this repository: tech stack, commands, project structure, coding conventions, and constraints. `CLAUDE.md` only contains the line `@AGENTS.md`, so Claude Code loads the same file.
 
 Update it whenever the project structure, tech stack, scripts, or coding conventions change in a meaningful way (e.g. a new dependency, a renamed directory, a new shell script, a new convention).
 
 ### Regeneration prompt
 
-Open Claude Code in this repository and run the following prompt. It will read the codebase from scratch and rewrite `CLAUDE.md` based on what it actually finds.
+Open Claude Code in this repository and run the following prompt. It will read the codebase from scratch and rewrite `AGENTS.md` based on what it actually finds.
 
 ```
-Analyze this repository and update the existing CLAUDE.md file in the project root. Include:
+Analyze this repository and update the existing AGENTS.md file in the project root. Keep its Git workflow section. Include:
 
 - Project overview – what this project does and its tech stack
 - Build & run commands – install, dev server, build, test, and any shell scripts
@@ -207,4 +207,4 @@ Analyze this repository and update the existing CLAUDE.md file in the project ro
 Base everything on what you actually find in the codebase, including the README.md in the project root. Do not invent or assume anything not present.
 ```
 
-After Claude generates the file, review it and correct anything that is missing or imprecise before committing.
+After the agent generates the file, review it and correct anything that is missing or imprecise before committing.

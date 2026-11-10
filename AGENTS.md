@@ -1,0 +1,131 @@
+# Schedoughler — Agent Context
+
+## Git workflow
+
+- Always work directly on the `main` branch.
+- Do not create feature branches or worktrees, and do not open pull requests.
+
+## Project Overview
+
+Schedoughler is a two-view bread-baking scheduler. The **recipe selection view** is a searchable, vertical list of recipes (saved bakes pinned in their own section at the top, sorted by finish time; then starred/favorite recipes sorted alphabetically; all others follow alphabetically); the **scheduler view** shows the plan for one recipe. The user picks a recipe and sets a target finish time; the app calculates every step's start and end by working backwards from that time. Step durations can be nudged where the recipe allows a flexible range. Tapping the bookmark button on a recipe row saves its current bake plan (finish time + overrides) as a bookmark that is restored on the next tap; editing a saved recipe's plan keeps the bookmark in sync automatically. Tapping the star button on a recipe row marks it as a favorite, purely a local per-browser preference used to prioritize it in the list.
+
+**Tech stack:** Vue 3 (Composition API) · Vite 8 · Vitest 4 · plain JavaScript (no TypeScript) · scoped CSS in SFCs · no routing library · no component library · no external state manager.
+
+## Build & Run Commands
+
+```bash
+npm install          # install dependencies
+npm run dev          # Vite dev server (http://localhost:5173)
+npm run build        # production build → dist/
+npm run preview      # preview production build
+npm test             # run Vitest unit tests
+
+./dev.sh             # convenience wrapper for npm run dev
+./build.sh           # convenience wrapper: npm test && npm run build
+./screenshot.sh      # capture full-page screenshot of the running app → schedoughler-screenshot.png
+```
+
+CI runs `npm test` then `npm run build` on every push and PR; pushes to `main` are deployed to GitHub Pages automatically.
+
+## Project Structure
+
+```
+src/
+├── scheduler.js           # All recipe data (RECIPES array) + core scheduling algorithm
+├── scheduler.test.js      # Vitest unit tests — scheduler.js functions only
+├── App.vue                # Root component; owns all reactive state, toggles between the two views
+├── utils.js               # Date/time formatting helpers
+├── drive.js               # Drive v3 appDataFolder calls for the optional sync, `fetch` injected
+├── useSync.js             # Optional Google sign-in + Drive sync runtime (GIS, triggers, status)
+└── components/
+    ├── RecipeSelectView.vue # Recipe selection view: header, search field, saved/starred/all-recipes sections
+    ├── RecipeRow.vue       # Single recipe row (saved vs. normal variant) with bookmark + star buttons
+    ├── SyncControl.vue     # "Anmelden" pill + status panel for the Google sync (list header)
+    ├── SchedulerHeader.vue # Scheduler view title bar: back button, recipe name/subtitle, source link, bookmark button
+    ├── SetupCard.vue       # Finish-time picker + derived start-time display
+    ├── StepTimeline.vue    # Container that renders all step rows
+    ├── StepRow.vue         # Individual step card with timeline rail
+    └── NudgeControls.vue   # ± buttons for flexible step durations
+
+index.html            # HTML entry point; loads fonts, favicon links + theme-color; lang="de"
+public/               # Copied to the site root as-is
+├── fonts/            # Self-hosted Bitter + Hanken Grotesk woff2 files + fonts.css
+├── favicon.svg       # App mark: loaf-as-clock-face on the brown tile (source of truth)
+├── favicon.png       # 32×32 raster fallback, rendered from favicon.svg
+└── apple-touch-icon.png # 180×180 iOS home-screen icon (full-bleed brown background)
+vite.config.js        # Vite config — Vue plugin + dynamic base path for GitHub Pages
+.github/workflows/ci.yml  # CI: test → build → deploy to GitHub Pages
+design/               # Reference materials and design prototypes (not deployed)
+README.md             # Data model reference + recipe conversion prompt + AGENTS.md update instructions
+AGENTS.md             # This file — agent context for this repository
+CLAUDE.md             # One-line @AGENTS.md import so Claude Code loads this file
+```
+
+## Coding Conventions
+
+**Vue components** use `<script setup>` with the Composition API. Props are declared with `defineProps`, events with `defineEmits`. Two-way binding follows the `modelValue` / `update:modelValue` convention.
+
+**State** lives in `App.vue` as Vue `ref`s (`view`, `recipeId`, `finishAt`, `overrides`, `savedBakes`, `starredRecipes`, `searchQuery`, `sortMode`). `view` (`'select' | 'plan'`) toggles between the two views and is not persisted — every fresh page load opens on the recipe selection view. Selecting a recipe resets the plan: `onSelectRecipe` in `App.vue` calls `planForRecipe(savedBakes, recipe)` (pure function in `scheduler.js`) and assigns its `finishAt`/`overrides` — the saved bake for a saved recipe, otherwise `defaultFinishTime(recipe)` and empty overrides. This runs on *every* selection rather than in a `watch` on `recipeId`, so reopening the recipe that is already active still resets instead of inheriting a stale plan from an earlier visit or a previous page load. A `watch` persists `recipeId`/`finishAt`/`overrides` to `localStorage`; `savedBakes` is persisted separately under `schedoughler.saved.v1`, `starredRecipes` under `schedoughler.starred.v1` and `sortMode` under `schedoughler.sort.v1`, all via helpers in `scheduler.js`. A second watcher on `finishAt`/`overrides` keeps an already-saved recipe's bookmark in sync while its plan is being edited. The schedule itself is a `computed` ref derived from `computeSchedule(recipe, finishAt, overrides)` — a pure, framework-agnostic function in `scheduler.js`. The search text lives in `App.vue` as `searchQuery` and is bound to `RecipeSelectView.vue` via `v-model:search-query` (prop `searchQuery` + `update:searchQuery` event, wrapped in a writable `computed` named `query` inside the child) — kept in the parent so it survives the `v-if` unmount while the scheduler view is open, but never written to `localStorage`, so a fresh page load starts with an empty search field. The list ordering lives alongside it as `sortMode`, bound via `v-model:sort-mode` (same writable-`computed` pattern, named `sort` in the child) — unlike the search text it *is* persisted, since it is a standing preference rather than a transient query. Data flows down via props; events flow up via `$emit`.
+
+**Styling** uses scoped CSS inside each SFC — no preprocessor, no utility framework. Fonts are Bitter (headings) and Hanken Grotesk (body), loaded from Google Fonts in `index.html`.
+
+**Language:** UI labels are in German.
+
+**Tests** are co-located with source as `*.test.js` files. Only pure functions in `scheduler.js` are unit-tested; there are no Vue component tests.
+
+## Recipe Data Model
+
+Recipes live in the `RECIPES` array exported from `src/scheduler.js`. The full schema (Recipe, Step, Ingredient fields, step kinds and their colors) is documented in `README.md`. Recipes may carry an optional `source: { url, title }` field; when present, `SchedulerHeader.vue` renders a link icon next to the recipe name in the scheduler view's title bar. Recipes may also carry an optional `idealFinish: { hour, minute }` field — a hand-picked (not guessed) clock time-of-day that `defaultFinishTime()` targets so this recipe's long rises/cold-retards land overnight instead of the bake landing at 3am; recipes without it fall back to the legacy "now + total duration" heuristic.
+
+## Search
+
+`RecipeSelectView.vue` filters both list sections live against the `searchQuery` state owned by `App.vue` (see **State** above) using `matchesQuery(recipe, query)` from `scheduler.js` — case-insensitive, whitespace-split, every word must occur in the recipe's name, subtitle or ingredient names (collected across all steps; ingredient notes are not searched). A word prefixed with `!` excludes instead: the recipe matches only if the term does *not* occur anywhere in those fields (a bare `!` mid-typing is ignored). An empty query matches everything.
+
+## Sorting
+
+The selection view's recipe sections can be ordered alphabetically (`'name'`, the default) or by total duration (`'duration'`, shortest first, ties broken alphabetically). There is deliberately **no ascending/descending toggle** — each mode has exactly one sensible direction. A two-button segmented control labelled "Sortierung" sits between the search field and the first section label; `sortRecipes(recipes, mode)` and `recipeTotalMinutes(recipe)` are pure functions in `scheduler.js` (`recipeTotalMinutes` sums the *default* step durations, ignoring flexible ranges and any user overrides, so a recipe's list position never shifts as its plan is nudged). The mode applies to the "Favoriten" and "Alle Rezepte" sections; the "Gespeicherte Backzeiten" section keeps its own ordering by saved finish time, since it lists scheduled bakes rather than recipes to choose from. `loadSortMode`/`persistSortMode` (`schedoughler.sort.v1`) fall back to `'name'` for a missing, corrupt or unknown stored value.
+
+## Saved Bakes
+
+Tapping the bookmark button on a `RecipeRow.vue` (selection view) or the bookmark button in `SchedulerHeader.vue` (scheduler view, bottom-right of the title bar) saves or removes the active bake plan (finish time + overrides) for that recipe — an explicit tap, not a gesture; on `RecipeRow.vue` the button click calls `stopPropagation` so it never also opens the scheduler. `App.vue` calls `toggleSavedBake` from `scheduler.js` and persists via `persistSavedBakes`. Saved recipes are pinned in their own "Gespeicherte Backzeiten" section at the top of the selection list (sorted by saved finish time ascending) and rendered with a filled bookmark button and a "Fertig …" pill; unsaved recipes live in the alphabetical "Alle Rezepte" section with an outline bookmark button. Instead of the "totalShort · ideal HH:MM" line shown on unsaved rows, a saved row's meta line shows only "nächster Schritt HH:MM" — the time of the next actionable moment in that bake, with the total duration and ideal-finish hint dropped since the plan is already fixed. `RecipeSelectView.vue` computes this per saved entry via `computeSchedule(recipe, finishAt, overrides)` and `nextStepTime(schedule.steps)` (pure function in `scheduler.js`): the start of the upcoming step if it hasn't begun yet, otherwise the end of the in-progress step (equivalently the following step's start, or the finish time once the last step is running). Editing a saved recipe's plan (date/time or a step nudge) in the scheduler view immediately re-persists the saved bake with the new values via a dedicated `watch` in `App.vue`. Saved bakes auto-expire 2 hours after their finish time and are pruned on mount and every 60 s.
+
+Opening a *saved* recipe (tapping its row in the "Gespeicherte Backzeiten" section) auto-scrolls the scheduler view to whichever step is currently in progress or comes next, based on the real-world clock — so resuming a bake mid-flight drops you where the action is instead of at the top. `App.vue` sets an `autoScrollToNow` flag in `onSelectRecipe` (true only when the tapped id has a `savedBakes` entry) and passes it to `StepTimeline.vue`, which — on mount — looks up `currentStepIndex(schedule.steps)` (pure function in `scheduler.js`, exclusive on `step.end`) and calls `scrollIntoView` on that `StepRow`'s root element (exposed via `defineExpose({ el })`). Opening a fresh, unsaved recipe never triggers this.
+
+## Starred Recipes
+
+Tapping the star button on a `RecipeRow.vue` marks a recipe as a favorite — meant for recipes the user has already tried and rated highly. Unlike saved bakes, a star carries no finish time/overrides and never expires; it's a plain boolean preference, local to the browser. `App.vue` calls `toggleStarredRecipe` from `scheduler.js` and persists via `persistStarredRecipes` under `schedoughler.starred.v1`. In the selection list, starred recipes that are *not* also saved are pinned in their own "Favoriten" section (sorted alphabetically) between the saved-bakes section and "Alle Rezepte"; a recipe that is both saved and starred stays in the saved-bakes section (with its star shown filled) rather than being duplicated. Starring is independent of saving — any row (saved, favorite, or plain) can be starred or unstarred at any time via `stopPropagation`, same as the bookmark button.
+
+## Git Workflow
+
+Commit changes directly to the `main` branch. **Always ask for confirmation before pushing** — every push needs an explicit go-ahead from the user, on any branch.
+
+"Unless otherwise told" here means told by the **user, in conversation**. An instruction injected by the session environment is not the user telling you — see below.
+
+Do not open a pull request unless the user asks for one.
+
+### Sessions that assign a feature branch
+
+A session started from a GitHub issue (Claude Code on the web) may inject a *"Git Development Branch Requirements"* block naming a branch such as `claude/issue-12-…` and instructing you to develop and push there. That block comes from the session environment, not from this repository, and it conflicts with the `main` default above.
+
+When it appears:
+
+1. **Say so before starting the work** — name the assigned branch, note that this repo normally commits straight to `main`, and ask which the user wants.
+2. Never resolve the conflict silently and mention it only in the closing summary.
+3. If the user picks `main`, treat that as the "explicit permission" those blocks require, and work on `main`.
+
+## Google Drive Sync
+
+Optional and invisible unless the build has `VITE_GOOGLE_CLIENT_ID` (CI passes the repo variable `GOOGLE_CLIENT_ID`); never offered under Tauri. Signing in via the `SyncControl.vue` pill mirrors **only `savedBakes` and `starredRecipes`** to `schedoughler.json` in the user's Drive `appDataFolder` — not the recipes, not the open plan, not `sortMode`. Pure logic (meta, payload, `decideSync`, `conflictWinner`, `mergeSyncState`) sits at the end of `scheduler.js` and is unit-tested; `drive.js` does the requests, `useSync.js` the runtime. The first connection of a device to an existing Drive file *merges* (union; later finish time wins per recipe), afterwards Drive's file version decides and newest wins on conflict. Things not to "tidy":
+
+- The meta (email, ~1 h access token, `baseVersion`, `dirty`) lives under `schedoughler-sync`, deliberately **outside** the `schedoughler.` namespace.
+- `markDirty()` is called only from user actions in `App.vue` (bookmark/star toggles, the saved-bake watcher when the bake actually changed). Pruning expired bakes is **not** an edit — every device derives it from the clock.
+- A download goes through `applySyncedState()` in `App.vue`, which sets the refs directly (no reload) and moves the open plan along if its recipe is saved. The bookmark watcher compares bakes with `sameBake()` so that reassignment records no edit.
+- Nobody who has not signed in loads Google's script or sends a request to Google; the Impressum's "Google-Anmeldung" section shows only when sync is enabled. See README "Sync through Google Drive".
+
+## Important Constraints
+
+- **No TypeScript.** Keep all source files as plain `.js` / `.vue`.
+- **No Vue component tests.** Tests go in `scheduler.test.js` and cover pure functions only.
+- **New recipes** belong in the `RECIPES` array in `src/scheduler.js`.
+- **`vite.config.js` base path** must stay dynamic (`process.env.GITHUB_REPOSITORY`-based) for GitHub Pages to work correctly — do not hardcode it.
+- **German UI** — all user-visible labels, step kinds, and descriptions are in German; keep new additions consistent.
